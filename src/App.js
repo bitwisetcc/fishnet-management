@@ -1,4 +1,5 @@
-import logo from './logo512.png'; //importar imagem
+import logo from './Logo.png'; //importar imagem
+import perfilphoto from './Perfil.png';
 import { IoIosPersonAdd } from "react-icons/io";
 import { FaFishFins } from "react-icons/fa6";
 import { FaUsers } from "react-icons/fa";
@@ -8,15 +9,15 @@ import { MdOutlineLibraryBooks } from "react-icons/md";
 export default function App() {
   return (
     <main className="flex-row align-center justify-center px-10 pt-10">
-      <div className="NavBar flex space-x-[40%] h-10 bg-gray-600">
-        <img src={logo} alt="est" height="20" width="40"/>
-        <h1>Cadastro de Produtos</h1>
-        <img src={logo} alt="est" height="20" width="40"/>
+      <div className="NavBar flex flex-row h-[130px] items-center justify-between">
+        <img className="rounded-lg" src={logo} alt="est" width="150"/>
+        <h1 className="text-3xl whitespace-nowrap">Cadastro de Produtos</h1>
+        <img className="rounded-full" src={perfilphoto} alt="est" width="60"/> {/*Seria a foto de alguem, ou um icon????????????*/}
       </div>
       <div className="flex flex-row pt-5 space-x-5 text-sm">
-        <div className="NavBarLateral flex flex-col bg-gray-600 h-full w-[25%] text-center">
-          <h1 className="py-2">Menu</h1>
-          <hr className=""></hr>
+        <div className="NavBarLateral flex flex-col bg-gray-200 h-[500px] w-[25%] text-center rounded">
+          <h1 className="py-2 font-medium">MENU</h1>
+          <hr className="border-black"></hr>
           <div className="flex flex-col space-y-5 pt-3 items-center">
             <button>
               <div className="flex flex-row items-center">
@@ -51,7 +52,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="flex flex-col bg-gray-600 pb-10 h-full w-screen">
+        <div className="flex flex-col pb-10 h-full w-screen">
           <h1 className="text-xl font-medium">Novo Produto</h1>
           <label 
           for="NomePeixe" 
@@ -151,9 +152,9 @@ export default function App() {
           </label>
         </div>
       </div>
-      <div className="flex flex-row  items-center justify-end p-4">
-        
-        
+      <div className="flex flex-row justify-end p-4 space-x-8">
+        <button className="h-10 w-[140px] bg-gray-300">LIMPAR</button>
+        <button className="h-10 w-[140px] bg-gray-300">ENVIAR</button>
       </div>
     </main>
   );
