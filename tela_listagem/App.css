@@ -1,0 +1,43 @@
+header {
+  text-align: center;
+}
+h1 {
+  text-align: center;
+}
+nav {
+  text-align: left;
+  border: 1px solid;
+  border-radius: 10px;
+  height: 40%;
+  width: 20%;
+}
+section {
+  margin: -15%;
+  padding: 9px;
+  gap: 18px;
+}
+form.titulo {
+  background-color: rgb(185,180,180);
+  text-align: center;
+  border: 1px solid;
+  margin: auto;
+  width: 43%;
+  border-radius: 10px;
+  padding: 8px;
+
+}
+form.exemplo {
+  background-color:rgb(221, 221, 204);
+  text-align: center;
+  border: 1px center;
+  margin: auto;
+  width: 43%;
+  border-radius: 10px;
+  padding: 8px;
+  gap: 20px;
+}
+label {
+  margin: 0 15px;
+  font-size: larger;
+}
+
