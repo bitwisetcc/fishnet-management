@@ -16,9 +16,9 @@ const NavBar = () => {
           <IoIosPersonAdd size={30} />
           <span className="pl-2">Cadastro de Usuário</span>
         </Link>
-        <Link to="/CadastroProdutos" className="flex items-center space-x-2">
+        <Link to="/prods" className="flex items-center space-x-2">
           <FaFishFins size={30} />
-          <span className="pl-2">Cadastro de Produtos</span>
+          <span className="pl-2">Listagem de Produtos</span>
         </Link>
         <Link to="/ListagemUsuarios" className="flex items-center space-x-2">
           <FaUsers size={30} />
@@ -27,10 +27,6 @@ const NavBar = () => {
         <Link to="/ListagemVendas" className="flex items-center space-x-2">
           <GiDoubleFish size={30} />
           <span className="pl-2">Listagem de Vendas</span>
-        </Link>
-        <Link to="/ListagemProdutos" className="flex items-center space-x-2">
-          <GiDoubleFish size={30} />
-          <span className="pl-2">Listagem de Produto</span>
         </Link>
         <Link to="*" className="flex items-center space-x-2">
           <MdOutlineLibraryBooks size={30} />

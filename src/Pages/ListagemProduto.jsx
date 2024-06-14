@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const ListagemProdtuto = () => {
   return (
     <>
@@ -6,13 +8,13 @@ const ListagemProdtuto = () => {
 
       <header className="flex justify-between mt-3">
         <div className="flex gap-3">
-          <button className="shadow text-sm bg-sky-300 p-3 py-1 rounded-lg border border-sky-500">Água salgada</button>
-          <button className="shadow text-sm bg-sky-300 p-3 py-1 rounded-lg border border-sky-500">Água doce</button>
+          <button className="shadow text-sm bg-sky-300 p-3 py-1 rounded-xl border border-sky-500">Água salgada</button>
+          <button className="shadow text-sm bg-sky-300 p-3 py-1 rounded-xl border border-sky-500">Água doce</button>
         </div>
         <div className="flex items-center">
           <label htmlFor="search" className="mr-1">Buscar:</label>
-          <input type="search" id="search" name="search" className="rounded-full border bg-slate-200 border-slate-300" />
-          <button className="shadow text-sm bg-sky-300 p-3 py-1 rounded-lg border border-sky-500">Adicionar produto</button>
+          <input type="search" id="search" name="search" className="rounded-xl border bg-slate-200 border-slate-300 pt-1 px-2 font-mono" />
+          <Link to="/prods/cadastro" className="shadow text-sm bg-sky-300 p-3 py-1 rounded-xl border border-sky-500 ml-2">Adicionar produto</Link>
         </div>
       </header>
 
