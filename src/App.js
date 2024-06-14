@@ -1,5 +1,5 @@
 import logo from './Logo.png'; //importar imagem
-import perfilphoto from './Perfil.png';
+import perfilphoto from './baiacu.jpg';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import NavBar from './components/NavBar'; // Supondo que você tem um componente NavBar
@@ -43,17 +43,19 @@ const Header = () => {
         return 'Listagem de Usuários';
       case '/ListagemVendas':
         return 'Listagem de Vendas';
-      case '/ListagemProdutos':
+      case '/prods':
         return 'Listagem de Produtos';
+      case '/prods/cadastro':
+        return 'Cadastro de Produtos';
       default:
         return '';
     }
   };
 
   return (
-    <header className="NavBarCima flex flex-row h-[130px] items-center justify-between px-10 py-5 bg-gray-100 shadow-md">
-      <img className="rounded-lg" src={logo} alt="Logo" width="150" />
-      <h1 className="text-3xl whitespace-nowrap">{getTitle()}</h1>
+    <header className="flex flex-row items-center justify-between px-10 py-5 bg-gray-100 shadow-md">
+      <img src={logo} alt="Logo" width="70" />
+      <h1 className="text-3xl">{getTitle()}</h1>
       <img className="rounded-full" src={perfilphoto} alt="Perfil" width="60" />
     </header>
   );
