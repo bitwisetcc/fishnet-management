@@ -7,6 +7,7 @@ import CadastroProdutos from './Pages/CadastroProdutos';
 import CadastroUsuarios from './Pages/CadastroUsuarios';
 import ListagemUsuarios from './Pages/ListagemUsuarios';
 import ListagemVendas from './Pages/ListagemVendas';
+import ListagemProduto from "./Pages/ListagemProduto";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/CadastroUsuarios" element={<CadastroUsuarios />} />
             <Route path="/CadastroProdutos" element={<CadastroProdutos />} />
             <Route path="/ListagemUsuarios" element={<ListagemUsuarios />} /> 
+            <Route path="/ListagemProdutos" element={<ListagemProduto />} /> 
             <Route path="/ListagemVendas" element={<ListagemVendas />} />
             <Route path="*" element={<h1>Página não encontrada</h1>} />
           </Routes>
@@ -41,6 +43,8 @@ const Header = () => {
         return 'Listagem de Usuários';
       case '/ListagemVendas':
         return 'Listagem de Vendas';
+      case '/ListagemProdutos':
+        return 'Listagem de Produtos';
       default:
         return '';
     }

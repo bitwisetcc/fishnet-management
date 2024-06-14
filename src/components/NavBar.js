@@ -8,7 +8,7 @@ import { MdOutlineLibraryBooks } from "react-icons/md";
 
 const NavBar = () => {
   return (
-    <nav className="NavBarLateral flex flex-col bg-gray-200 h-full w-[25%] text-center ml-5 mt-5 p-5 rounded">
+    <nav className="NavBarLateral flex flex-col bg-gray-200 border border-gray-400 shadow h-full text-center ml-5 mt-5 p-5 px-8 rounded">
       <h1 className="py-2 font-medium">MENU</h1>
       <hr className="border-black mb-4" />
       <div className="flex flex-col space-y-5">
@@ -27,6 +27,10 @@ const NavBar = () => {
         <Link to="/ListagemVendas" className="flex items-center space-x-2">
           <GiDoubleFish size={30} />
           <span className="pl-2">Listagem de Vendas</span>
+        </Link>
+        <Link to="/ListagemProdutos" className="flex items-center space-x-2">
+          <GiDoubleFish size={30} />
+          <span className="pl-2">Listagem de Produto</span>
         </Link>
         <Link to="*" className="flex items-center space-x-2">
           <MdOutlineLibraryBooks size={30} />
