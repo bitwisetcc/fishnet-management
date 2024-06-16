@@ -4,7 +4,6 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  useLocation,
 } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import CadastroProdutos from "./Pages/CadastroProdutos";

@@ -11,5 +11,5 @@ span.nav-hint {
 }
 
 .dashboard-panel {
-  @apply rounded-lg bg-stone-100 shadow-sm p-4;
+  @apply rounded-lg bg-stone-100 border border-stone-200 shadow-sm p-4 flex flex-col justify-between;
 }
