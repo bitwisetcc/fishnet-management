@@ -21,8 +21,7 @@ const NavBar = () => {
         <img
           src={logo}
           alt="Logo"
-          width="50"
-          className="rounded-full border border-slate-600 shadow-sm p-[6px]"
+          className="rounded-full border border-slate-600 shadow-sm p-[6px] size-14"
         />
         <NavItem Icon={HomeIcon} text="Home" url="/" />
         <NavItem Icon={UserPlusIcon} text="Usuários" url="/CadastroUsuarios" />

@@ -9,3 +9,7 @@ span.nav-hint {
 #root {
   @apply min-h-[100vh];
 }
+
+.dashboard-panel {
+  @apply rounded-lg bg-stone-100 shadow-sm p-4;
+}
