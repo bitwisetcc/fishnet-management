@@ -1,0 +1,70 @@
+import perfilphoto from "./baiacu.jpg";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import NavBar from "./components/NavBar"; // Supondo que você tem um componente NavBar
+import CadastroProdutos from "./Pages/CadastroProdutos";
+import CadastroUsuarios from "./Pages/CadastroUsuarios";
+import ListagemUsuarios from "./Pages/ListagemUsuarios";
+import ListagemVendas from "./Pages/ListagemVendas";
+import ListagemProduto from "./Pages/ListagemProduto";
+import Dashboard from "./Pages/Dashboard";
+
+const App = () => {
+  return (
+    <Router>
+      <div className="flex min-h-[100vh] items-stretch">
+        <NavBar />
+        <div className="flex-1">
+          <Header />
+          <main className="mr-8">
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/CadastroUsuarios" element={<CadastroUsuarios />} />
+              <Route path="/prods" element={<ListagemProduto />} />
+              <Route path="/prods/cadastro" element={<CadastroProdutos />} />
+              <Route path="/ListagemUsuarios" element={<ListagemUsuarios />} />
+              <Route path="/ListagemVendas" element={<ListagemVendas />} />
+              <Route path="*" element={<h1>Página não encontrada</h1>} />
+            </Routes>
+          </main>
+        </div>
+      </div>
+    </Router>
+  );
+};
+
+const Header = () => {
+  const location = useLocation();
+
+  // Função para obter o título da página com base na rota atual
+  const getTitle = () => {
+    switch (location.pathname) {
+      case "/CadastroProdutos":
+        return "Cadastro de Produtos";
+      case "/ListagemUsuarios":
+        return "Listagem de Usuários";
+      case "/ListagemVendas":
+        return "Listagem de Vendas";
+      case "/prods":
+        return "Listagem de Produtos";
+      case "/prods/cadastro":
+        return "Cadastro de Produtos";
+      default:
+        return "";
+    }
+  };
+
+  return (
+    <header className="flex flex-row items-center justify-between px-10 py-5">
+      <h1 className="text-3xl">{getTitle()}</h1>
+      <img className="rounded-full" src={perfilphoto} alt="Perfil" width="60" />
+    </header>
+  );
+};
+
+export default App;

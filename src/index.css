@@ -5,3 +5,7 @@
 span.nav-hint {
   @apply left-7 absolute opacity-0 group-hover:opacity-100 transition-opacity text-nowrap bg-stone-200 border border-stone-400 shadow rounded-lg p-1;
 }
+
+#root {
+  @apply min-h-[100vh];
+}
