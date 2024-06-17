@@ -1,21 +1,34 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { TitleContext } from "../App";
+import { PlusCircleIcon, PrinterIcon } from "@heroicons/react/24/outline";
 
 const ListagemProdtuto = () => {
+  const setTitle = useContext(TitleContext);
+  setTitle("Meus produtos");
   return (
     <>
-      <h1 className="text-2xl font-semibold mb-3">Meus produtos</h1>
-      <p className="text-sm">Clique na categoria para buscar os produtos</p>
+      <header className="listing">
+        <input type="search" name="search" id="search" placeholder="Pesquise" />
+        <input
+          type="date"
+          name="date"
+          id="date"
+          className="empty:text-slate-500"
+        />
+        <input type="text" />
+        <input type="text" name="" id="" />
+      </header>
 
-      <header className="flex justify-between mt-3">
-        <div className="flex gap-3">
-          <button className="shadow text-sm bg-sky-300 p-3 py-1 rounded-xl border border-sky-500">Água salgada</button>
-          <button className="shadow text-sm bg-sky-300 p-3 py-1 rounded-xl border border-sky-500">Água doce</button>
-        </div>
-        <div className="flex items-center">
-          <label htmlFor="search" className="mr-1">Buscar:</label>
-          <input type="search" id="search" name="search" className="rounded-xl border bg-slate-200 border-slate-300 pt-1 px-2 font-mono" />
-          <Link to="/prods/cadastro" className="shadow text-sm bg-sky-300 p-3 py-1 rounded-xl border border-sky-500 ml-2">Adicionar produto</Link>
-        </div>
+      <header className="flex justify-end gap-3 my-4">
+        <button className="action">
+          <PlusCircleIcon className="size-5" />
+          Adicionar
+        </button>
+        <button className="action">
+          <PrinterIcon className="size-5" />
+          Imprimir
+        </button>
       </header>
 
       <table className="table-auto mt-3 border border-slate-400 w-full">
@@ -35,7 +48,11 @@ const ListagemProdtuto = () => {
             <td>Peixe Beta</td>
             <td>R$ 10,00</td>
             <td>10</td>
-            <td><a href="https://via.placeholder.com/50" target="_blank">Peixe Beta</a></td>
+            <td>
+              <a href="https://via.placeholder.com/50" target="_blank">
+                Peixe Beta
+              </a>
+            </td>
             <td>10 vendas</td>
           </tr>
           <tr>
@@ -43,7 +60,11 @@ const ListagemProdtuto = () => {
             <td>Peixe Beta</td>
             <td>R$ 10,00</td>
             <td>10</td>
-            <td><a href="https://via.placeholder.com/50" target="_blank">Peixe Beta</a></td>
+            <td>
+              <a href="https://via.placeholder.com/50" target="_blank">
+                Peixe Beta
+              </a>
+            </td>
             <td>10 vendas</td>
           </tr>
           <tr>
@@ -51,7 +72,11 @@ const ListagemProdtuto = () => {
             <td>Peixe Beta</td>
             <td>R$ 10,00</td>
             <td>10</td>
-            <td><a href="https://via.placeholder.com/50" target="_blank">Peixe Beta</a></td>
+            <td>
+              <a href="https://via.placeholder.com/50" target="_blank">
+                Peixe Beta
+              </a>
+            </td>
             <td>10 vendas</td>
           </tr>
           <tr>
@@ -59,7 +84,11 @@ const ListagemProdtuto = () => {
             <td>Peixe Beta</td>
             <td>R$ 10,00</td>
             <td>10</td>
-            <td><a href="https://via.placeholder.com/50" target="_blank">Peixe Beta</a></td>
+            <td>
+              <a href="https://via.placeholder.com/50" target="_blank">
+                Peixe Beta
+              </a>
+            </td>
             <td>10 vendas</td>
           </tr>
         </tbody>

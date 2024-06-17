@@ -48,3 +48,15 @@ login-bg-2 {
     conic-gradient(var(--c2) 25%, var(--c3) 0 50%, var(--c4) 0 75%, var(--c5) 0);
   background-size: var(--s) var(--s);
 }
+
+header.listing {
+  @apply bg-slate-100 border border-slate-300 shadow-sm p-4 rounded-lg flex justify-between;
+}
+
+header.listing input {
+  @apply bg-slate-200 border border-slate-300 rounded-lg p-1 px-2 placeholder:text-slate-500;
+}
+
+header button.action {
+  @apply flex gap-1 items-center bg-highlighy-dimm border border-teal-600 p-[5px] px-3 rounded-lg;
+}
