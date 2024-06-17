@@ -29,7 +29,7 @@ const NavBar = () => {
         <NavItem Icon={UserGroupIcon} text="Usuários" url="/ListagemUsuarios" />
         <NavItem Icon={Cog6ToothIcon} text="Configurações" url="/config" />
       </ul>
-      <NavItem Icon={LogOutIcon} text="Logout" url="/logout" />
+      <NavItem Icon={LogOutIcon} text="Logout" url="/login" />
     </nav>
   );
 };
