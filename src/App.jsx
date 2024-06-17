@@ -1,10 +1,6 @@
 import perfilphoto from "./loser.jpg";
 import { createContext, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import CadastroProdutos from "./Pages/CadastroProdutos";
 import CadastroUsuarios from "./Pages/CadastroUsuarios";
@@ -12,20 +8,22 @@ import ListagemUsuarios from "./Pages/ListagemUsuarios";
 import ListagemVendas from "./Pages/ListagemVendas";
 import ListagemProduto from "./Pages/ListagemProduto";
 import Dashboard from "./Pages/Dashboard";
+import Login from "./Pages/Login";
 
 export const TitleContext = createContext("");
 
 const App = () => {
   const [title, setTitle] = useState("");
+  const escapeLayout = title === "Login";
 
   return (
     <Router>
-      <div className="flex min-h-[100vh] items-stretch">
-        <NavBar />
-        <div className="flex-1">
-          <Header title={title} />
-          <main className="mr-8">
-            <TitleContext.Provider value={setTitle}>
+      <TitleContext.Provider value={setTitle}>
+        <div className="flex min-h-[100vh] items-stretch">
+          {escapeLayout || <NavBar />}
+          <div className="flex-1">
+            {escapeLayout || <Header title={title} />}
+            <main className={escapeLayout ? "" : "mr-8"}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/users" element={<ListagemUsuarios />} />
@@ -33,12 +31,13 @@ const App = () => {
                 <Route path="/prods" element={<ListagemProduto />} />
                 <Route path="/prods/cadastro" element={<CadastroProdutos />} />
                 <Route path="/vendas" element={<ListagemVendas />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="*" element={<h1>Página não encontrada</h1>} />
               </Routes>
-            </TitleContext.Provider>
-          </main>
+            </main>
+          </div>
         </div>
-      </div>
+      </TitleContext.Provider>
     </Router>
   );
 };
