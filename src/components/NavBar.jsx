@@ -25,8 +25,8 @@ const NavBar = () => {
         />
         <NavItem Icon={HomeIcon} text="Home" url="/" />
         <NavItem Icon={FaFishFins} text="Produtos" url="/prods" />
-        <NavItem Icon={DocumentTextIcon} text="Vendas" url="/ListagemVendas" />
-        <NavItem Icon={UserGroupIcon} text="Usuários" url="/ListagemUsuarios" />
+        <NavItem Icon={DocumentTextIcon} text="Vendas" url="/vendas" />
+        <NavItem Icon={UserGroupIcon} text="Usuários" url="/users" />
         <NavItem Icon={Cog6ToothIcon} text="Configurações" url="/config" />
       </ul>
       <NavItem Icon={LogOutIcon} text="Logout" url="/login" />

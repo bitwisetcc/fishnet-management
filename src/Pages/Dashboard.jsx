@@ -4,7 +4,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { TitleContext } from "../App";
 import { useContext } from "react";
-import graph from "../output.png";
+import graph from "../plot.png";
 
 function Dashboard() {
   const setTitle = useContext(TitleContext);
