@@ -1,19 +1,67 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import { TitleContext } from "../App";
 import {
+  ArrowTopRightOnSquareIcon,
   ChevronDownIcon,
   CurrencyDollarIcon,
   FunnelIcon,
+  LockClosedIcon,
   MagnifyingGlassIcon,
   PlusCircleIcon,
   PrinterIcon,
+  PencilSquareIcon,
 } from "@heroicons/react/24/outline";
 import ListingFilter from "../components/ListingFilter";
 
 const ListagemProdtuto = () => {
   const setTitle = useContext(TitleContext);
   setTitle("Meus produtos");
+
+  const products = [
+    {
+      id: 1,
+      name: "Peixe Beta",
+      price: 50,
+      stock: 25,
+      photo: "https://example.com",
+    },
+    {
+      id: 2,
+      name: "Peixe Leão",
+      price: 70,
+      stock: 10,
+      photo: "https://example.com",
+    },
+    {
+      id: 3,
+      name: "Guppy",
+      price: 10,
+      stock: 50,
+      photo: "https://example.com",
+    },
+    {
+      id: 4,
+      name: "Peixe Anjo",
+      price: 30,
+      stock: 15,
+      photo: "https://example.com",
+    },
+    {
+      id: 5,
+      name: "Peixe Palhaço",
+      price: 25,
+      stock: 30,
+      photo: "https://example.com",
+    },
+    {
+      id: 6,
+      name: "Tubarão Branco",
+      price: 10000,
+      stock: 0,
+      photo: "https://example.com",
+    },
+  ];
+
   return (
     <>
       <ListingFilter>
@@ -54,20 +102,20 @@ const ListagemProdtuto = () => {
           </div>
         </button>
 
-        <span className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
+        <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
           <FunnelIcon className="size-4" />
           <span className="text-nowrap">Outros filtros</span>
           <ChevronDownIcon className="size-4 ml-4" />
 
-          <div className="panel right-0 top-10">
-            <ul>
-              <li>Água doce</li>
-              <li>Água salgada</li>
-              <li>Em oferta</li>
-              <li>Em estoque</li>
+          <div className="panel right-0 top-10 px-10 text-left">
+            <ul className="flex flex-col gap-1">
+              <li className="hover:text-slate-800">Água doce</li>
+              <li className="hover:text-slate-800">Água salgada</li>
+              <li className="hover:text-slate-800">Em oferta</li>
+              <li className="hover:text-slate-800">Em estoque</li>
             </ul>
           </div>
-        </span>
+        </button>
       </ListingFilter>
 
       <header className="flex justify-end gap-3 my-4">
@@ -94,103 +142,28 @@ const ListagemProdtuto = () => {
           <span>Ações</span>
         </header>
 
-        <section className="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
-          <span>
-            <span className="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
-              1
+        {products.map((product) => (
+          <section className="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
+            <span>
+              <span className="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
+                {product.id}
+              </span>
             </span>
-          </span>
-          <span>Peixe Beta</span>
-          <span>R$50,00</span>
-          <span>25</span>
-          <span>https://example.com</span>
-          <span>acessar</span>
-          <span>
-            <Link to="/editar">Editar</Link>
-          </span>
-        </section>
-
-        <section class="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
-          <span>
-            <span class="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
-              1
+            <span>{product.name}</span>
+            <span>R${product.price}</span>
+            <span>{product.stock}</span>
+            <span>{product.photo}</span>
+            <ArrowTopRightOnSquareIcon className="size-5 text-slate-800 hover:text-highlighy-dimm cursor-pointer transition-colors duration-200" />
+            <span className="flex gap-2">
+              <button>
+                <LockClosedIcon className="size-5" />
+              </button>
+              <button>
+                <PencilSquareIcon className="size-5" />
+              </button>
             </span>
-          </span>
-          <span>Lion Fish</span>
-          <span>R$70,00</span>
-          <span>10</span>
-          <span>https://example.com</span>
-          <span>acessar</span>
-          <span>
-            <Link to="/editar">Editar</Link>
-          </span>
-        </section>
-
-        <section class="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
-          <span>
-            <span class="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
-              1
-            </span>
-          </span>
-          <span>Guppy</span>
-          <span>R$10,00</span>
-          <span>50</span>
-          <span>https://example.com</span>
-          <span>acessar</span>
-          <span>
-            <Link to="/editar">Editar</Link>
-          </span>
-        </section>
-
-        <section class="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
-          <span>
-            <span class="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
-              1
-            </span>
-          </span>
-          <span>Angel Fish</span>
-          <span>R$30,00</span>
-          <span>15</span>
-          <span>https://example.com</span>
-          <span>acessar</span>
-          <span>
-            <Link to="/editar">Editar</Link>
-          </span>
-        </section>
-
-        <section class="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
-          <span>
-            <span class="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
-              1
-            </span>
-          </span>
-          <span>Clown Fish</span>
-          <span>R$25,00</span>
-          <span>30</span>
-          <span>https://example.com</span>
-          <span>acessar</span>
-          <span>
-            <Link to="/editar">Editar</Link>
-          </span>
-        </section>
-
-        <section class="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
-          <span>
-            <span class="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
-              1
-            </span>
-          </span>
-          <span>White Shark</span>
-          <span>R$10.000,00 </span>
-          <span>-</span>
-          <span>https://example.com</span>
-          <span>acessar</span>
-          <span>
-            <Link to="/editar" disabled>
-              Editar
-            </Link>
-          </span>
-        </section>
+          </section>
+        ))}
       </article>
     </>
   );

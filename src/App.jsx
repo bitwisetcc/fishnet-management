@@ -1,4 +1,4 @@
-import perfilphoto from "./loser.jpg";
+import perfilphoto from "./mcc.jpg";
 import { createContext, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
@@ -47,7 +47,7 @@ const Header = ({ title }) => {
     <header className="flex flex-row items-center justify-between mr-7 my-6">
       <h1 className="text-3xl">{title}</h1>
       <img
-        className="rounded-full size-14 shadow-sm"
+        className="rounded-full size-14 shadow-sm object-cover"
         src={perfilphoto}
         alt="Perfil"
       />
