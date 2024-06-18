@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const ListagemProdtuto = () => {
+const ListagemProduto = () => {
   return (
     <>
       <h1 className="text-2xl font-semibold mb-3">Meus produtos</h1>
@@ -68,4 +68,4 @@ const ListagemProdtuto = () => {
   );
 };
 
-export default ListagemProdtuto;
+export default ListagemProduto;
