@@ -35,28 +35,18 @@ span.nav-hint {
   background-size: calc(4 * var(--s)) calc(12 * var(--s));
 }
 
-login-bg-2 {
-  --s: 120px; /* control the size*/
-  --c1: #101c36;
-  --c2: #2ec4b6;
-  --c3: #ffbf69;
-  --c4: #ff9f1c;
-  --c5: #cbf3c8;
-
-  --_g: radial-gradient(#0000 70%, var(--c1) 71%);
-  background: var(--_g), var(--_g) calc(var(--s) / 2) calc(var(--s) / 2),
-    conic-gradient(var(--c2) 25%, var(--c3) 0 50%, var(--c4) 0 75%, var(--c5) 0);
-  background-size: var(--s) var(--s);
-}
-
 header.listing {
-  @apply bg-slate-100 border border-slate-300 shadow-sm p-4 rounded-lg flex justify-between;
-}
-
-header.listing input {
-  @apply bg-slate-200 border border-slate-300 rounded-lg p-1 px-2 placeholder:text-slate-500;
+  @apply bg-slate-100 border border-slate-300 shadow-sm p-4 rounded-lg justify-between gap-4 py-2 grid grid-cols-subgrid content-start mb-2;
 }
 
 header button.action {
-  @apply flex gap-1 items-center bg-highlighy-dimm border border-teal-600 p-[5px] px-3 rounded-lg;
+  @apply flex gap-1 items-center bg-highlighy-dimm border border-teal-600 p-[5px] px-3 rounded-lg shadow-sm;
+}
+
+input {
+  @apply bg-transparent
+}
+
+.panel {
+  @apply hidden absolute group-focus-within:block bg-slate-200 shadow border border-slate-400 rounded-lg p-4;
 }

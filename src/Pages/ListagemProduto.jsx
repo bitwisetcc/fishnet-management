@@ -1,24 +1,74 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { TitleContext } from "../App";
-import { PlusCircleIcon, PrinterIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  CurrencyDollarIcon,
+  FunnelIcon,
+  MagnifyingGlassIcon,
+  PlusCircleIcon,
+  PrinterIcon,
+} from "@heroicons/react/24/outline";
+import ListingFilter from "../components/ListingFilter";
 
 const ListagemProdtuto = () => {
   const setTitle = useContext(TitleContext);
   setTitle("Meus produtos");
   return (
     <>
-      <header className="listing">
-        <input type="search" name="search" id="search" placeholder="Pesquise" />
+      <ListingFilter>
+        <span className="flex items-center text-slate-600 flex-1 gap-1">
+          <MagnifyingGlassIcon className="size-4" />
+          <input
+            type="search"
+            name="search"
+            id="search"
+            placeholder="Pesquise"
+            maxLength={90}
+            className="w-full placeholder:text-slate-500"
+          />
+        </span>
         <input
           type="date"
           name="date"
           id="date"
           className="empty:text-slate-500"
         />
-        <input type="text" />
-        <input type="text" name="" id="" />
-      </header>
+
+        <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
+          <CurrencyDollarIcon className="size-4" />
+          <span>Preço</span>
+          <ChevronDownIcon className="size-4 ml-4" />
+
+          <div className="panel left-0 top-10">
+            <input
+              type="range"
+              name="price"
+              id="price"
+              className="accent-alt-dimm"
+            />
+            <div className="flex justify-between text-sm">
+              <span>R$10,00</span>
+              <span>R$500,00</span>
+            </div>
+          </div>
+        </button>
+
+        <span className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
+          <FunnelIcon className="size-4" />
+          <span className="text-nowrap">Outros filtros</span>
+          <ChevronDownIcon className="size-4 ml-4" />
+
+          <div className="panel right-0 top-10">
+            <ul>
+              <li>Água doce</li>
+              <li>Água salgada</li>
+              <li>Em oferta</li>
+              <li>Em estoque</li>
+            </ul>
+          </div>
+        </span>
+      </ListingFilter>
 
       <header className="flex justify-end gap-3 my-4">
         <button className="action">
@@ -31,68 +81,117 @@ const ListagemProdtuto = () => {
         </button>
       </header>
 
-      <table className="table-auto mt-3 border border-slate-400 w-full">
-        <thead className="bg-slate-400">
-          <tr className="*:text-left">
-            <th>#</th>
-            <th>Nome</th>
-            <th>Preço</th>
-            <th>Estoque</th>
-            <th>Foto</th>
-            <th className="italic">Insights</th>
-          </tr>
-        </thead>
-        <tbody className="*:even:bg-slate-100 *:odd:bg-slate-200 *:border-b border-b-slate-300">
-          <tr>
-            <td>1</td>
-            <td>Peixe Beta</td>
-            <td>R$ 10,00</td>
-            <td>10</td>
-            <td>
-              <a href="https://via.placeholder.com/50" target="_blank">
-                Peixe Beta
-              </a>
-            </td>
-            <td>10 vendas</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Peixe Beta</td>
-            <td>R$ 10,00</td>
-            <td>10</td>
-            <td>
-              <a href="https://via.placeholder.com/50" target="_blank">
-                Peixe Beta
-              </a>
-            </td>
-            <td>10 vendas</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Peixe Beta</td>
-            <td>R$ 10,00</td>
-            <td>10</td>
-            <td>
-              <a href="https://via.placeholder.com/50" target="_blank">
-                Peixe Beta
-              </a>
-            </td>
-            <td>10 vendas</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Peixe Beta</td>
-            <td>R$ 10,00</td>
-            <td>10</td>
-            <td>
-              <a href="https://via.placeholder.com/50" target="_blank">
-                Peixe Beta
-              </a>
-            </td>
-            <td>10 vendas</td>
-          </tr>
-        </tbody>
-      </table>
+      <article className="grid grid-cols-7 content-start">
+        <header className="listing grid-cols-7 col-span-7 text-slate-500">
+          <span>
+            <span className="bg-slate-300 rounded-lg px-2">#</span>
+          </span>
+          <span>Nome</span>
+          <span>Preço</span>
+          <span>Estoque</span>
+          <span>Foto</span>
+          <span>Insights</span>
+          <span>Ações</span>
+        </header>
+
+        <section className="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
+          <span>
+            <span className="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
+              1
+            </span>
+          </span>
+          <span>Peixe Beta</span>
+          <span>R$50,00</span>
+          <span>25</span>
+          <span>https://example.com</span>
+          <span>acessar</span>
+          <span>
+            <Link to="/editar">Editar</Link>
+          </span>
+        </section>
+
+        <section class="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
+          <span>
+            <span class="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
+              1
+            </span>
+          </span>
+          <span>Lion Fish</span>
+          <span>R$70,00</span>
+          <span>10</span>
+          <span>https://example.com</span>
+          <span>acessar</span>
+          <span>
+            <Link to="/editar">Editar</Link>
+          </span>
+        </section>
+
+        <section class="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
+          <span>
+            <span class="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
+              1
+            </span>
+          </span>
+          <span>Guppy</span>
+          <span>R$10,00</span>
+          <span>50</span>
+          <span>https://example.com</span>
+          <span>acessar</span>
+          <span>
+            <Link to="/editar">Editar</Link>
+          </span>
+        </section>
+
+        <section class="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
+          <span>
+            <span class="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
+              1
+            </span>
+          </span>
+          <span>Angel Fish</span>
+          <span>R$30,00</span>
+          <span>15</span>
+          <span>https://example.com</span>
+          <span>acessar</span>
+          <span>
+            <Link to="/editar">Editar</Link>
+          </span>
+        </section>
+
+        <section class="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
+          <span>
+            <span class="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
+              1
+            </span>
+          </span>
+          <span>Clown Fish</span>
+          <span>R$25,00</span>
+          <span>30</span>
+          <span>https://example.com</span>
+          <span>acessar</span>
+          <span>
+            <Link to="/editar">Editar</Link>
+          </span>
+        </section>
+
+        <section class="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
+          <span>
+            <span class="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
+              1
+            </span>
+          </span>
+          <span>White Shark</span>
+          <span>R$10.000,00 </span>
+          <span>-</span>
+          <span>https://example.com</span>
+          <span>acessar</span>
+          <span>
+            <Link to="/editar" disabled>
+              Editar
+            </Link>
+          </span>
+        </section>
+      </article>
     </>
   );
 };
