@@ -7,6 +7,7 @@ import { TitleContext } from "../App";
 import graph from "../plot.png";
 import { Link } from "react-router-dom";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { price } from "../lib/format";
 
 function Dashboard() {
   const setTitle = useContext(TitleContext);
@@ -85,7 +86,7 @@ function Dashboard() {
               />
               <div className="grid grid-cols-5 content-center flex-1 bg-stone-100 border border-stone-200 rounded-lg shadow-sm px-4">
                 <span>{client.name}</span>
-                <span>R${client.total}</span>
+                <span>{price(client.total)}</span>
                 <span>
                   {new Date(client.date).toLocaleString("pt-BR").split(",")[0]}
                 </span>

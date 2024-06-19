@@ -129,8 +129,8 @@ const ListagemProdtuto = () => {
         </button>
       </header>
 
-      <article className="grid grid-cols-7 content-start">
-        <header className="listing grid-cols-7 col-span-7 text-slate-500">
+      <article className="grid grid-cols-[60px_repeat(4,1fr)_90px_70px] content-start">
+        <header className="listing col-span-7 text-slate-500">
           <span>
             <span className="bg-slate-300 rounded-lg px-2">#</span>
           </span>

@@ -12,6 +12,7 @@ import Tippy from "@tippyjs/react";
 import React, { useContext } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
+import { price } from "../lib/format";
 import report from "../report.pdf";
 
 const ListagemVendas = () => {
@@ -140,8 +141,8 @@ const ListagemVendas = () => {
         </button>
       </header>
 
-      <article className="grid grid-cols-8 content-start">
-        <header className="listing grid-cols-8 col-span-8 text-slate-500">
+      <article className="grid grid-cols-[60px_repeat(6,1fr)_70px] content-start">
+        <header className="listing col-span-8 text-slate-500">
           <span>
             <span className="bg-slate-300 rounded-lg px-2">#</span>
           </span>
@@ -163,12 +164,12 @@ const ListagemVendas = () => {
             </span>
             <span>{sale.client}</span>
             <span>
-              R${sale.shipping}{" "}
-              <span className="bg-slate-200 text-slate-400 text-sm rounded-lg px-2">
+              {price(sale.shipping)}
+              <span className="bg-slate-200 text-slate-400 text-sm rounded-lg px-2 ml-1">
                 {sale.shippingProvider}
               </span>
             </span>
-            <span>R${sale.total}</span>
+            <span>{price(sale.total)}</span>
             <span>{sale.payment}</span>
             <span>
               <span
