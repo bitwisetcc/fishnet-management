@@ -13,7 +13,7 @@ import { useContext } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 
-const ListagemProdtuto = () => {
+function ListagemProduto() {
   const setTitle = useContext(TitleContext);
   setTitle("Meus produtos");
 
