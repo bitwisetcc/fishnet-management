@@ -1,9 +1,9 @@
 import {
-  Square2StackIcon,
   ArrowTopRightOnSquareIcon as LinkIcon,
+  Square2StackIcon,
 } from "@heroicons/react/24/solid";
-import { TitleContext } from "../App";
 import { useContext } from "react";
+import { TitleContext } from "../App";
 import graph from "../plot.png";
 
 function Dashboard() {

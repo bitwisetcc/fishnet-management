@@ -1,16 +1,18 @@
-import React, { useContext } from "react";
 import {
+  CheckCircleIcon,
   ChevronDownIcon,
   CurrencyDollarIcon,
-  FunnelIcon,
-  MagnifyingGlassIcon,
-  PlusCircleIcon,
-  PrinterIcon,
   DocumentTextIcon,
   EnvelopeIcon,
+  FunnelIcon,
+  MagnifyingGlassIcon,
+  PrinterIcon
 } from "@heroicons/react/24/outline";
+import Tippy from "@tippyjs/react";
+import React, { useContext } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
+import report from "../report.pdf";
 
 const ListagemVendas = () => {
   const setTitle = useContext(TitleContext);
@@ -30,7 +32,7 @@ const ListagemVendas = () => {
       status: 0,
     },
     {
-      id: 1,
+      id: 2,
       client: "Amity",
       shipping: 10,
       shippingProvider: "Correios",
@@ -40,7 +42,7 @@ const ListagemVendas = () => {
       status: 0,
     },
     {
-      id: 1,
+      id: 3,
       client: "Augusto",
       shipping: 10,
       shippingProvider: "Loggi",
@@ -50,7 +52,7 @@ const ListagemVendas = () => {
       status: 2,
     },
     {
-      id: 1,
+      id: 4,
       client: "Willow",
       shipping: 10,
       shippingProvider: "Correios",
@@ -70,7 +72,7 @@ const ListagemVendas = () => {
             type="search"
             name="search"
             id="search"
-            placeholder="Pesquise"
+            placeholder="Nome do cliente"
             maxLength={90}
             className="w-full placeholder:text-slate-500"
           />
@@ -100,6 +102,20 @@ const ListagemVendas = () => {
             </div>
           </div>
         </button>
+        
+        <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
+          <CheckCircleIcon className="size-4" />
+          <span>Status</span>
+          <ChevronDownIcon className="size-4 ml-4" />
+
+          <div className="panel left-0 top-10">
+            <ul className="flex flex-col gap-1 text-left">
+              <li className="hover:text-slate-800">Finalizado</li>
+              <li className="hover:text-slate-800">Pendente</li>
+              <li className="hover:text-slate-800">Cancelado</li>
+            </ul>
+          </div>
+        </button>
 
         <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
           <FunnelIcon className="size-4" />
@@ -108,20 +124,16 @@ const ListagemVendas = () => {
 
           <div className="panel right-0 top-10 px-10 text-left">
             <ul className="flex flex-col gap-1">
-              <li className="hover:text-slate-800">Água doce</li>
-              <li className="hover:text-slate-800">Água salgada</li>
-              <li className="hover:text-slate-800">Em oferta</li>
-              <li className="hover:text-slate-800">Em estoque</li>
+              <li className="hover:text-slate-800">Pagamento</li>
+              <li className="hover:text-slate-800">Frete</li>
+              <li className="hover:text-slate-800">Empresa</li>
+              <li className="hover:text-slate-800">Pessoal</li>
             </ul>
           </div>
         </button>
       </ListingFilter>
 
       <header className="flex justify-end gap-3 my-4">
-        <button className="action">
-          <PlusCircleIcon className="size-5" />
-          Adicionar
-        </button>
         <button className="action">
           <PrinterIcon className="size-5" />
           Imprimir
@@ -171,14 +183,16 @@ const ListagemVendas = () => {
                 {statusMessages[sale.status]}
               </span>
             </span>
-            <span>{sale.date}</span>
+            <span>{(new Date(sale.date)).toLocaleString("pt-BR").split(",")[0]}</span>
 
             <span className="flex gap-2">
-              <button>
+              <a href={report} target="_blank">
                 <DocumentTextIcon className="size-5" />
-              </button>
+              </a>
               <button>
-                <EnvelopeIcon className="size-5" />
+                <Tippy placement="left" content="Copiar e-mail">
+                  <EnvelopeIcon className="size-5" />
+                </Tippy>
               </button>
             </span>
           </section>

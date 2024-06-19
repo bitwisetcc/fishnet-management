@@ -1,5 +1,3 @@
-import { useContext } from "react";
-import { TitleContext } from "../App";
 import {
   ArrowTopRightOnSquareIcon,
   ChevronDownIcon,
@@ -7,10 +5,12 @@ import {
   FunnelIcon,
   LockClosedIcon,
   MagnifyingGlassIcon,
+  PencilSquareIcon,
   PlusCircleIcon,
   PrinterIcon,
-  PencilSquareIcon,
 } from "@heroicons/react/24/outline";
+import { useContext } from "react";
+import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 
 const ListagemProdtuto = () => {
