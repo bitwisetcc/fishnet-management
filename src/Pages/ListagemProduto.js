@@ -12,6 +12,7 @@ import {
 import { useContext } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
+import { Link } from "react-router-dom";
 
 function ListagemProduto() {
   const setTitle = useContext(TitleContext);
@@ -119,10 +120,10 @@ function ListagemProduto() {
       </ListingFilter>
 
       <header className="flex justify-end gap-3 my-4">
-        <button className="action">
+        <Link to="new" className="action">
           <PlusCircleIcon className="size-5" />
           Adicionar
-        </button>
+        </Link>
         <button className="action">
           <PrinterIcon className="size-5" />
           Imprimir

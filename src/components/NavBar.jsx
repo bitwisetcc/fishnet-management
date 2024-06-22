@@ -1,6 +1,5 @@
 import Tippy from "@tippyjs/react";
 import React from "react";
-import { FaUsers } from "react-icons/fa";
 import { FaFishFins } from "react-icons/fa6";
 import {
   HomeIcon,

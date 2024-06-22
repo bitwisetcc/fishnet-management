@@ -39,7 +39,7 @@ header.listing {
   @apply bg-slate-100 border border-slate-300 shadow-sm p-4 rounded-lg justify-between gap-4 py-2 grid grid-cols-subgrid content-start mb-2;
 }
 
-header button.action {
+.action {
   @apply flex gap-1 items-center bg-highlighy-dimm border border-teal-600 p-[5px] px-3 rounded-lg shadow-sm;
 }
 
