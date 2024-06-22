@@ -1,5 +1,4 @@
 import Tippy from "@tippyjs/react";
-import React from "react";
 import { FaFishFins } from "react-icons/fa6";
 import {
   HomeIcon,
@@ -38,7 +37,7 @@ function NavItem({ Icon, text, url }) {
     <li className="only-of-type:stroke-[10px]">
       <Tippy content={text} placement="right" delay={50} arrow>
         <Link to={url}>
-          <Icon className="size-7 text-slate-700 hover:text-[#FF9F1C] transition-colors" />
+          <Icon className="size-7 text-slate-700 hover:text-highlighy-dimm transition-colors" />
         </Link>
       </Tippy>
     </li>

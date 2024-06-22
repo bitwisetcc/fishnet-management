@@ -77,12 +77,6 @@ function ListagemProduto() {
             className="w-full placeholder:text-slate-500"
           />
         </span>
-        <input
-          type="date"
-          name="date"
-          id="date"
-          className="empty:text-slate-500"
-        />
 
         <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
           <CurrencyDollarIcon className="size-4" />
@@ -94,7 +88,7 @@ function ListagemProduto() {
               type="range"
               name="price"
               id="price"
-              className="accent-alt-dimm"
+              className="accent-highlighy-dimm"
             />
             <div className="flex justify-between text-sm">
               <span>R$10,00</span>
@@ -131,7 +125,7 @@ function ListagemProduto() {
       </header>
 
       <article className="grid grid-cols-[60px_repeat(4,1fr)_90px_70px] content-start">
-        <header className="listing col-span-7 text-slate-500">
+        <header className="listing col-span-7">
           <span>
             <span className="bg-slate-300 rounded-lg px-2">#</span>
           </span>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { TitleContext } from "../App";
 
 const CadastroProdutos = () => {
@@ -41,9 +41,10 @@ const CadastroProdutos = () => {
           placeholder="Digite a descrição do peixe a ser cadastrado"
         />
       </div>
-      <div className="flex flex-row justify-end p-4 space-x-8 mt-5">
-        <button className="h-10 w-[140px] bg-gray-300 rounded">LIMPAR</button>
-        <button className="h-10 w-[140px] bg-gray-300 rounded">ENVIAR</button>
+
+      <div className="flex flex-row justify-end p-4 gap-4 mt-5">
+        <button className="action">Cadastrar</button>
+        <button className="alternate">Limpar</button>
       </div>
     </>
   );

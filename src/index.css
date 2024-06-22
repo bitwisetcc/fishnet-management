@@ -11,7 +11,7 @@ span.nav-hint {
 }
 
 .dashboard-panel {
-  @apply rounded-lg bg-stone-100 border border-stone-200 shadow-sm p-4 flex flex-col justify-between;
+  @apply rounded-lg bg-slate-200 border border-slate-300 shadow-sm p-4 flex flex-col justify-between;
 }
 
 .login-bg {
@@ -36,11 +36,15 @@ span.nav-hint {
 }
 
 header.listing {
-  @apply bg-slate-100 border border-slate-300 shadow-sm p-4 rounded-lg justify-between gap-4 py-2 grid grid-cols-subgrid content-start mb-2;
+  @apply bg-slate-200 border border-slate-300 text-slate-600 shadow-sm p-4 rounded-lg justify-between gap-4 py-2 grid grid-cols-subgrid content-start mb-2;
 }
 
 .action {
   @apply flex gap-1 items-center bg-highlighy-dimm border border-teal-600 p-[5px] px-3 rounded-lg shadow-sm;
+}
+
+.alternate {
+  @apply flex gap-1 items-center bg-stone-400/50 border border-stone-600 p-[5px] px-3 rounded-lg shadow-sm;
 }
 
 input {

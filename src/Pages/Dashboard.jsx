@@ -2,7 +2,7 @@ import {
   ArrowTopRightOnSquareIcon as LinkIcon,
   Square2StackIcon,
 } from "@heroicons/react/24/solid";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { TitleContext } from "../App";
 import graph from "../plot.png";
 import { Link } from "react-router-dom";
@@ -23,6 +23,18 @@ function Dashboard() {
     { name: "Minos", total: 450, date: "2021-09-01", status: 0 },
     { name: "Charlie", total: 450, date: "2021-09-01", status: 1 },
   ];
+
+  const timeFilters = [
+    "Hoje",
+    "Ontem",
+    "Semana",
+    "Mês",
+    "Mês passado",
+    "Este ano",
+    "Ano passado",
+  ];
+
+  const [timeFilter, setTimeFilter] = useState("Mês");
 
   return (
     <div>
@@ -71,9 +83,21 @@ function Dashboard() {
       <section className="my-9">
         <header className="flex justify-between mb-3">
           <h2 className="text-lg">Melhores vendas</h2>
-          <span className="p-1 px-3 bg-stone-200 border border-stone-400 shadow-sm rounded-lg">
-            Filtrar por:
-          </span>
+          <button className="p-1 px-3 bg-slate-300 border border-slate-400 shadow-sm rounded-lg relative group">
+            Filtrar por: {timeFilter}
+            <div className="panel right-0 top-10 px-10 text-left">
+              <ul className="flex flex-col gap-1">
+                {timeFilters.map((filter) => (
+                  <li
+                    className="hover:text-slate-800"
+                    onClick={() => setTimeFilter(filter)}
+                  >
+                    {filter}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </button>
         </header>
 
         <section className="flex flex-col gap-4">
@@ -82,9 +106,9 @@ function Dashboard() {
               <img
                 src={avatarApi.replace("$", client.name + 91)}
                 alt="Avatar de alguém"
-                className="rounded-full size-14 border border-slate-800 mr-5"
+                className="rounded-full size-14 border border-slate-600 mr-5"
               />
-              <div className="grid grid-cols-5 content-center flex-1 bg-stone-100 border border-stone-200 rounded-lg shadow-sm px-4">
+              <div className="grid grid-cols-5 content-center flex-1 bg-slate-200 border border-slate-300 rounded-lg shadow-sm px-4">
                 <span>{client.name}</span>
                 <span>{price(client.total)}</span>
                 <span>
