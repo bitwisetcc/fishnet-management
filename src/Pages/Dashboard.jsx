@@ -19,9 +19,9 @@ function Dashboard() {
   const statusMessages = ["Finalizado", "Pendente", "Cancelado"];
 
   const clients = [
-    { name: "Gabriel", total: 450, date: "2021-09-01", status: 0 },
-    { name: "Minos", total: 450, date: "2021-09-01", status: 0 },
-    { name: "Charlie", total: 450, date: "2021-09-01", status: 1 },
+    { id: 1, name: "Gabriel", total: 450, date: "2021-09-01", status: 0 },
+    { id: 2, name: "Minos", total: 450, date: "2021-09-01", status: 0 },
+    { id: 3, name: "Charlie", total: 450, date: "2021-09-01", status: 1 },
   ];
 
   const timeFilters = [
@@ -37,24 +37,24 @@ function Dashboard() {
   const [timeFilter, setTimeFilter] = useState("Mês");
 
   return (
-    <div>
-      <section className="grid grid-cols-3 h-44 gap-4 mb-5">
+    <>
+      <section className="grid md:grid-cols-3 *:h-36 md:*:h-44 gap-4 mb-5">
         <div className="dashboard-panel">
           <h2>Relatório Mensal</h2>
-          <span className="text-3xl">R$538.976</span>
+          <span className="text-2xl md:text-3xl">R$538.976</span>
           <p className="text-sm">Aumento de 7,9% em relação ao último mês</p>
         </div>
 
         <div className="dashboard-panel">
           <h2>Clientes Atingidos</h2>
           <p className="flex items-center text-sm justify-between">
-            <span className="text-3xl">72</span> Clientes distintos{" "}
+            <span className="text-lg md:text-3xl">72</span> Clientes distintos{" "}
             <span className="flex items-center gap-1">
               <Square2StackIcon className="size-4 inline" />5
             </span>
           </p>
           <p className="flex items-center text-sm justify-between mb-4">
-            <span className="text-3xl">105</span> Compras realizadas{" "}
+            <span className="text-lg md:text-3xl">105</span> Compras realizadas{" "}
             <span className="flex items-center gap-1">
               <Square2StackIcon className="size-4 inline" />5
             </span>
@@ -73,6 +73,7 @@ function Dashboard() {
           </p>
         </div>
       </section>
+
       <section>
         <div className="dashboard-panel">
           <h2 className="mb-2">Relatório Anual</h2>
@@ -103,7 +104,7 @@ function Dashboard() {
 
         <section className="flex flex-col gap-4">
           {clients.map((client) => (
-            <div className="flex">
+            <div className="flex" key={client.id}>
               <img
                 src={avatarApi.replace("$", client.name + 91)}
                 alt="Avatar de alguém"
@@ -138,7 +139,7 @@ function Dashboard() {
           ))}
         </section>
       </section>
-    </div>
+    </>
   );
 }
 
