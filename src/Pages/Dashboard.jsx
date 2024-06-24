@@ -89,6 +89,7 @@ function Dashboard() {
               <ul className="flex flex-col gap-1">
                 {timeFilters.map((filter) => (
                   <li
+                    key={filter}
                     className="hover:text-slate-800"
                     onClick={() => setTimeFilter(filter)}
                   >

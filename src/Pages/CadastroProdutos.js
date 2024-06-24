@@ -9,7 +9,7 @@ const CadastroProdutos = () => {
     <>
       <div className="grid md:grid-cols-2 gap-7">
         <Field
-          label="Nome do Peixe BIANCA"
+          label="Nome do Peixe"
           placeholder="Digite o nome do peixe a ser cadastrado"
         />
         <Field
