@@ -17,7 +17,7 @@ import report from "../report.pdf";
 
 const ListagemVendas = () => {
   const setTitle = useContext(TitleContext);
-  setTitle("Minhas vendas");
+  setTitle("Vendas");
 
   // status: finalizado, pendente, cancelado
   const statusMessages = ["Finalizado", "Pendente", "Cancelado"];

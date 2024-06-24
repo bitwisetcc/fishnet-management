@@ -5,7 +5,7 @@ function ListingFilter({ children }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="bg-slate-200 border border-slate-300 shadow-sm p-4 rounded-lg relative overflow-hidden">
+    <header className="bg-slate-200 border border-slate-300 shadow-sm p-4 rounded-lg relative">
       <button
         className="flex items-center justify-between w-full md:hidden gap-2 bg-slate-300 border border-[#a8accf] rounded-lg p-1 px-3 text-slate-600"
         onClick={() => setOpen(!open)}
@@ -15,7 +15,7 @@ function ListingFilter({ children }) {
       </button>
 
       <ul
-        className={`${open ? "top-14 block z-10" : "-left-10 hidden"} *:w-full md:*:w-auto bg-slate-200 border border-slate-300 shadow-sm p-3 rounded-lg md:bg-none md:border-none md:shadow-none md:p-0 md:w-auto absolute md:static md:flex justify-between gap-4 *:bg-slate-300 *:border *:border-[#a8accf]  *:rounded-lg *:p-1 *:px-3 text-slate-600`}
+        className={`${open ? "top-14 block z-10" : "-left-10 hidden"} flex flex-col *:w-full md:*:w-auto bg-slate-200 border border-slate-300 shadow-sm p-3 rounded-lg md:bg-none md:border-none md:shadow-none md:p-0 md:w-auto absolute md:static justify-between gap-2 md:gap-4 *:bg-slate-300 *:border *:border-[#a8accf]  *:rounded-lg *:p-1 *:px-3 text-slate-600`}
       >
         {children}
       </ul>

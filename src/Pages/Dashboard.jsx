@@ -85,7 +85,7 @@ function Dashboard() {
         <header className="flex justify-between mb-3">
           <h2 className="text-lg">Melhores vendas</h2>
           <button className="p-1 px-3 bg-slate-300 border border-slate-400 shadow-sm rounded-lg relative group">
-            Filtrar por: {timeFilter}
+            Filtro: {timeFilter}
             <div className="panel right-0 top-10 px-10 text-left">
               <ul className="flex flex-col gap-1">
                 {timeFilters.map((filter) => (
@@ -102,15 +102,15 @@ function Dashboard() {
           </button>
         </header>
 
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-4 overflow-x-scroll max-w-[calc(100vw-3rem)]">
           {clients.map((client) => (
-            <div className="flex" key={client.id}>
+            <div className="flex w-max" key={client.id}>
               <img
                 src={avatarApi.replace("$", client.name + 91)}
                 alt="Avatar de alguém"
                 className="rounded-full size-14 border border-slate-600 mr-5"
               />
-              <div className="grid grid-cols-5 content-center flex-1 bg-slate-200 border border-slate-300 rounded-lg shadow-sm px-4">
+              <div className="grid grid-cols-5 content-center flex-1 bg-slate-200 border border-slate-300 rounded-lg shadow-sm px-4 gap-x-3">
                 <span>{client.name}</span>
                 <span>{price(client.total)}</span>
                 <span>

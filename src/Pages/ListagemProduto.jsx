@@ -17,7 +17,7 @@ import { listAllProducts } from "../lib/query";
 
 function ListagemProduto() {
   const setTitle = useContext(TitleContext);
-  setTitle("Meus produtos");
+  setTitle("Produtos");
 
   const [products, setProds] = useState([]);
   useEffect(() => {
@@ -86,7 +86,7 @@ function ListagemProduto() {
       </header>
 
       <div className="overflow-x-scroll">
-        <article className="grid grid-cols-[90px_minmax(130px,1fr)_90px_90px_1fr_90px_70px] content-start gap-x-3 overflow-x-scroll max-w-[calc(100vw-5rem)]">
+        <article className="grid grid-cols-[90px_minmax(130px,1fr)_90px_90px_1fr_90px_70px] content-start gap-x-3 overflow-x-scroll max-w-[calc(100vw-4rem)]">
           <header className="listing col-span-7">
             <span>
               <span className="bg-slate-300 rounded-lg px-2">#</span>

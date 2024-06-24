@@ -3,7 +3,7 @@ import { TitleContext } from "../App";
 
 const CadastroProdutos = () => {
   const setTitle = useContext(TitleContext);
-  setTitle("Cadastro de produto");
+  setTitle("Novo produto");
 
   return (
     <>
