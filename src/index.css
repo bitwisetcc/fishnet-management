@@ -11,7 +11,7 @@ span.nav-hint {
 }
 
 .dashboard-panel {
-  @apply rounded-lg bg-slate-200 border border-slate-300 shadow-sm p-4 flex flex-col justify-between;
+  @apply rounded-lg bg-slate-100 border border-backnav-light shadow-xl p-4 flex flex-col justify-between bg-fundo-light;
 }
 
 .login-bg {
@@ -36,11 +36,11 @@ span.nav-hint {
 }
 
 header.listing {
-  @apply bg-slate-200 border border-slate-300 text-slate-600 shadow-sm p-4 rounded-lg justify-between gap-4 py-2 grid grid-cols-subgrid content-start mb-2;
+  @apply bg-cyan-100 border border-slate-300 text-slate-600 shadow-sm p-4 rounded-lg justify-between gap-4 py-2 grid grid-cols-subgrid content-start mb-2;
 }
 
 .action {
-  @apply flex gap-1 items-center bg-highlighy-dimm border border-teal-600 p-[5px] px-3 rounded-lg shadow-sm;
+  @apply flex gap-1 items-center bg-fundo-light text-white border border-teal-600 p-[5px] px-3 rounded-lg shadow-sm;
 }
 
 .alternate {

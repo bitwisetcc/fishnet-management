@@ -67,14 +67,14 @@ function ListagemProduto() {
     <>
       <ListingFilter>
         <span className="flex items-center text-slate-600 flex-1 gap-1">
-          <MagnifyingGlassIcon className="size-4" />
+          <MagnifyingGlassIcon className="size-4 bg-backnav-light" />
           <input
             type="search"
             name="search"
             id="search"
             placeholder="Pesquise"
             maxLength={90}
-            className="w-full placeholder:text-slate-500"
+            className="w-full placeholder:text-slate-500 bg-backnav-light"
           />
         </span>
 

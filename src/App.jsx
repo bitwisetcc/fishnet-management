@@ -19,7 +19,7 @@ const App = () => {
   return (
     <Router>
       <TitleContext.Provider value={setTitle}>
-        <div className="flex min-h-[100vh] items-stretch bg-slate-100">
+        <div className="flex min-h-[100vh] items-stretch bg-backnav-light">
           {escapeLayout || <NavBar />}
           <div className="flex-1">
             {escapeLayout || <Header title={title} />}
@@ -45,7 +45,7 @@ const App = () => {
 const Header = ({ title }) => {
   return (
     <header className="flex flex-row items-center justify-between mr-7 my-6">
-      <h1 className="text-3xl">{title}</h1>
+      <h1 className="text-4xl  font-bold text-white">{title}</h1>
       <img
         className="rounded-full size-14 shadow-sm object-cover"
         src={perfilphoto}
@@ -53,6 +53,6 @@ const Header = ({ title }) => {
       />
     </header>
   );
-};
+};   
 
 export default App;
