@@ -141,64 +141,64 @@ const ListagemVendas = () => {
         </button>
       </header>
 
-      <article className="grid grid-cols-[60px_repeat(6,1fr)_70px] content-start">
-        <header className="listing col-span-8 text-slate-500">
-          <span>
-            <span className="bg-slate-300 rounded-lg px-2">#</span>
-          </span>
-          <span>Cliente</span>
-          <span>Frete</span>
-          <span>Total</span>
-          <span>Pagamento</span>
-          <span>Status</span>
-          <span>Data</span>
-          <span>Ações</span>
-        </header>
-
-        {sales.map((sale) => (
-          <section className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2">
+      <div className="overflow-x-scroll">
+        <article className="grid-cols-[60px_repeat(6,1fr)_70px]">
+          <header className="listing col-span-8 text-slate-500">
             <span>
-              <span className="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
-                {sale.id}
+              <span className="bg-slate-300 rounded-lg px-2">#</span>
+            </span>
+            <span>Cliente</span>
+            <span>Frete</span>
+            <span>Total</span>
+            <span>Pagamento</span>
+            <span>Status</span>
+            <span>Data</span>
+            <span>Ações</span>
+          </header>
+          {sales.map((sale) => (
+            <section className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2">
+              <span>
+                <span className="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
+                  {sale.id}
+                </span>
               </span>
-            </span>
-            <span>{sale.client}</span>
-            <span>
-              {price(sale.shipping)}
-              <span className="bg-slate-200 text-slate-400 text-sm rounded-lg px-2 ml-1">
-                {sale.shippingProvider}
+              <span>{sale.client}</span>
+              <span>
+                {price(sale.shipping)}
+                <span className="bg-slate-200 text-slate-400 text-sm rounded-lg px-2 ml-1">
+                  {sale.shippingProvider}
+                </span>
               </span>
-            </span>
-            <span>{price(sale.total)}</span>
-            <span>{sale.payment}</span>
-            <span>
-              <span
-                className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm ${
-                  [
-                    "bg-lime-400 text-lime-900",
-                    "bg-amber-400 text-amber-800",
-                    "bg-rose-500 text-rose-900",
-                  ][sale.status]
-                }`}
-              >
-                {statusMessages[sale.status]}
+              <span>{price(sale.total)}</span>
+              <span>{sale.payment}</span>
+              <span>
+                <span
+                  className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm ${
+                    [
+                      "bg-lime-400 text-lime-900",
+                      "bg-amber-400 text-amber-800",
+                      "bg-rose-500 text-rose-900",
+                    ][sale.status]
+                  }`}
+                >
+                  {statusMessages[sale.status]}
+                </span>
               </span>
-            </span>
-            <span>{(new Date(sale.date)).toLocaleString("pt-BR").split(",")[0]}</span>
-
-            <span className="flex gap-2">
-              <a href={report} target="_blank">
-                <DocumentTextIcon className="size-5" />
-              </a>
-              <button>
-                <Tippy placement="left" content="Copiar e-mail">
-                  <EnvelopeIcon className="size-5" />
-                </Tippy>
-              </button>
-            </span>
-          </section>
-        ))}
-      </article>
+              <span>{(new Date(sale.date)).toLocaleString("pt-BR").split(",")[0]}</span>
+              <span className="flex gap-2">
+                <a href={report} target="_blank">
+                  <DocumentTextIcon className="size-5" />
+                </a>
+                <button>
+                  <Tippy placement="left" content="Copiar e-mail">
+                    <EnvelopeIcon className="size-5" />
+                  </Tippy>
+                </button>
+              </span>
+            </section>
+          ))}
+        </article>
+      </div>
     </>
   );
 };
