@@ -8,7 +8,7 @@ import {
   UserGroupIcon,
   ArrowLeftStartOnRectangleIcon as LogOutIcon,
 } from "@heroicons/react/24/solid";
-import perfilphoto from "../mcc.jpg";
+import perfilphoto from "../coisadenerd.jpg";
 import logo from "../Logo.png";
 
 const Header = ({ title }) => {
@@ -38,7 +38,7 @@ function MiniNav() {
         className="rounded-full border border-slate-600 shadow-sm p-[6px] size-14 z-30"
         onClick={() => setOpen(!open)}
       />
-      <ul className={`list-none flex flex-col space-y-5 items-center absolute transition-transform ease-in-out top-[4.5rem] bg-slate-300 rounded-full p-3 border border-slate-400 shadow origin-top duration-500 ${open ? "scale-y-100 translate-y-0" : "scale-y-0 -translate-y-10"}`}>
+      <ul className={`list-none flex flex-col space-y-5 items-center absolute transition-transform ease-in-out top-[4.5rem] bg-slate-100 rounded-full p-3 border border-slate-400 shadow origin-top duration-500 ${open ? "scale-y-100 translate-y-0" : "scale-y-0 -translate-y-10"}`}>
         <NavItem Icon={HomeIcon} text="Home" url="/" />
         <NavItem Icon={FaFishFins} text="Produtos" url="/prods" />
         <NavItem Icon={DocumentTextIcon} text="Vendas" url="/vendas" />
