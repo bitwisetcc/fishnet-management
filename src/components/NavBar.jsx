@@ -14,7 +14,7 @@ import logo from "../Logo.png";
 
 const NavBar = () => {
   return (
-    <nav className="flex flex-col justify-between items-center list-none pb-12 p-5 mr-2 h-[100vh] sticky top-0 left-0">
+    <nav className="hidden sticky md:flex flex-col justify-between items-center list-none pb-12 p-5 mr-2 h-[100vh] top-0 left-0">
       <ul className="list-none flex flex-col space-y-5 items-center">
         <img
           src={logo}

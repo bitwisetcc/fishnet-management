@@ -17,9 +17,9 @@ import { listAllProducts } from "../lib/query";
 
 function ListagemProduto() {
   const setTitle = useContext(TitleContext);
-  setTitle("Meus produtos");
+  setTitle("Produtos");
 
-  const [products, setProds] = useState([]);
+  const [products, setProds] = useState([]); 
   useEffect(() => {
     listAllProducts().then(setProds);
   }, []);
@@ -28,18 +28,18 @@ function ListagemProduto() {
     <>
       <ListingFilter>
         <span className="flex items-center text-slate-600 flex-1 gap-1">
-          <MagnifyingGlassIcon className="size-4 bg-backnav-light" />
+          <MagnifyingGlassIcon className="size-4" />
           <input
             type="search"
             name="search"
             id="search"
             placeholder="Pesquise"
-            maxLength={90}
+            maxLength={100}
             className="w-full placeholder:text-slate-500 bg-backnav-light"
           />
         </span>
 
-        <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
+        <button className="flex items-center gap-1 relative group cursor-pointer">
           <CurrencyDollarIcon className="size-4" />
           <span>Preço</span>
           <ChevronDownIcon className="size-4 ml-4" />
@@ -58,7 +58,7 @@ function ListagemProduto() {
           </div>
         </button>
 
-        <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
+        <button className="flex items-center gap-1 relative group cursor-pointer">
           <FunnelIcon className="size-4" />
           <span className="text-nowrap">Outros filtros</span>
           <ChevronDownIcon className="size-4 ml-4" />
@@ -85,44 +85,46 @@ function ListagemProduto() {
         </button>
       </header>
 
-      <article className="grid grid-cols-[90px_1fr_90px_90px_1fr_90px_70px] content-start gap-x-3">
-        <header className="listing col-span-7">
-          <span>
-            <span className="bg-slate-300 rounded-lg px-2">#</span>
-          </span>
-          <span>Nome</span>
-          <span>Preço</span>
-          <span>Estoque</span>
-          <span>Foto</span>
-          <span>Insights</span>
-          <span>Ações</span>
-        </header>
+      <div className="overflow-x-scroll">
+        <article className="grid-cols-[90px_minmax(130px,1fr)_90px_90px_1fr_90px_70px]">
+          <header className="listing col-span-7">
+            <span>
+              <span className="bg-slate-300 rounded-lg px-2">#</span>
+            </span>
+            <span>Nome</span>
+            <span>Preço</span>
+            <span>Estoque</span>
+            <span>Foto</span>
+            <span>Insights</span>
+            <span>Ações</span>
+          </header>
 
-        {products.map((product) => (
-          <section className="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
-            <span className="w-8">
-              <span className="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
-                {product.id.slice(0, 6)}...
+          {products.map((product) => (
+            <section className="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
+              <span className="w-8">
+                <span className="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
+                  {product.id.slice(0, 6)}...
+                </span>
               </span>
-            </span>
-            <span className="text-nowrap truncate">{product.name}</span>
-            <span>R${product.price}</span>
-            <span>{product.name.length}</span>
-            <span className="truncate text-nowrap underline hover:text-highlighy-dimm">
-              <Link to={product.img}>{product.img}</Link>
-            </span>
-            <ArrowTopRightOnSquareIcon className="size-5 text-slate-800 hover:text-highlighy-dimm cursor-pointer transition-colors duration-200" />
-            <span className="flex gap-2">
-              <button>
-                <LockClosedIcon className="size-5" />
-              </button>
-              <button>
-                <PencilSquareIcon className="size-5" />
-              </button>
-            </span>
-          </section>
-        ))}
-      </article>
+              <span className="text-nowrap truncate">{product.name}</span>
+              <span>R${product.price}</span>
+              <span>{product.name.length}</span>
+              <span className="truncate text-nowrap underline hover:text-highlighy-dimm">
+                <Link to={product.img}>{product.img}</Link>
+              </span>
+              <ArrowTopRightOnSquareIcon className="size-5 text-slate-800 hover:text-highlighy-dimm cursor-pointer transition-colors duration-200" />
+              <span className="flex gap-2">
+                <button>
+                  <LockClosedIcon className="size-5" />
+                </button>
+                <button>
+                  <PencilSquareIcon className="size-5" />
+                </button>
+              </span>
+            </section>
+          ))}
+        </article>
+      </div>
     </>
   );
 }

@@ -35,6 +35,10 @@ span.nav-hint {
   background-size: calc(4 * var(--s)) calc(12 * var(--s));
 }
 
+article:has(> header.listing) {
+  @apply gap-x-3 overflow-x-scroll max-w-[calc(100vw-4rem)] grid content-start;
+}
+
 header.listing {
   @apply bg-cyan-100 border border-slate-300 text-slate-600 shadow-sm p-4 rounded-lg justify-between gap-4 py-2 grid grid-cols-subgrid content-start mb-2;
 }
