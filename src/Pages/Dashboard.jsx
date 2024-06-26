@@ -38,7 +38,7 @@ function Dashboard() {
 
   return (
     <div>
-      <section className="grid md:grid-cols-3 *:h-36 md:*:h-44 gap-4 mb-5 text-white">
+      <section className="grid md:grid-cols-3 *:h-36 md:*:h-44 gap-4 mb-5">
         <div className="dashboard-panel">
           <h2>Relatório Mensal</h2>
           <span className="text-2xl md:text-3xl">R$538.976</span>
@@ -75,15 +75,15 @@ function Dashboard() {
 
       <section>
         <div className="dashboard-panel">
-          <h2 className="mb-2 text-white">Relatório Anual</h2>
+          <h2 className="mb-2">Relatório Anual</h2>
           <img src={graph} className="rounded shadow-1xl" alt="gráfico de vendas anual" />
         </div>
       </section>
 
       <section className="my-9">
-        <header className="flex justify-between mb-3 text-white">
+        <header className="flex justify-between mb-3">
           <h2 className="text-lg">Melhores vendas</h2>
-          <button className="p-1 px-3 bg-fundo-light border border-fundo-light shadow-sm rounded-lg relative group">
+          <button className="p-1 px-3 bg-slate-300 border border-slate-300 shadow-sm rounded-lg relative group">
             Filtrar por: {timeFilter}
             <div className="panel right-0 top-10 px-10 text-left ">
               <ul className="flex flex-col gap-1 ">
@@ -106,9 +106,9 @@ function Dashboard() {
               <img
                 src={avatarApi.replace("$", client.name + 91)}
                 alt="Avatar de alguém"
-                className="rounded-full size-14 border border-backnav-light mr-5"
+                className="rounded-full size-14 border border-slate-100 mr-5"
               />
-              <div className="grid grid-cols-5 content-center flex-1 bg-fundo-light border border-backnav-light rounded-lg shadow-sm px-4 gap-x-3 text-white">
+              <div className="grid grid-cols-5 content-center flex-1 bg-slate-300 border border-slate-100 rounded-lg shadow-sm px-4 gap-x-3">
                 <span>{client.name}</span>
                 <span>{price(client.total)}</span>
                 <span>

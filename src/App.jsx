@@ -19,7 +19,7 @@ const App = () => {
   return (
     <Router>
       <TitleContext.Provider value={setTitle}>
-        <div className="flex min-h-[100vh] items-stretch bg-backnav-light">
+        <div className="flex min-h-[100vh] items-stretch bg-slate-100">
           {escapeLayout || <NavBar />}
           <div className="flex-1">
             {escapeLayout || <Header title={title} />}

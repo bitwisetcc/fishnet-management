@@ -165,7 +165,7 @@ const ListagemVendas = () => {
               <span>{sale.client}</span>
               <span>
                 {price(sale.shipping)}
-                <span className="bg-slate-200 text-slate-400 text-sm rounded-lg px-2 ml-1">
+                <span className="bg-slate-200 text-stone-600 text-sm rounded-lg px-2 ml-1">
                   {sale.shippingProvider}
                 </span>
               </span>

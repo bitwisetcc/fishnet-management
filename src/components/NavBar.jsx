@@ -37,7 +37,7 @@ function NavItem({ Icon, text, url }) {
     <li className="only-of-type:stroke-[10px]">
       <Tippy content={text} placement="right" delay={50} arrow>
         <Link to={url}>
-          <Icon className="size-7 text-fundo-light hover:text-sombra transition-colors" />
+          <Icon className="size-7 text-sky-950 hover:text-sombra transition-colors" />
         </Link>
       </Tippy>
     </li>
