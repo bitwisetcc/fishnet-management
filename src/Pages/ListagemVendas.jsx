@@ -6,7 +6,7 @@ import {
   EnvelopeIcon,
   FunnelIcon,
   MagnifyingGlassIcon,
-  PrinterIcon
+  PrinterIcon,
 } from "@heroicons/react/24/outline";
 import Tippy from "@tippyjs/react";
 import React, { useContext } from "react";
@@ -103,7 +103,7 @@ const ListagemVendas = () => {
             </div>
           </div>
         </button>
-        
+
         <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
           <CheckCircleIcon className="size-4" />
           <span>Status</span>
@@ -145,7 +145,7 @@ const ListagemVendas = () => {
         <article className="grid-cols-[60px_repeat(6,1fr)_70px]">
           <header className="listing col-span-8 text-slate-500">
             <span>
-              <span className="bg-slate-300 rounded-lg px-2">#</span>
+              <span className="bg-slate-200 rounded-lg px-2">#</span>
             </span>
             <span>Cliente</span>
             <span>Frete</span>
@@ -158,7 +158,7 @@ const ListagemVendas = () => {
           {sales.map((sale) => (
             <section className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2">
               <span>
-                <span className="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm">
+                <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm">
                   {sale.id}
                 </span>
               </span>
@@ -184,7 +184,9 @@ const ListagemVendas = () => {
                   {statusMessages[sale.status]}
                 </span>
               </span>
-              <span>{(new Date(sale.date)).toLocaleString("pt-BR").split(",")[0]}</span>
+              <span>
+                {new Date(sale.date).toLocaleString("pt-BR").split(",")[0]}
+              </span>
               <span className="flex gap-2">
                 <a href={report} target="_blank">
                   <DocumentTextIcon className="size-5" />

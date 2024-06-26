@@ -10,7 +10,7 @@ function Login() {
     <article className="flex items-center justify-center h-[100vh] relative">
       <div className="absolute inset-0 login-bg blur-[4px]"></div>
       <form
-        className="bg-slate-100 text-slate-800 border border-slate-300 rounded-lg p-9 shadow-lg z-10 flex w-2/3"
+        className="bg-slate-100 text-slate-800 border border-slate-400 rounded-lg p-9 shadow-lg z-10 flex w-2/3"
         action="/"
       >
         <section className="flex-1 flex items-center justify-center border-r border-r-slate-300 mr-8 pr-5">

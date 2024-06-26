@@ -9,7 +9,7 @@ module.exports = {
         neutral: "#ffffff",
         highlight: "#cbf3f0",
         "highlighy-dimm": "#5bbfb5",
-        "backnav-light": "#83C5BE", 
+        "backnav-light": "#aae2dd", 
         "fundo-light": "#006D77", 
         sombra: "#E29578", 
       },

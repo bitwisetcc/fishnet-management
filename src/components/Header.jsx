@@ -16,7 +16,7 @@ const Header = ({ title }) => {
     <header className="flex flex-row items-center justify-between mx-7 my-6 md:ml-0">
       <div className="flex gap-4 items-center">
         <MiniNav />
-        <h1 className="text-3xl text-white font-bold">{title}</h1>
+        <h1 className="text-3xl text-sky-950 font-bold">{title}</h1>
       </div>
       <img
         className="rounded-full size-14 shadow-sm object-cover"

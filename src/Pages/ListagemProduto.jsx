@@ -19,7 +19,7 @@ function ListagemProduto() {
   const setTitle = useContext(TitleContext);
   setTitle("Produtos");
 
-  const [products, setProds] = useState([]); 
+  const [products, setProds] = useState([]);
   useEffect(() => {
     listAllProducts().then(setProds);
   }, []);
@@ -86,10 +86,10 @@ function ListagemProduto() {
       </header>
 
       <div className="md:overflow-x-hidden overflow-x-scroll">
-        <article className="grid-cols-[90px_minmax(130px,1fr)_90px_90px_1fr_90px_70px]">
+        <article className="grid-cols-[90px_minmax(130px,1fr)_90px_90px_minmax(130px,1fr)_90px_70px]">
           <header className="listing col-span-7">
             <span>
-              <span className="bg-slate-300 rounded-lg px-2">#</span>
+              <span className="bg-slate-200 rounded-lg px-2">#</span>
             </span>
             <span>Nome</span>
             <span>Preço</span>
@@ -102,7 +102,7 @@ function ListagemProduto() {
           {products.map((product) => (
             <section className="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
               <span className="w-8">
-                <span className="bg-slate-300 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
+                <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
                   {product.id.slice(0, 6)}...
                 </span>
               </span>
