@@ -141,7 +141,7 @@ const ListagemVendas = () => {
         </button>
       </header>
 
-      <div className="overflow-x-scroll">
+      <div className="overflow-x-scroll md:overflow-x-hidden">
         <article className="grid-cols-[60px_repeat(6,1fr)_70px]">
           <header className="listing col-span-8 text-slate-500">
             <span>

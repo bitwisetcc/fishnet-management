@@ -38,7 +38,7 @@ function Dashboard() {
 
   return (
     <div>
-      <section className="grid md:grid-cols-3 *:h-36 md:*:h-44 gap-4 mb-5 text-white"> sai fora, deixa que eu mandon o tcormpudor agora TRABALHE
+      <section className="grid md:grid-cols-3 *:h-36 md:*:h-44 gap-4 mb-5 text-white">
         <div className="dashboard-panel">
           <h2>Relatório Mensal</h2>
           <span className="text-2xl md:text-3xl">R$538.976</span>
@@ -100,7 +100,7 @@ function Dashboard() {
           </button>
         </header>
 
-        <section className="flex flex-col gap-4 overflow-x-scroll max-w-[calc(100vw-3rem)]">
+        <section className="flex flex-col gap-4 overflow-x-scroll md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
           {clients.map((client) => (
             <div className="flex w-max md:w-auto" key={client.id}>
               <img

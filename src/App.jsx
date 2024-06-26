@@ -39,18 +39,6 @@ const App = () => {
     </Router>
   );
 };
-
-const Header = ({ title }) => {
-  return (
-    <header className="flex flex-row items-center justify-between mr-7 my-6">
-      <h1 className="text-4xl  font-bold text-white">{title}</h1>
-      <img
-        className="rounded-full size-14 shadow-sm object-cover"
-        src={perfilphoto}
-        alt="Perfil"
-      />
-    </header>
-  );
-};   
+   
 
 export default App;

@@ -35,7 +35,7 @@ function ListagemProduto() {
             id="search"
             placeholder="Pesquise"
             maxLength={100}
-            className="w-full placeholder:text-slate-500 bg-backnav-light"
+            className="w-full placeholder:text-slate-500"
           />
         </span>
 
@@ -85,7 +85,7 @@ function ListagemProduto() {
         </button>
       </header>
 
-      <div className="overflow-x-scroll">
+      <div className="md:overflow-x-hidden overflow-x-scroll">
         <article className="grid-cols-[90px_minmax(130px,1fr)_90px_90px_1fr_90px_70px]">
           <header className="listing col-span-7">
             <span>

@@ -36,7 +36,7 @@ span.nav-hint {
 }
 
 article:has(> header.listing) {
-  @apply gap-x-3 overflow-x-scroll max-w-[calc(100vw-4rem)] grid content-start;
+  @apply gap-x-3 overflow-x-scroll md:overflow-x-hidden max-w-[calc(100vw-4rem)] grid content-start;
 }
 
 header.listing {
