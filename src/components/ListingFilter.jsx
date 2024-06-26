@@ -14,7 +14,13 @@ function ListingFilter({ children }) {
         <ChevronDownIcon className="size-4" />
       </button>
 
-      q
+      <ul
+        className={`${
+          open ? "top-14 block z-10" : "-left-10 hidden md:block"
+        } flex flex-col md:flex-row *:w-full md:*:w-auto border border-slate-300 shadow-sm p-3 rounded-lg md:bg-none md:border-none md:shadow-none md:p-0 md:w-auto absolute md:static justify-between gap-2 md:gap-4 *:bg-slate-300 *:border *:border-[#a8accf]  *:rounded-lg *:p-1 *:px-3 text-slate-600`}
+      >
+        {children}
+      </ul>
     </header>
   );
 }
