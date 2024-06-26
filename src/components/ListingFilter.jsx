@@ -16,7 +16,7 @@ function ListingFilter({ children }) {
 
       <ul
         className={`${
-          open ? "top-14 block z-10 bg-cyan-100" : "-left-10 hidden md:block"
+          open ? "top-14 block z-10 bg-cyan-100" : "-left-10 hidden md:flex"
         } flex flex-col md:flex-row *:w-full md:*:w-auto border border-slate-400 shadow-sm p-3 rounded-lg md:bg-none md:border-none md:shadow-none md:p-0 md:w-auto absolute md:static justify-between gap-2 md:gap-4 *:bg-slate-200 *:border *:border-[#a8accf]  *:rounded-lg *:p-1 *:px-3 text-slate-600`}
       >
         {children}

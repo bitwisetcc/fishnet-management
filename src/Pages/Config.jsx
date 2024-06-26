@@ -1,14 +1,15 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { TitleContext } from "../App";
 
-const ListagemUsuarios = () => {
+function Config() {
   const setTitle = useContext(TitleContext);
-  setTitle("Usuários");
+  setTitle("Configuração");
+
   return (
     <>
       <h1>Em desenvolvimento</h1>
     </>
   );
-};
+}
 
-export default ListagemUsuarios;
+export default Config;
