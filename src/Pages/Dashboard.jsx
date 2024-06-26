@@ -104,7 +104,7 @@ function Dashboard() {
 
         <section className="flex flex-col gap-4 overflow-x-scroll max-w-[calc(100vw-3rem)]">
           {clients.map((client) => (
-            <div className="flex w-max" key={client.id}>
+            <div className="flex w-max md:w-auto" key={client.id}>
               <img
                 src={avatarApi.replace("$", client.name + 91)}
                 alt="Avatar de alguém"
