@@ -9,8 +9,7 @@ module.exports = {
         neutral: "#ffffff",
         highlight: "#cbf3f0",
         "highlighy-dimm": "#5bbfb5",
-        "backnav-light": "#aee8e3", 
-        "fundo-light": "#006D77", 
+        "backnav-dark": "#11223A", //essa é a mesma cor azul escuro da NavBar da loja FishNet -Bianca
         sombra: "#E29578", 
       },
     },
