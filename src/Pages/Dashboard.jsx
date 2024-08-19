@@ -37,107 +37,125 @@ function Dashboard() {
   const [timeFilter, setTimeFilter] = useState("Mês");
 
   return (
-    <div>
-      <section className="grid md:grid-cols-3 *:h-36 md:*:h-44 gap-4 mb-5">
-        <div className="dashboard-panel">
-          <h2>Relatório Mensal</h2>
-          <span className="text-2xl md:text-3xl">R$538.976</span>
-          <p className="text-sm">Aumento de 7,9% em relação ao último mês</p>
-        </div>
-        <div className="dashboard-panel">
-          <h2>Clientes Atingidos</h2>
-          <p className="flex items-center text-sm justify-between">
-            <span className="text-lg md:text-3xl">72</span> Clientes distintos{" "}
-            <span className="flex items-center gap-1">
-              <Square2StackIcon className="size-4 inline" />5
-            </span>
-          </p>
-          <p className="flex items-center text-sm justify-between mb-4">
-            <span className="text-lg md:text-3xl">105</span> Compras realizadas{" "}
-            <span className="flex items-center gap-1">
-              <Square2StackIcon className="size-4 inline" />5
-            </span>
-          </p>
-        </div>
-
-        <div className="dashboard-panel">
-          <h2>Atalhos</h2>
-          <p className="flex items-center justify-between text-lg">
-            Backup de Dados
-            <LinkIcon className="size-4 inline hover:text-[#E29578] transition-colors duration-300" />
-          </p>
-          <p className="flex items-center justify-between text-lg mb-5">
-            Exportar dados
-            <LinkIcon className="size-4 inline hover:text-[#E29578] transition-colors duration-300" />
-          </p>
-        </div>
+    <div className="p-5">
+      <section className="grid md:grid-cols-3 gap-4 mb-5">
+        <DashboardPanel title="Relatório Mensal" content="R$538.976" description="Aumento de 7,9% em relação ao último mês" />
+        <DashboardPanel title="Clientes Atingidos">
+          <ClientStats count={72} label="Clientes distintos" />
+          <ClientStats count={105} label="Compras realizadas" />
+        </DashboardPanel>
+        <DashboardPanel title="Atalhos">
+          <Shortcut label="Backup de Dados" />
+          <Shortcut label="Exportar dados" />
+        </DashboardPanel>
       </section>
 
       <section>
-        <div className="dashboard-panel">
-          <h2 className="mb-2">Relatório Anual</h2>
-          <img src={graph} className="rounded shadow-1xl" alt="gráfico de vendas anual" />
-        </div>
+        <DashboardPanel title="Relatório Anual">
+          <img src={graph} className="rounded shadow-1xl w-full" alt="gráfico de vendas anual" />
+        </DashboardPanel>
       </section>
 
       <section className="my-9">
         <header className="flex justify-between mb-3">
           <h2 className="text-lg">Melhores vendas</h2>
-          <button className="p-1 px-3 bg-slate-300 border border-slate-300 shadow-sm rounded-lg relative group">
-            Filtrar por: {timeFilter}
-            <div className="panel right-0 top-10 px-10 text-left ">
-              <ul className="flex flex-col gap-1 ">
-                {timeFilters.map((filter) => (
-                  <li
-                    className="hover:text-sombra"
-                    onClick={() => setTimeFilter(filter)}
-                  >
-                    {filter}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </button>
+          <FilterDropdown selectedFilter={timeFilter} onFilterChange={setTimeFilter} filters={timeFilters} />
         </header>
-
-        <section className="flex flex-col gap-4 overflow-x-scroll md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
-          {clients.map((client) => (
-            <div className="flex w-max md:w-auto" key={client.id}>
-              <img
-                src={avatarApi.replace("$", client.name + 91)}
-                alt="Avatar de alguém"
-                className="rounded-full size-14 border border-slate-100 mr-5"
-              />
-              <div className="grid grid-cols-5 content-center flex-1 bg-slate-300 border border-slate-100 rounded-lg shadow-sm px-4 gap-x-3">
-                <span>{client.name}</span>
-                <span>{price(client.total)}</span>
-                <span>
-                  {new Date(client.date).toLocaleString("pt-BR").split(",")[0]}
-                </span>
-                <span>
-                  <span
-                    className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm  ${
-                      [
-                        "bg-lime-400 text-lime-900",
-                        "bg-amber-400 text-amber-800",
-                        "bg-rose-500 text-rose-900",
-                      ][client.status]
-                    }`}
-                  >
-                    {statusMessages[client.status]}
-                  </span>
-                </span>
-                <span className="justify-self-end">
-                  <Link to="/vendas">
-                    <ArrowTopRightOnSquareIcon className="size-6 hover:text-sombra  " />
-                  </Link>
-                </span>
-              </div>
-            </div>
-          ))}
-        </section>
+        <ClientList clients={clients} avatarApi={avatarApi} statusMessages={statusMessages} />
       </section>
     </div>
+  );
+}
+
+function DashboardPanel({ title, content, description, children }) {
+  return (
+    <div className="dashboard-panel bg-blue-100 p-4 rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold mb-2">{title}</h2>
+      {content && <span className="text-2xl md:text-3xl">{content}</span>}
+      {description && <p className="text-sm">{description}</p>}
+      {children}
+    </div>
+  );
+}
+
+function ClientStats({ count, label }) {
+  return (
+    <p className="flex items-center justify-between text-sm mb-2">
+      <span className="text-lg md:text-3xl">{count}</span> {label}
+    </p>
+  );
+}
+
+function Shortcut({ label }) {
+  return (
+    <p className="flex items-center justify-between text-lg mb-5">
+      {label}
+      <LinkIcon className="size-4 inline text-black hover:text-[#E29578] transition-colors duration-300" />
+    </p>
+  );
+}
+
+function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
+  return (
+    <button className="p-1 px-3 bg-slate-300 border border-slate-300 shadow-sm rounded-lg relative group">
+      Filtrar por: {selectedFilter}
+      <div className="panel right-0 top-10 px-10 text-left">
+        <ul className="flex flex-col gap-1">
+          {filters.map((filter) => (
+            <li
+              key={filter}
+              className="hover:text-sombra cursor-pointer"
+              onClick={() => onFilterChange(filter)}
+            >
+              {filter}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </button>
+  );
+}
+
+function ClientList({ clients, avatarApi, statusMessages }) {
+  return (
+    <section className="flex flex-col gap-4 overflow-x-auto md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
+      {clients.map((client) => (
+        <div className="flex w-full md:w-auto items-center" key={client.id}>
+          <img
+            src={avatarApi.replace("$", client.name + 91)}
+            alt={`Avatar de ${client.name}`}
+            className="rounded-full w-14 h-14 border border-slate-100 mr-5"
+          />
+          <div className="grid grid-cols-5 content-center flex-1 bg-slate-300 border border-slate-100 rounded-lg shadow-sm px-4 gap-x-3">
+            <span>{client.name}</span>
+            <span>{price(client.total)}</span>
+            <span>{new Date(client.date).toLocaleDateString("pt-BR")}</span>
+            <StatusBadge status={client.status} messages={statusMessages} />
+            <span className="justify-self-end">
+              <Link to="/vendas">
+                <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-sombra" />
+              </Link>
+            </span>
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function StatusBadge({ status, messages }) {
+  const statusStyles = [
+    "bg-lime-400 text-lime-900",
+    "bg-amber-400 text-amber-800",
+    "bg-rose-500 text-rose-900",
+  ];
+
+  return (
+    <span
+      className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm ${statusStyles[status]}`}
+    >
+      {messages[status]}
+    </span>
   );
 }
 
