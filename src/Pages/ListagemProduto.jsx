@@ -109,10 +109,10 @@ function ListagemProduto() {
               <span className="text-nowrap truncate">{product.name}</span>
               <span>R${product.price}</span>
               <span>{product.name.length}</span>
-              <span className="truncate text-nowrap underline hover:text-highlighy-dimm">
+              <span className="truncate text-nowrap underline hover:text-yellow-light">
                 <Link to={product.img}>{product.img}</Link>
               </span>
-              <ArrowTopRightOnSquareIcon className="size-5 text-slate-800 hover:text-highlighy-dimm cursor-pointer transition-colors duration-200" />
+              <ArrowTopRightOnSquareIcon className="size-5 text-slate-800 hover:text-yellow-light cursor-pointer transition-colors duration-200" />
               <span className="flex gap-2">
                 <button>
                   <LockClosedIcon className="size-5" />

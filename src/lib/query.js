@@ -1,31 +1,32 @@
+const API_URL = "https://fishnet-api-py.onrender.com"
+
 function parseProduct(prod) {
   return {
+    ...prod,
     id: prod._id,
-    name: prod.name_species.match(/^[^\(]+/)[0],
-    scientificName: prod.name_species.match(/(?<=\()[^\(|"]+/)[0],
-    quantity: 10,
-    feeding: prod.feeding,
-    tankSize: prod.tank_size,
+    quantity: 5,
+    feeding: String(prod.feeding),
+    tankSize: String(prod.tank_size),
     sizes: prod.size.match(/(\d*\scm)+/g) || ["Tamanho não informado"],
-    category: "Peixe",
     price: Number(prod.price.replace("$", "").trim()),
-    img: "https:" + prod.picture,
-    description: prod.description,
   };
 }
 
-export async function listAllProducts() {
+export async function listAllProducts(page = 1, limit = 10) {
   try {
-    const data = await fetch("https://fishnet-api.onrender.com/fishs");
+    const data = await fetch(`${API_URL}/itens`);
     const prods = await data.json();
-    return prods.slice(10, 40).map(parseProduct);
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    return prods.slice(start, end).map(parseProduct);
   } catch (error) {
     console.error(error.message);
+    return [];
   }
 }
 
 export async function getProductById(id) {
-  const data = await fetch("https://fishnet-api.onrender.com/fishs/" + id);
+  const data = await fetch(`${API_URL}/itens/${id}`);
   const prod = await data.json();
   return parseProduct(prod);
 }

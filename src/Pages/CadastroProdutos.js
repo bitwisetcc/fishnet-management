@@ -52,11 +52,11 @@ const CadastroProdutos = () => {
 
 function Field({ label, placeholder }) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 ">
       <label htmlFor={`txt-${label}`}>{label}</label>
       <input
         placeholder={placeholder}
-        className="py-1 px-3 bg-gray-300 rounded-md placeholder:text-slate-600 placeholder:italic"
+        className="py-1 px-3 bg-gray-300 rounded-md placeholder:text-slate-600 placeholder:italic "
         type="text"
         id={`txt-${label}`}
       />

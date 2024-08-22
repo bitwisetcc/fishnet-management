@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { TitleContext } from "../App";
-import logo from "../Logo.png";
+import logo from "../LogoSemFundo.png";
 import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
 
 function Login() {
@@ -8,15 +8,15 @@ function Login() {
   setTitle("Login");
   return (
     <article className="flex items-center justify-center h-[100vh] relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-blue-200 blur-[4px]"></div>
+      <div className="absolute inset-0 bg-blue-dark"></div>
       <div className="absolute inset-0 flex justify-center items-center">
-        <div className="w-[300px] h-[300px] bg-blue-300 opacity-30 rounded-full absolute -left-20 -bottom-20 animate-pulse"></div>
-        <div className="w-[200px] h-[200px] bg-blue-400 opacity-20 rounded-full absolute left-40 top-40 animate-pulse"></div>
-        <div className="w-[150px] h-[150px] bg-blue-200 opacity-25 rounded-full absolute right-20 bottom-10 animate-pulse"></div>
-        <div className="w-[100px] h-[100px] bg-blue-300 opacity-30 rounded-full absolute left-20 top-20 animate-pulse"></div>
-        <div className="w-[180px] h-[180px] bg-blue-400 opacity-20 rounded-full absolute right-40 bottom-40 animate-pulse"></div>
-        <div className="w-[130px] h-[130px] bg-blue-200 opacity-25 rounded-full absolute left-60 bottom-20 animate-pulse"></div>
-        <div className="w-[90px] h-[90px] bg-blue-300 opacity-30 rounded-full absolute right-60 top-10 animate-pulse"></div>
+        <div className="w-[300px] h-[300px] bg-[#6096ba] opacity-30 rounded-full absolute -left-20 -bottom-20 animate-pulse"></div>
+        <div className="w-[200px] h-[200px] bg-[#274c77] opacity-20 rounded-full absolute left-40 top-40 animate-pulse"></div>
+        <div className="w-[150px] h-[150px] bg-[#274c77] opacity-25 rounded-full absolute right-10 bottom-10 animate-pulse"></div>
+        <div className="w-[100px] h-[100px] bg-[#6096ba] opacity-30 rounded-full absolute left-20 top-20 animate-pulse"></div>
+        <div className="w-[180px] h-[180px] bg-[#6096ba] opacity-20 rounded-full absolute right-40 bottom-40 animate-pulse"></div>
+        <div className="w-[130px] h-[130px] bg-[#274c77] opacity-25 rounded-full absolute left-60 bottom-20 animate-pulse"></div>
+        <div className="w-[90px] h-[90px] bg-[#6096ba] opacity-30 rounded-full absolute right-60 top-10 animate-pulse"></div>
         
       </div>
       <form
@@ -56,12 +56,12 @@ function Login() {
                 />
               </span>
             </div>
-            <a href="/reset-password" className="text-[#93C5FD]">
+            <a href="/reset-password" className="text-blue-dark">
               Esqueceu a senha?
             </a>
             <button
               type="submit"
-              className="bg-blue-300 rounded-lg py-2 shadow-sm"
+              className="bg-blue-dark rounded-lg py-2 shadow-sm text-white"
             >
               Login
             </button>

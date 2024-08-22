@@ -90,7 +90,7 @@ function Shortcut({ label }) {
   return (
     <p className="flex items-center justify-between text-lg mb-5">
       {label}
-      <LinkIcon className="size-4 inline text-black hover:text-[#E29578] transition-colors duration-300" />
+      <LinkIcon className="size-4 inline text-black hover:text-yellow-light transition-colors duration-300" />
     </p>
   );
 }
@@ -104,7 +104,7 @@ function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
           {filters.map((filter) => (
             <li
               key={filter}
-              className="hover:text-sombra cursor-pointer"
+              className="hover:text-yellow-light cursor-pointer"
               onClick={() => onFilterChange(filter)}
             >
               {filter}
@@ -133,7 +133,7 @@ function ClientList({ clients, avatarApi, statusMessages }) {
             <StatusBadge status={client.status} messages={statusMessages} />
             <span className="justify-self-end">
               <Link to="/vendas">
-                <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-sombra" />
+                <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-yellow-light" />
               </Link>
             </span>
           </div>

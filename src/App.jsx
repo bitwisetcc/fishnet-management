@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import CadastroProdutos from "./Pages/CadastroProdutos";
+import CadastroUsuarios from "./Pages/CadastroUsuarios";
 import ListagemVendas from "./Pages/ListagemVendas";
 import ListagemProduto from "./Pages/ListagemProduto";
 import Dashboard from "./Pages/Dashboard";
@@ -19,7 +20,7 @@ const App = () => {
   return (
     <Router>
       <TitleContext.Provider value={setTitle}>
-        <div className="flex min-h-[100vh] items-stretch bg-slate-300">
+        <div className="flex min-h-[100vh] items-stretch bg-gray-light">
           {escapeLayout || <NavBar />}
           <div className="flex-1">
             {escapeLayout || <Header title={title} />}
@@ -30,6 +31,7 @@ const App = () => {
                 {/* <Route path="/users/new" element={<CadastroUsuarios />} /> */}
                 <Route path="/prods" element={<ListagemProduto />} />
                 <Route path="/prods/new" element={<CadastroProdutos />} />
+                <Route path="/users/new" element={<CadastroUsuarios />} />
                 <Route path="/vendas" element={<ListagemVendas />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/config" element={<Config />} />

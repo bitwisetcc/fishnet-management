@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { FaFishFins } from "react-icons/fa6";
 import {
   HomeIcon,
-  DocumentTextIcon,
-  Cog6ToothIcon,
-  UserGroupIcon,
   ArrowLeftStartOnRectangleIcon as LogOutIcon,
+  UserIcon,
+  WrenchScrewdriverIcon,
+  PresentationChartLineIcon,
 } from "@heroicons/react/24/solid";
 import perfilphoto from "../coisadenerd.jpg";
 import logo from "../Logo.png";
@@ -43,9 +43,9 @@ function MiniNav() {
       >
         <NavItem Icon={HomeIcon} text="Home" url="/" />
         <NavItem Icon={FaFishFins} text="Produtos" url="/prods" />
-        <NavItem Icon={DocumentTextIcon} text="Vendas" url="/vendas" />
-        <NavItem Icon={UserGroupIcon} text="Usuários" url="/users" />
-        <NavItem Icon={Cog6ToothIcon} text="Configurações" url="/config" />
+        <NavItem Icon={PresentationChartLineIcon} text="Vendas" url="/vendas" />
+        <NavItem Icon={UserIcon} text="Usuários" url="/users" />
+        <NavItem Icon={WrenchScrewdriverIcon} text="Configurações" url="/config" />
       </ul>
     </nav>
   );
@@ -55,7 +55,7 @@ function NavItem({ Icon, url }) {
   return (
     <li>
       <Link to={url}>
-        <Icon className="w-7 h-7 text-slate-700 hover:text-yellow-300 transition-colors duration-300" />
+        <Icon className="w-7 h-7 text-slate-700 hover:text-yellow-light transition-colors duration-300" />
       </Link>
     </li>
   );
