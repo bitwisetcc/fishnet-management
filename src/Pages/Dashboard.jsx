@@ -97,11 +97,11 @@ function Shortcut({ label }) {
 
 function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
   return (
-    <button className="p-1 px-3 bg-slate-300 border border-slate-300 shadow-sm rounded-lg relative group">
+    <button className="p-1 px-3 bg-slate-200 border border-slate-100 shadow-sm rounded-lg relative group">
       Filtrar por: {selectedFilter}
       <div className="panel right-0 top-10 px-10 text-left">
         <ul className="flex flex-col gap-1">
-          {filters.map((filter) => (
+          {filters.map((filter) => (  
             <li
               key={filter}
               className="hover:text-yellow-light cursor-pointer"
@@ -126,7 +126,7 @@ function ClientList({ clients, avatarApi, statusMessages }) {
             alt={`Avatar de ${client.name}`}
             className="rounded-full w-14 h-14 border border-slate-100 mr-5"
           />
-          <div className="grid grid-cols-5 content-center flex-1 bg-slate-300 border border-slate-100 rounded-lg shadow-sm px-4 gap-x-3">
+          <div className="grid grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
             <span>{client.name}</span>
             <span>{price(client.total)}</span>
             <span>{new Date(client.date).toLocaleDateString("pt-BR")}</span>
@@ -151,11 +151,13 @@ function StatusBadge({ status, messages }) {
   ];
 
   return (
-    <span
-      className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm ${statusStyles[status]}`}
-    >
-      {messages[status]}
-    </span>
+    <div className={`flex`}>
+      <span
+        className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm ${statusStyles[status]}`}
+      >
+        {messages[status]}
+      </span>
+    </div>
   );
 }
 

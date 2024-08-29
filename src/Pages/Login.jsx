@@ -10,13 +10,13 @@ function Login() {
     <article className="flex items-center justify-center h-[100vh] relative overflow-hidden">
       <div className="absolute inset-0 bg-blue-dark"></div>
       <div className="absolute inset-0 flex justify-center items-center">
-        <div className="w-[300px] h-[300px] bg-[#6096ba] opacity-30 rounded-full absolute -left-20 -bottom-20 animate-pulse"></div>
-        <div className="w-[200px] h-[200px] bg-[#274c77] opacity-20 rounded-full absolute left-40 top-40 animate-pulse"></div>
-        <div className="w-[150px] h-[150px] bg-[#274c77] opacity-25 rounded-full absolute right-10 bottom-10 animate-pulse"></div>
-        <div className="w-[100px] h-[100px] bg-[#6096ba] opacity-30 rounded-full absolute left-20 top-20 animate-pulse"></div>
-        <div className="w-[180px] h-[180px] bg-[#6096ba] opacity-20 rounded-full absolute right-40 bottom-40 animate-pulse"></div>
-        <div className="w-[130px] h-[130px] bg-[#274c77] opacity-25 rounded-full absolute left-60 bottom-20 animate-pulse"></div>
-        <div className="w-[90px] h-[90px] bg-[#6096ba] opacity-30 rounded-full absolute right-60 top-10 animate-pulse"></div>
+        <div className="w-[300px] h-[300px] bg-[#CBAD51] opacity-30 rounded-full absolute -left-20 -bottom-20 animate-pulse"></div>
+        <div className="w-[200px] h-[200px] bg-[#CBAD51] opacity-20 rounded-full absolute left-40 top-40 animate-pulse"></div>
+        <div className="w-[150px] h-[150px] bg-[#CBAD51] opacity-25 rounded-full absolute right-10 bottom-10 animate-pulse"></div>
+        <div className="w-[100px] h-[100px] bg-[#CBAD51] opacity-30 rounded-full absolute left-20 top-20 animate-pulse"></div>
+        <div className="w-[180px] h-[180px] bg-[#CBAD51] opacity-20 rounded-full absolute right-40 bottom-40 animate-pulse"></div>
+        <div className="w-[130px] h-[130px] bg-[#CBAD51] opacity-25 rounded-full absolute left-60 bottom-20 animate-pulse"></div>
+        <div className="w-[90px] h-[90px] bg-[#CBAD51] opacity-30 rounded-full absolute right-60 top-10 animate-pulse"></div>
         
       </div>
       <form
@@ -56,7 +56,7 @@ function Login() {
                 />
               </span>
             </div>
-            <a href="/reset-password" className="text-blue-dark">
+            <a href="/reset-password" className="text-blue-dark hover:text-yellow-light w-max" >
               Esqueceu a senha?
             </a>
             <button
