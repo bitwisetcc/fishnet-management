@@ -60,7 +60,7 @@ function ListagemUsuarios() {
       </header>
 
       <div className="md:overflow-x-hidden overflow-x-scroll">
-        <article className="grid grid-cols-[90px_minmax(150px,1fr)_120px_minmax(180px,1fr)_150px_minmax(200px,1fr)_120px_90px_70px]">
+        <article className="grid grid-cols-[90px_minmax(150px,1fr)_120px_minmax(180px,1fr)_150px_minmax(200px,1fr)_120px_90px_...]">
           <header className="listing col-span-8 text-slate-500">
             <span>
               <span className="bg-slate-200 rounded-lg px-2">#</span>
@@ -76,7 +76,7 @@ function ListagemUsuarios() {
           </header>
 
           {users.map((user) => (
-            <section className="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
+            <section className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2">
               <span className="w-8">
                 <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
                   {user.id.slice(0, 6)}...
@@ -88,7 +88,6 @@ function ListagemUsuarios() {
               <span>{user.cpf}</span>
               <span>{user.addr}</span>
               <span>{user.uf}</span>
-              {/* <ArrowTopRightOnSquareIcon className="size-5 text-slate-800 hover:text-yellow-light cursor-pointer transition-colors duration-200" />
               <span className="flex gap-2">
                 <button>
                   <LockClosedIcon className="size-5" />
@@ -96,7 +95,7 @@ function ListagemUsuarios() {
                 <button>
                   <PencilSquareIcon className="size-5" />
                 </button>
-              </span> */}
+              </span>
             </section>
           ))}
         </article>
