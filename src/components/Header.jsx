@@ -39,13 +39,19 @@ function MiniNav() {
         onClick={() => setOpen(!open)}
       />
       <ul
-        className={`list-none flex flex-col space-y-5 items-center absolute transition-transform ease-in-out top-[4.5rem] bg-slate-100 rounded-full p-3 border border-slate-400 shadow origin-top duration-500 ${open ? "scale-y-100 translate-y-0" : "scale-y-0 -translate-y-10"}`}
+        className={`list-none flex flex-col space-y-5 items-center absolute transition-transform ease-in-out top-[4.5rem] bg-slate-100 rounded-full p-3 border border-slate-400 shadow origin-top duration-500 ${
+          open ? "scale-y-100 translate-y-0" : "scale-y-0 -translate-y-10"
+        }`}
       >
         <NavItem Icon={HomeIcon} text="Home" url="/" />
         <NavItem Icon={FaFishFins} text="Produtos" url="/prods" />
         <NavItem Icon={PresentationChartLineIcon} text="Vendas" url="/vendas" />
         <NavItem Icon={UserIcon} text="Usuários" url="/users" />
-        <NavItem Icon={WrenchScrewdriverIcon} text="Configurações" url="/config" />
+        <NavItem
+          Icon={WrenchScrewdriverIcon}
+          text="Configurações"
+          url="/config"
+        />
       </ul>
     </nav>
   );

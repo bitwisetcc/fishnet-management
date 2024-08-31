@@ -24,7 +24,7 @@ const App = () => {
           {escapeLayout || <NavBar />}
           <div className="flex-1">
             {escapeLayout || <Header title={title} />}
-            <main className={escapeLayout ? "" : "mx-7 md:ml-0 md:mr-8"}>
+            <main className={escapeLayout ? "" : "mx-7"}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/users" element={<ListagemUsuarios />} />

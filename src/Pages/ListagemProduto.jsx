@@ -155,10 +155,21 @@ function AddProduct({ open, setOpen }) {
             </button>
           </header>
 
-          <form action="" method="post" className="flex flex-col gap-4 text-stone-900">
+          <form
+            action=""
+            method="post"
+            className="flex flex-col gap-4 text-stone-900"
+          >
             <div className="flex flex-col gap-1">
-              <label htmlFor="txt-name" className="font-semibold">Nome</label>
-              <input type="text" name="name" id="txt-name" className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" />
+              <label htmlFor="txt-name" className="font-semibold">
+                Nome
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="txt-name"
+                className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <label htmlFor="txt-namec">Nome científico</label>
