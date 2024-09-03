@@ -13,7 +13,6 @@ module.exports = {
         "gray-light": "#CBD5E1", //cor 30% -- cinza
         "yellow-light": "#CBAD51", //cor 10% -- amarelo
         "branco-perolado": "#F0F0F0", //plano de fundo com detalhes
-        "BU-azul": "#003459",
       },
     },
   },

@@ -21,13 +21,13 @@ const NavBar = () => {
           alt="Logo"
           className="rounded-full border border-slate-600 shadow-sm p-[6px] w-14 h-14"
         />
-        <NavItem Icon={HomeIcon} text="Home" url="/" />
+        <NavItem Icon={HomeIcon} text="Início" url="/" />
         <NavItem Icon={FaFishFins} text="Produtos" url="/prods" />
         <NavItem Icon={PresentationChartLineIcon} text="Vendas" url="/vendas" />
         <NavItem Icon={UsersIcon} text="Usuários" url="/users" />
         <NavItem Icon={WrenchScrewdriverIcon} text="Configurações" url="/config" /> {/* Atualizado */}
       </ul>
-      <NavItem Icon={LogOutIcon} text="Logout" url="/login" />
+      <NavItem Icon={LogOutIcon} text="Sair" url="/login" />
     </nav>
   );
 };
