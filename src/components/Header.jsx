@@ -9,7 +9,7 @@ import {
   PresentationChartLineIcon,
 } from "@heroicons/react/24/solid";
 import perfilphoto from "../coisadenerd.jpg";
-import logo from "../Logo.png";
+import logo from "../LogoGold.jpeg";
 
 const Header = ({ title }) => {
   return (

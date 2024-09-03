@@ -10,7 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import "tippy.js/dist/tippy.css";
 
-import logo from "../Logo.png";
+import logo from "../LogoGold.jpeg";
 
 const NavBar = () => {
   return (
