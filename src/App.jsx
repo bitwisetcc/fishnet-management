@@ -15,7 +15,7 @@ export const TitleContext = createContext("");
 
 const App = () => {
   const [title, setTitle] = useState("");
-  const escapeLayout = title === "Login";
+  const escapeLayout = title === "Login" || title === "Cadastro de Usuários";
 
   return (
     <Router>

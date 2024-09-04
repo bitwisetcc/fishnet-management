@@ -100,11 +100,11 @@ function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
     <button className="p-1 px-3 bg-slate-200 border border-slate-100 shadow-sm rounded-lg relative group">
       Filtrar por: {selectedFilter}
       <div className="panel right-0 top-10 px-10 text-left">
-        <ul className="flex flex-col gap-1">
+        <ul className="flex flex-col gap-1 ">
           {filters.map((filter) => (  
             <li
               key={filter}
-              className="hover:text-yellow-light cursor-pointer"
+              className="hover:text-slate-800 cursor-pointer"
               onClick={() => onFilterChange(filter)}
             >
               {filter}

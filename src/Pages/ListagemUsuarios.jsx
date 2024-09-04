@@ -49,10 +49,6 @@ function ListagemUsuarios() {
       </ListingFilter>
 
       <header className="flex justify-end gap-3 my-4">
-        <Link to="new" className="action">
-          <PlusCircleIcon className="size-5" />
-          Adicionar
-        </Link>
         <button className="action">
           <PrinterIcon className="size-5" />
           Imprimir

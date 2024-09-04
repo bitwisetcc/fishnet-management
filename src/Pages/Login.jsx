@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { TitleContext } from "../App";
 import logo from "../LogoSemFundo.png";
+import { Link } from "react-router-dom";
 import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
 
 function Login() {
@@ -56,9 +57,11 @@ function Login() {
                 />
               </span>
             </div>
+            <Link to="/users/new">
             <a href="/reset-password" className="text-blue-dark hover:text-yellow-light w-max" >
               Esqueceu a senha?
             </a>
+            </Link>
             <button
               type="submit"
               className="bg-blue-dark rounded-lg py-2 shadow-sm text-white"
