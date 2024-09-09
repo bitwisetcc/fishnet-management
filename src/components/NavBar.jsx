@@ -3,6 +3,7 @@ import { FaFishFins } from "react-icons/fa6";
 import {
   HomeIcon,
   UsersIcon,
+  BriefcaseIcon,
   WrenchScrewdriverIcon,
   PresentationChartLineIcon,
   ArrowLeftStartOnRectangleIcon as LogOutIcon,
@@ -24,7 +25,8 @@ const NavBar = () => {
         <NavItem Icon={HomeIcon} text="Início" url="/" />
         <NavItem Icon={FaFishFins} text="Produtos" url="/prods" />
         <NavItem Icon={PresentationChartLineIcon} text="Vendas" url="/vendas" />
-        <NavItem Icon={UsersIcon} text="Usuários" url="/users" />
+        <NavItem Icon={UsersIcon} text="Clientes" url="/client" />
+        <NavItem Icon={BriefcaseIcon} text="Funcionários" url="/users" />
         <NavItem Icon={WrenchScrewdriverIcon} text="Configurações" url="/config" /> {/* Atualizado */}
       </ul>
       <NavItem Icon={LogOutIcon} text="Sair" url="/login" />

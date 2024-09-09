@@ -17,13 +17,14 @@ import { listAllProducts } from "../lib/query";
 
 function ListagemUsuarios() {
   const setTitle = useContext(TitleContext);
-  setTitle("Usuários");
+  setTitle("Lista de Funcionários");
 
-  // const [products, setProds] = useState([]);
-  // useEffect(() => {
-  //   listAllProducts().then(setProds);
-  // }, []);
-  
+  const [products, setProds] = useState([]);
+  const [registerOpen, setRegisterOpen] = useState(false);
+  useEffect(() => {
+    listAllProducts().then(setProds);
+  }, []);
+
   const users = [
     { id: "1", name: "John Doe", tel: "1234567890", email: "john@example.com", cpf: "123456789", addr: "123 Main St", uf: "CA" },
     { id: "2", name: "Jane Smith", tel: "9876543210", email: "jane@example.com", cpf: "987654321", addr: "456 Elm St", uf: "NY" },
@@ -49,6 +50,10 @@ function ListagemUsuarios() {
       </ListingFilter>
 
       <header className="flex justify-end gap-3 my-4">
+        <button className="action" onClick={() => setRegisterOpen(true)}>
+          <PlusCircleIcon className="size-5" />
+          Adicionar
+        </button>
         <button className="action">
           <PrinterIcon className="size-5" />
           Imprimir
@@ -64,10 +69,9 @@ function ListagemUsuarios() {
             <span>Nome</span>
             <span>Tel</span>
             <span>Email</span>
-            <span>CPF/CNPJ</span>
+            <span>CPF</span>
             <span>Endereço</span>
             <span>Cidade/UF</span>
-            {/* <span>Insights</span> */}
             <span>Ações</span>
           </header>
 
@@ -79,7 +83,7 @@ function ListagemUsuarios() {
                 </span>
               </span>
               <span className="text-nowrap truncate">{user.name}</span>
-              <span>R${user.tel}</span>
+              <span>{user.tel}</span>
               <span>{user.email}</span>
               <span>{user.cpf}</span>
               <span>{user.addr}</span>

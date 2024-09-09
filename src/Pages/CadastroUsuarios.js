@@ -1,63 +1,87 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { TitleContext } from "../App";
 
 const CadastroUsuarios = () => {
   const setTitle = useContext(TitleContext);
   setTitle("Cadastro de Usuários");
-  return (
-  <>
-  <div className="grid md:grid-cols-2 gap-7 ">
-    <Field 
-      label="Nome"
-      placeholder="Digite o nome do usuário a ser cadastrado"
-    />
-    <Field
-      label="Estado"
-      placeholder="Digite o Estado do usuário a ser cadastrado"
-    />
-     <Field
-      label="Email"
-      placeholder="Digite o email do usuário a ser cadastrado"
-    />
-    <Field
-      label="Cidade"
-      placeholder="Digite a cidade do usuário a ser cadastrado"
-    />
-    <Field
-      label="Telefone"
-      placeholder="Digite o telefone do usuário a ser cadastrado"
-    />
-    <Field
-      label="Endereço"
-      placeholder="Digite por exemplo: Rua da Tereza, 40 (e complemento se tiver) " 
-    />
-    
-    <Field
-      label="CPF ou CNPJ"
-      placeholder="Digite o CPF ou CNPJ do usuário a ser cadastrado"
-    />
-  </div>
 
-  <div className="flex flex-row justify-end p-4 gap-4 mt-5">
-    <button className="action">Cadastrar</button>
-    <button className="alternate">Limpar</button>
-  </div>
-</>
-);
+  const [formData, setFormData] = useState({
+    nome: "",
+    estado: "",
+    email: "",
+    cidade: "",
+    telefone: "",
+    endereço: "",
+    cpfCnpj: ""
+  });
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prevData => ({ ...prevData, [id]: value }));
+  };
+
+  const handleClear = () => {
+    setFormData({
+      nome: "",
+      estado: "",
+      email: "",
+      cidade: "",
+      telefone: "",
+      endereco: "",
+      cpfCnpj: ""
+    });
+  };
+
+  return (
+    <>
+      <div className="p-5">
+        <div className="text-3xl text-sky-950 font-bold">Cadastro de Usuário</div><br></br>
+        <div className="grid md:grid-cols-2 gap-7">
+          {Object.keys(formData).map(key => (
+            <Field
+              key={key}
+              id={key}
+              label={capitalizeFirstLetter(key)}
+              placeholder={`Digite o ${key} do usuário a ser cadastrado`}
+              value={formData[key]}
+              onChange={handleChange}
+            />
+          ))}
+        </div>
+
+        <div className="flex flex-row justify-end p-4 gap-4 mt-5">
+          <button className="action">Cadastrar</button>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="alternate"
+          >
+            Limpar
+          </button>
+        </div>
+      </div>
+    </>
+  );
 };
 
-function Field({ label, placeholder }) {
-return (
-<div className="flex flex-col gap-1">
-  <label htmlFor={`txt-${label}`}>{label}</label>
-  <input
-    placeholder={placeholder}
-    className="py-1 px-3 bg-gray-300 rounded-md placeholder:text-slate-600 placeholder:italic"
-    type="text"
-    id={`txt-${label}`}
-  />
-</div>
-);
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1).replace(/([A-Z])/g, ' $1');
+};
+
+function Field({ id, label, placeholder, value, onChange }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <label htmlFor={`txt-${id}`}>{label}</label>
+      <input
+        placeholder={placeholder}
+        className="py-1 px-3 bg-gray-300 rounded-md placeholder:text-slate-600 placeholder:italic"
+        type="text"
+        id={id}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
 }
 
 export default CadastroUsuarios;

@@ -57,9 +57,12 @@ function Login() {
                 />
               </span>
             </div>
-            <Link to="/users/new">
             <a href="/reset-password" className="text-blue-dark hover:text-yellow-light w-max" >
               Esqueceu a senha?
+            </a>
+            <Link to="/users/new">
+            <a href="/reset-password" className="text-blue-dark hover:text-yellow-light w-max" >
+              Não tem uma conta? Crie agora!
             </a>
             </Link>
             <button

@@ -4,12 +4,13 @@ import { FaFishFins } from "react-icons/fa6";
 import {
   HomeIcon,
   ArrowLeftStartOnRectangleIcon as LogOutIcon,
-  UserIcon,
+  UsersIcon,
   WrenchScrewdriverIcon,
   PresentationChartLineIcon,
 } from "@heroicons/react/24/solid";
 import perfilphoto from "../coisadenerd.jpg";
 import logo from "../LogoGold.jpeg";
+import { BriefcaseIcon } from "@heroicons/react/24/outline";
 
 const Header = ({ title }) => {
   return (
@@ -46,7 +47,8 @@ function MiniNav() {
         <NavItem Icon={HomeIcon} text="Home" url="/" />
         <NavItem Icon={FaFishFins} text="Produtos" url="/prods" />
         <NavItem Icon={PresentationChartLineIcon} text="Vendas" url="/vendas" />
-        <NavItem Icon={UserIcon} text="Usuários" url="/users" />
+        <NavItem Icon={UsersIcon} text="Clientes" url="/client" />
+        <NavItem Icon={BriefcaseIcon} text="Funcionários" url="/users" />
         <NavItem
           Icon={WrenchScrewdriverIcon}
           text="Configurações"

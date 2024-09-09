@@ -5,6 +5,7 @@ import CadastroProdutos from "./Pages/CadastroProdutos";
 import CadastroUsuarios from "./Pages/CadastroUsuarios";
 import ListagemVendas from "./Pages/ListagemVendas";
 import ListagemProduto from "./Pages/ListagemProduto";
+import ListagemClientes from "./Pages/ListagemClientes";
 import Dashboard from "./Pages/Dashboard";
 import Login from "./Pages/Login";
 import Header from "./components/Header";
@@ -28,7 +29,7 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/users" element={<ListagemUsuarios />} />
-                {/* <Route path="/users/new" element={<CadastroUsuarios />} /> */}
+                <Route path="/client" element={<ListagemClientes />} /> 
                 <Route path="/prods" element={<ListagemProduto />} />
                 <Route path="/prods/new" element={<CadastroProdutos />} />
                 <Route path="/users/new" element={<CadastroUsuarios />} />
