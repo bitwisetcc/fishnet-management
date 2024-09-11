@@ -7,6 +7,7 @@ import ListagemVendas from "./Pages/ListagemVendas";
 import ListagemProduto from "./Pages/ListagemProduto";
 import ListagemClientes from "./Pages/ListagemClientes";
 import Dashboard from "./Pages/Dashboard";
+import TelaPerfilUser from "./Pages/TelaPerfilUser";
 import Login from "./Pages/Login";
 import Header from "./components/Header";
 import ListagemUsuarios from "./Pages/ListagemUsuarios";
@@ -34,6 +35,7 @@ const App = () => {
                 <Route path="/prods/new" element={<CadastroProdutos />} />
                 <Route path="/users/new" element={<CadastroUsuarios />} />
                 <Route path="/vendas" element={<ListagemVendas />} />
+                <Route path="/profile" element={<TelaPerfilUser />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/config" element={<Config />} />
                 <Route path="*" element={<h1>Página não encontrada</h1>} />

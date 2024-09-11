@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
     ArrowTopRightOnSquareIcon,
     ChevronDownIcon,
@@ -9,7 +10,7 @@ import {
     PlusCircleIcon,
     PrinterIcon,
 } from "@heroicons/react/24/outline";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { Link } from "react-router-dom";
@@ -19,22 +20,49 @@ function ListagemClientes() {
     const setTitle = useContext(TitleContext);
     setTitle("Lista de Clientes");
 
+    const [activeTab, setActiveTab] = useState("Todos");  // Começar com a aba "Todos" selecionada
     const [products, setProds] = useState([]);
     const [registerOpen, setRegisterOpen] = useState(false);
+    
     useEffect(() => {
         listAllProducts().then(setProds);
     }, []);
 
     const users = [
-        { id: "1", name: "Cliente 1", tel: "1234567890", email: "john@example.com", cpf: "123456789", addr: "123 Main St", uf: "CA" },
-        { id: "2", name: "Cliente 2", tel: "9876543210", email: "jane@example.com", cpf: "987654321", addr: "456 Elm St", uf: "NY" },
-        { id: "3", name: "Cliente 3", tel: "5555555555", email: "bob@example.com", cpf: "555555555", addr: "789 Oak St", uf: "TX" },
-        { id: "4", name: "Cliente 4", tel: "1111111111", email: "alice@example.com", cpf: "111111111", addr: "321 Pine St", uf: "FL" },
-        { id: "5", name: "Cliente 5", tel: "9999999999", email: "mike@example.com", cpf: "999999999", addr: "654 Cedar St", uf: "WA" },
+        { id: "1", name: "Cliente 1", tel: "1234567890", email: "john@example.com", cpf: "123456789", addr: "123 Main St", uf: "CA", type: "Pessoa Física" },
+        { id: "2", name: "Cliente 2", tel: "9876543210", email: "jane@example.com", cpf: "987654321", addr: "456 Elm St", uf: "NY", type: "Pessoa Física" },
+        { id: "3", name: "Cliente 3", tel: "5555555555", email: "bob@example.com", cpf: "555555555", addr: "789 Oak St", uf: "TX", type: "Pessoa Jurídica" },
+        { id: "4", name: "Cliente 4", tel: "1111111111", email: "alice@example.com", cpf: "111111111", addr: "321 Pine St", uf: "FL", type: "Pessoa Jurídica" },
+        { id: "5", name: "Cliente 5", tel: "9999999999", email: "mike@example.com", cpf: "999999999", addr: "654 Cedar St", uf: "WA", type: "Pessoa Física" },
     ];
+
+    // Filtrar os usuários com base na aba ativa
+    const filteredUsers = activeTab === "Todos" ? users : users.filter(user => user.type === activeTab);
 
     return (
         <>
+            {/* Tabs */}
+            <div className="flex gap-2 border-b mb-4">
+                <button
+                    onClick={() => setActiveTab("Todos")}
+                    className={`px-4 py-2 text-lg ${activeTab === "Todos" ? "border-b-2 border-yellow-light" : ""}`}
+                >
+                    Todos
+                </button>
+                <button
+                    onClick={() => setActiveTab("Pessoa Física")}
+                    className={`px-4 py-2 text-lg ${activeTab === "Pessoa Física" ? "border-b-2 border-yellow-light" : ""}`}
+                >
+                    Pessoa Física
+                </button>
+                <button
+                    onClick={() => setActiveTab("Pessoa Jurídica")}
+                    className={`px-4 py-2 text-lg ${activeTab === "Pessoa Jurídica" ? "border-b-2 border-yellow-light" : ""}`}
+                >
+                    Pessoa Jurídica
+                </button>
+            </div>
+
             <ListingFilter>
                 <span className="flex items-center text-slate-600 flex-1 gap-1">
                     <MagnifyingGlassIcon className="size-4" />
@@ -75,8 +103,8 @@ function ListagemClientes() {
                         <span>Ações</span>
                     </header>
 
-                    {users.map((user) => (
-                        <section className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2">
+                    {filteredUsers.map((user) => (
+                        <section className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2" key={user.id}>
                             <span className="w-8">
                                 <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
                                     {user.id.slice(0, 6)}...

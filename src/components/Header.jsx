@@ -1,29 +1,91 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FaFishFins } from "react-icons/fa6";
 import {
   HomeIcon,
-  ArrowLeftStartOnRectangleIcon as LogOutIcon,
+  ArrowLeftOnRectangleIcon as LogOutIcon,
   UsersIcon,
   WrenchScrewdriverIcon,
   PresentationChartLineIcon,
+  Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 import perfilphoto from "../coisadenerd.jpg";
 import logo from "../LogoGold.jpeg";
 import { BriefcaseIcon } from "@heroicons/react/24/outline";
 
 const Header = ({ title }) => {
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const location = useLocation();
+  const menuRef = useRef(null); // Criação de uma ref para o menu suspenso
+
+  // Fechar o menu sempre que a localização (rota) mudar
+  useEffect(() => {
+    setProfileMenuOpen(false);
+  }, [location]);
+
+  // Fechar o menu quando clicar fora dele
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setProfileMenuOpen(false); // Fecha o menu se o clique for fora
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuRef]);
+
   return (
     <header className="flex flex-row items-center justify-between mx-7 my-6">
       <div className="flex gap-4 items-center">
         <MiniNav />
         <h1 className="text-3xl text-sky-950 font-bold">{title}</h1>
       </div>
-      <img
-        className="rounded-full w-14 h-14 shadow-sm object-cover"
-        src={perfilphoto}
-        alt="Perfil"
-      />
+      {/* Menu suspenso da conta ao clicar na foto de perfil */}
+      <div className="relative z-50">
+        <img
+          className="rounded-full w-14 h-14 shadow-sm object-cover cursor-pointer"
+          src={perfilphoto}
+          alt="Perfil"
+          onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+        />
+        {/* Menu suspenso */}
+        {profileMenuOpen && (
+          <ul
+            ref={menuRef} // Referência ao menu
+            className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-lg"
+          >
+            <li>
+              <Link
+                to="/profile"
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+              >
+                Minha Conta
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/config"
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+              >
+                <Cog6ToothIcon className="inline w-5 h-5 mr-2" />
+                Configurações
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/login"
+                className="block px-4 py-2 text-red-600 hover:bg-red-100"
+              >
+                <LogOutIcon className="inline w-5 h-5 mr-2" />
+                Sair da Conta
+              </Link>
+            </li>
+          </ul>
+        )}
+      </div>
     </header>
   );
 };
