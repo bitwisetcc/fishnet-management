@@ -20,7 +20,7 @@ function ListagemClientes() {
     const setTitle = useContext(TitleContext);
     setTitle("Lista de Clientes");
 
-    const [activeTab, setActiveTab] = useState("Todos");  // Começar com a aba "Todos" selecionada
+    const [activeTab, setActiveTab] = useState("Todos");  
     const [products, setProds] = useState([]);
     const [registerOpen, setRegisterOpen] = useState(false);
     
@@ -36,12 +36,11 @@ function ListagemClientes() {
         { id: "5", name: "Cliente 5", tel: "9999999999", email: "mike@example.com", cpf: "999999999", addr: "654 Cedar St", uf: "WA", type: "Pessoa Física" },
     ];
 
-    // Filtrar os usuários com base na aba ativa
+
     const filteredUsers = activeTab === "Todos" ? users : users.filter(user => user.type === activeTab);
 
     return (
         <>
-            {/* Tabs */}
             <div className="flex gap-2 border-b mb-4">
                 <button
                     onClick={() => setActiveTab("Todos")}

@@ -175,9 +175,9 @@ const ListagemVendas = () => {
                 <span
                   className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm ${
                     [
-                      "bg-lime-400 text-lime-900",
-                      "bg-amber-400 text-amber-800",
-                      "bg-rose-500 text-rose-900",
+                      "bg-lime-400 text-black",
+                      "bg-amber-400 text-black",
+                      "bg-rose-500 text-black",
                     ][sale.status]
                   }`}
                 >
