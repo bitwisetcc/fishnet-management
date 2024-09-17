@@ -2,7 +2,14 @@ import { useContext } from "react";
 import { TitleContext } from "../App";
 import logo from "../LogoSemFundo.png";
 import { Link } from "react-router-dom";
-import { UserIcon, LockClosedIcon, EnvelopeIcon, PhoneIcon, IdentificationIcon, MapIcon } from "@heroicons/react/24/outline";
+import {
+  UserIcon,
+  LockClosedIcon,
+  EnvelopeIcon,
+  PhoneIcon,
+  IdentificationIcon,
+  MapIcon,
+} from "@heroicons/react/24/outline";
 
 function CadastroUsuarios() {
   const setTitle = useContext(TitleContext);
@@ -22,137 +29,142 @@ function CadastroUsuarios() {
       </div>
 
       <form
-        className="bg-slate-100 text-slate-800 border border-slate-400 rounded-lg p-9 shadow-lg z-10 flex w-2/3"
+        className="bg-slate-100 text-slate-800 border border-slate-400 rounded-lg p-6 lg:p-9 shadow-lg z-10 flex flex-col lg:flex-row w-10/12 lg:w-2/3"
         action="/users/new"
       >
-        <section className="flex-1 flex items-center justify-center border-r border-r-slate-300 mr-8 pr-5">
-          <img src={logo} alt="Logo FishNet" className="size-32" />
+        <section className="flex-1 flex items-center justify-center lg:border-r border-r-slate-300 lg:mr-8 lg:pr-5 mb-4 lg:mb-0 m-auto">
+          <img src={logo} alt="Logo FishNet" className="size-16 lg:size-32" />
         </section>
         <section className="flex-1">
-          <h2 className="text-2xl font-semibold">Crie sua conta</h2>
+          <div className="overflow-y-scroll max-h-[67vh] lg:max-h-[80vh] pb-4">
+            <h2 className="text-2xl font-semibold">Crie sua conta</h2>
 
-          <div className="flex flex-col mt-6 gap-5">
-            <div>
-              <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
-                <UserIcon className="size-9 py-2 text-gray-500" />
-                <input
-                  type="text"
-                  name="nome"
-                  id="nome"
-                  required
-                  placeholder="Nome completo"
-                  className="flex-1 p-2 bg-transparent outline-none"
-                />
-              </span>
-            </div>
+            <div className="flex flex-col mt-6 gap-5">
+              <div>
+                <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
+                  <UserIcon className="size-9 py-2 text-gray-500" />
+                  <input
+                    type="text"
+                    name="nome"
+                    id="nome"
+                    required
+                    placeholder="Nome completo"
+                    className="flex-1 p-2 bg-transparent outline-none"
+                  />
+                </span>
+              </div>
 
-            <div>
-              <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
-                <EnvelopeIcon className="size-9 py-2 text-gray-500" />
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  required
-                  placeholder="seuemail@dominio.com"
-                  className="flex-1 p-2 bg-transparent outline-none"
-                />
-              </span>
-            </div>
+              <div>
+                <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
+                  <EnvelopeIcon className="size-9 py-2 text-gray-500" />
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    required
+                    placeholder="seuemail@dominio.com"
+                    className="flex-1 p-2 bg-transparent outline-none"
+                  />
+                </span>
+              </div>
 
-            <div>
-              <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
-                <PhoneIcon className="size-9 py-2 text-gray-500" />
-                <input
-                  type="text"
-                  name="telefone"
-                  id="telefone"
-                  required
-                  placeholder="(00) 00000-0000"
-                  className="flex-1 p-2 bg-transparent outline-none"
-                />
-              </span>
-            </div>
+              <div>
+                <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
+                  <PhoneIcon className="size-9 py-2 text-gray-500" />
+                  <input
+                    type="text"
+                    name="telefone"
+                    id="telefone"
+                    required
+                    placeholder="(00) 00000-0000"
+                    className="flex-1 p-2 bg-transparent outline-none"
+                  />
+                </span>
+              </div>
 
-            <div>
-              <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
-                <MapIcon className="size-9 py-2 text-gray-500" />
-                <input
-                  type="text"
-                  name="endereco"
-                  id="endereco"
-                  required
-                  placeholder="Endereço"
-                  className="flex-1 p-2 bg-transparent outline-none"
-                />
-              </span>
-            </div>
+              <div>
+                <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
+                  <MapIcon className="size-9 py-2 text-gray-500" />
+                  <input
+                    type="text"
+                    name="endereco"
+                    id="endereco"
+                    required
+                    placeholder="Endereço"
+                    className="flex-1 p-2 bg-transparent outline-none"
+                  />
+                </span>
+              </div>
 
-            <div>
-              <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
-                <MapIcon className="size-9 py-2 text-gray-500" />
-                <input
-                  type="text"
-                  name="cidade"
-                  id="cidade"
-                  required
-                  placeholder="Cidade"
-                  className="flex-1 p-2 bg-transparent outline-none"
-                />
-              </span>
-            </div>
+              <div>
+                <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
+                  <MapIcon className="size-9 py-2 text-gray-500" />
+                  <input
+                    type="text"
+                    name="cidade"
+                    id="cidade"
+                    required
+                    placeholder="Cidade"
+                    className="flex-1 p-2 bg-transparent outline-none"
+                  />
+                </span>
+              </div>
 
-            <div>
-              <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
-                <MapIcon className="size-9 py-2 text-gray-500" />
-                <input
-                  type="text"
-                  name="estado"
-                  id="estado"
-                  required
-                  placeholder="Estado"
-                  className="flex-1 p-2 bg-transparent outline-none"
-                />
-              </span>
-            </div>
+              <div>
+                <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
+                  <MapIcon className="size-9 py-2 text-gray-500" />
+                  <input
+                    type="text"
+                    name="estado"
+                    id="estado"
+                    required
+                    placeholder="Estado"
+                    className="flex-1 p-2 bg-transparent outline-none"
+                  />
+                </span>
+              </div>
 
-            <div>
-              <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
-                <IdentificationIcon className="size-9 py-2 text-gray-500" />
-                <input
-                  type="text"
-                  name="cpfCnpj"
-                  id="cpfCnpj"
-                  required
-                  placeholder="CPF ou CNPJ"
-                  className="flex-1 p-2 bg-transparent outline-none"
-                />
-              </span>
-            </div>
+              <div>
+                <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
+                  <IdentificationIcon className="size-9 py-2 text-gray-500" />
+                  <input
+                    type="text"
+                    name="cpfCnpj"
+                    id="cpfCnpj"
+                    required
+                    placeholder="CPF ou CNPJ"
+                    className="flex-1 p-2 bg-transparent outline-none"
+                  />
+                </span>
+              </div>
 
-            <div>
-              <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
-                <LockClosedIcon className="size-9 py-2 text-gray-500" />
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  required
-                  placeholder="Senha"
-                  className="flex-1 p-2 bg-transparent outline-none"
-                />
-              </span>
+              <div>
+                <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
+                  <LockClosedIcon className="size-9 py-2 text-gray-500" />
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    required
+                    placeholder="Senha"
+                    className="flex-1 p-2 bg-transparent outline-none"
+                  />
+                </span>
+              </div>
+
+              <Link
+                to="/login"
+                className="text-blue-dark hover:text-yellow-light w-max"
+              >
+                Já tem uma conta? Faça login.
+              </Link>
+              <button
+                type="submit"
+                className="bg-blue-dark rounded-lg py-2 shadow-sm text-white"
+              >
+                Criar Conta
+              </button>
             </div>
-    
-            <Link to="/login" className="text-blue-dark hover:text-yellow-light w-max">
-              Já tem uma conta? Faça login.
-            </Link>
-            <button
-              type="submit"
-              className="bg-blue-dark rounded-lg py-2 shadow-sm text-white"
-            >
-              Criar Conta
-            </button>
           </div>
         </section>
       </form>
