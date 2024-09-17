@@ -1,4 +1,4 @@
-const API_URL = "https://fishnet-api-py.onrender.com"
+export const API_URL = "https://fishnet-api-py.onrender.com"
 
 function parseProduct(prod) {
   return {

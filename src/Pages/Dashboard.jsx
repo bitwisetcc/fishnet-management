@@ -1,17 +1,33 @@
-import {
-  ArrowTopRightOnSquareIcon as LinkIcon,
-  Square2StackIcon,
-} from "@heroicons/react/24/solid";
-import { useContext, useState } from "react";
-import { TitleContext } from "../App";
-import graph from "../plot.png";
-import { Link } from "react-router-dom";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { ArrowTopRightOnSquareIcon as LinkIcon } from "@heroicons/react/24/solid";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { TitleContext } from "../App";
 import { price } from "../lib/format";
+import { API_URL } from "../lib/query";
+import graph from "../plot.png";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const setTitle = useContext(TitleContext);
   setTitle("Dashboard");
+
+  useEffect(() => {
+    const localAuth = localStorage.getItem("auth");
+    if (localAuth === null) {
+      navigate("/login");
+      return () => {};
+    }
+
+    const jwtToken = JSON.parse(localAuth).token;
+
+    fetch(`${API_URL}/auth/check`, {
+      headers: { Authorization: jwtToken },
+    }).catch(() => {
+      navigate("/login");
+      return () => {};
+    });
+  }, [navigate]);
 
   const avatarApi =
     "https://api.dicebear.com/9.x/adventurer/svg?seed=$flip=true&radius=50&earringsProbability=25&glassesProbability=25&backgroundColor=d1d4f9,b6e3f4,c0aede,ffd5dc";
@@ -39,7 +55,11 @@ function Dashboard() {
   return (
     <div className="p-5">
       <section className="grid md:grid-cols-3 gap-4 mb-5">
-        <DashboardPanel title="Relatório Mensal" content="R$538.976" description="Aumento de 7,9% em relação ao último mês" />
+        <DashboardPanel
+          title="Relatório Mensal"
+          content="R$538.976"
+          description="Aumento de 7,9% em relação ao último mês"
+        />
         <DashboardPanel title="Clientes Atingidos">
           <ClientStats count={72} label="Clientes distintos" />
           <ClientStats count={105} label="Compras realizadas" />
@@ -52,16 +72,28 @@ function Dashboard() {
 
       <section>
         <DashboardPanel title="Relatório Anual">
-          <img src={graph} className="rounded shadow-1xl w-full" alt="gráfico de vendas anual" />
+          <img
+            src={graph}
+            className="rounded shadow-1xl w-full"
+            alt="gráfico de vendas anual"
+          />
         </DashboardPanel>
       </section>
 
       <section className="my-9">
         <header className="flex justify-between mb-3">
           <h2 className="text-lg">Melhores vendas</h2>
-          <FilterDropdown selectedFilter={timeFilter} onFilterChange={setTimeFilter} filters={timeFilters} />
+          <FilterDropdown
+            selectedFilter={timeFilter}
+            onFilterChange={setTimeFilter}
+            filters={timeFilters}
+          />
         </header>
-        <ClientList clients={clients} avatarApi={avatarApi} statusMessages={statusMessages} />
+        <ClientList
+          clients={clients}
+          avatarApi={avatarApi}
+          statusMessages={statusMessages}
+        />
       </section>
     </div>
   );
@@ -101,7 +133,7 @@ function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
       Filtrar por: {selectedFilter}
       <div className="panel right-0 top-10 px-10 text-left">
         <ul className="flex flex-col gap-1 ">
-          {filters.map((filter) => (  
+          {filters.map((filter) => (
             <li
               key={filter}
               className="hover:text-slate-800 cursor-pointer"
