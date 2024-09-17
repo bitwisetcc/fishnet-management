@@ -1,12 +1,31 @@
+import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useContext } from "react";
 import { TitleContext } from "../App";
+import { API_URL } from "../lib/query";
 import logo from "../LogoSemFundo.png";
-import { Link } from "react-router-dom";
-import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   const setTitle = useContext(TitleContext);
   setTitle("Login");
+
+  function onSubmit(e) {
+    e.preventDefault();
+    console.log(JSON.stringify(Object.fromEntries(new FormData(e.target))))
+
+    fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      body: JSON.stringify(Object.fromEntries(new FormData(e.target))),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        localStorage.setItem("auth", JSON.stringify({ token: data.token }));
+        navigate("/");
+      })
+      .catch(() => alert("Login Inválido"));
+  }
+
   return (
     <article className="flex items-center justify-center h-[100vh] relative overflow-hidden">
       <div className="absolute inset-0 bg-blue-dark"></div>
@@ -18,11 +37,11 @@ function Login() {
         <div className="w-[180px] h-[180px] bg-[#CBAD51] opacity-20 rounded-full absolute right-40 bottom-40 animate-pulse"></div>
         <div className="w-[130px] h-[130px] bg-[#CBAD51] opacity-25 rounded-full absolute left-60 bottom-20 animate-pulse"></div>
         <div className="w-[90px] h-[90px] bg-[#CBAD51] opacity-30 rounded-full absolute right-60 top-10 animate-pulse"></div>
-        
       </div>
       <form
         className="bg-slate-100 text-slate-800 border border-slate-400 rounded-lg p-9 shadow-lg z-10 flex w-2/3"
         action="/"
+        onSubmit={onSubmit}
       >
         <section className="flex-1 flex items-center justify-center border-r border-r-slate-300 mr-8 pr-5">
           <img src={logo} alt="Logo FishNet" className="size-32" />
@@ -57,14 +76,18 @@ function Login() {
                 />
               </span>
             </div>
-            <a href="/reset-password" className="text-blue-dark hover:text-yellow-light w-max" >
+            <a
+              href="/reset-password"
+              className="text-blue-dark hover:text-yellow-light w-max"
+            >
               Esqueceu a senha?
             </a>
-            <Link to="/users/new">
-            <a href="/reset-password" className="text-blue-dark hover:text-yellow-light w-max" >
+            <a
+              href="/reset-password"
+              className="text-blue-dark hover:text-yellow-light w-max"
+            >
               Não tem uma conta? Crie agora!
             </a>
-            </Link>
             <button
               type="submit"
               className="bg-blue-dark rounded-lg py-2 shadow-sm text-white"
