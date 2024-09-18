@@ -11,6 +11,7 @@ import {
 import perfilphoto from "../coisadenerd.jpg";
 import logo from "../LogoGold.jpeg";
 import { BriefcaseIcon } from "@heroicons/react/24/outline";
+import { logout } from "../lib/auth";
 
 const Header = ({ title }) => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -72,6 +73,7 @@ const Header = ({ title }) => {
             <li>
               <Link
                 to="/login"
+                onClick={logout}
                 className="block px-4 py-2 text-red-600 hover:bg-red-100"
               >
                 <LogOutIcon className="inline w-5 h-5 mr-2" />

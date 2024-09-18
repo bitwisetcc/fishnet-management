@@ -1,33 +1,16 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ArrowTopRightOnSquareIcon as LinkIcon } from "@heroicons/react/24/solid";
-import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { TitleContext } from "../App";
+import { useAuth } from "../lib/auth";
 import { price } from "../lib/format";
-import { API_URL } from "../lib/query";
 import graph from "../plot.png";
 
 function Dashboard() {
-  const navigate = useNavigate();
+  useAuth();
   const setTitle = useContext(TitleContext);
   setTitle("Dashboard");
-
-  useEffect(() => {
-    const localAuth = localStorage.getItem("auth");
-    if (localAuth === null) {
-      navigate("/login");
-      return () => {};
-    }
-
-    const jwtToken = JSON.parse(localAuth).token;
-
-    fetch(`${API_URL}/auth/check`, {
-      headers: { Authorization: jwtToken },
-    }).catch(() => {
-      navigate("/login");
-      return () => {};
-    });
-  }, [navigate]);
 
   const avatarApi =
     "https://api.dicebear.com/9.x/adventurer/svg?seed=$flip=true&radius=50&earringsProbability=25&glassesProbability=25&backgroundColor=d1d4f9,b6e3f4,c0aede,ffd5dc";

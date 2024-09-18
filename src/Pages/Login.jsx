@@ -1,29 +1,26 @@
 import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { TitleContext } from "../App";
-import { API_URL } from "../lib/query";
 import logo from "../LogoSemFundo.png";
 import { useNavigate } from "react-router-dom";
+import { login } from "../lib/auth";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
 function Login() {
   const navigate = useNavigate();
   const setTitle = useContext(TitleContext);
   setTitle("Login");
 
-  function onSubmit(e) {
-    e.preventDefault();
-    console.log(JSON.stringify(Object.fromEntries(new FormData(e.target))))
+  const [error, setError] = useState("");
 
-    fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      body: JSON.stringify(Object.fromEntries(new FormData(e.target))),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        localStorage.setItem("auth", JSON.stringify({ token: data.token }));
-        navigate("/");
-      })
-      .catch(() => alert("Login Inválido"));
+  async function onSubmit(e) {
+    e.preventDefault();
+
+    if (login(e.target.email.value, e.target.password.value)) {
+      navigate("/");
+    } else {
+      setError("Usuário ou senha inválidos");
+    }
   }
 
   return (
@@ -38,6 +35,7 @@ function Login() {
         <div className="w-[130px] h-[130px] bg-[#CBAD51] opacity-25 rounded-full absolute left-60 bottom-20 animate-pulse"></div>
         <div className="w-[90px] h-[90px] bg-[#CBAD51] opacity-30 rounded-full absolute right-60 top-10 animate-pulse"></div>
       </div>
+
       <form
         className="bg-slate-100 text-slate-800 border border-slate-400 rounded-lg p-9 shadow-lg z-10 flex w-2/3"
         action="/"
@@ -46,9 +44,16 @@ function Login() {
         <section className="flex-1 flex items-center justify-center border-r border-r-slate-300 mr-8 pr-5">
           <img src={logo} alt="Logo FishNet" className="size-32" />
         </section>
+
         <section className="flex-1">
           <h2 className="text-2xl font-semibold">Bem vindo(a)!</h2>
 
+          {error && (
+            <p className="text-red-500 rounded-xl border border-red-500 bg-red-300 flex flex-row items-center">
+              <XMarkIcon className="size-5 text-red-800" />
+              {error}
+            </p>
+          )}
           <div className="flex flex-col mt-6 gap-5">
             <div>
               <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
