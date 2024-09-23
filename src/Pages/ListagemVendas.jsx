@@ -75,7 +75,7 @@ const ListagemVendas = () => {
             id="search"
             placeholder="Nome do cliente"
             maxLength={90}
-            className="w-full placeholder:text-slate-500"
+            className="w-full placeholder:text-slate-500 focus:outline-none"
           />
         </span>
         <input

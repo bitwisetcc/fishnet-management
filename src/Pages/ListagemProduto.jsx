@@ -18,15 +18,86 @@ import { Link } from "react-router-dom";
 import { listAllProducts } from "../lib/query";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
+
+function AddProduct({ open, setOpen }) {
+  const [images, setImages] = useState([""]);
+
+  return (
+    <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
+      <div className="fixed inset-0 flex w-screen items-center justify-center bg-zinc-800/50 p-4">
+        <DialogPanel className="h-[calc(100vh-4rem)] w-full mx-44 space-y-4 rounded-lg border border-slate-500 shadow-lg bg-slate-300 p-12 text-slate-800">
+          <header>
+            <DialogTitle className="font-bold">Cadastrar produto</DialogTitle>
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-2 right-2"
+            >
+              <XMarkIcon className="size-5" />
+            </button>
+          </header>
+
+          <form action="" method="post" className="flex flex-col gap-4 text-stone-900">
+            <div className="flex flex-col gap-1">
+              <label htmlFor="txt-name" className="font-semibold">
+                Nome
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="txt-name"
+                className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="txt-namec">Nome científico</label>
+              <input type="text" name="namec" id="txt-namec" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="txt-price">Preço</label>
+              {images.map((image, i) => (
+                <div key={i}>
+                  <label htmlFor={`url-img-${i}`}>Imagens</label>
+                  <input type="url" name="image" id={`txt-img-${i}`} />
+                </div>
+              ))}
+              <button type="button" onClick={() => setImages([...images, ""])}>
+                <PlusIcon className="size-4" />
+              </button>
+            </div>
+          </form>
+        </DialogPanel>
+      </div>
+    </Dialog>
+  );
+}
+
 function ListagemProduto() {
   const setTitle = useContext(TitleContext);
   setTitle("Produtos");
 
-  const [products, setProds] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [registerOpen, setRegisterOpen] = useState(false);
+
   useEffect(() => {
-    listAllProducts().then(setProds);
+    listAllProducts().then((data) => {
+      setProducts(data);
+      setFilteredProducts(data); 
+    });
   }, []);
+
+  
+  const handleSearch = (event) => {
+    const value = event.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(value)
+    );
+    setFilteredProducts(filtered);
+  };
 
   return (
     <>
@@ -40,7 +111,9 @@ function ListagemProduto() {
             id="search"
             placeholder="Pesquise"
             maxLength={100}
-            className="w-full placeholder:text-slate-500"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="w-full placeholder:text-slate-500 focus:outline-none"
           />
         </span>
 
@@ -104,8 +177,8 @@ function ListagemProduto() {
             <span>Ações</span>
           </header>
 
-          {products.map((product) => (
-            <section className="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2">
+          {filteredProducts.map((product) => (
+            <section className="grid grid-cols-subgrid col-span-7 pl-[9px] my-3 *:ml-2" key={product.id}>
               <span className="w-8">
                 <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
                   {product.id.slice(0, 6)}...
@@ -131,67 +204,6 @@ function ListagemProduto() {
         </article>
       </div>
     </>
-  );
-}
-
-function AddProduct({ open, setOpen }) {
-  const [images, setImages] = useState([""]);
-
-  return (
-    <Dialog
-      open={open}
-      onClose={() => setOpen(false)}
-      className="relative z-50"
-    >
-      <div className="fixed inset-0 flex w-screen items-center justify-center bg-zinc-800/50 p-4">
-        <DialogPanel className="h-[calc(100vh-4rem)] w-full mx-44 space-y-4 rounded-lg border border-slate-500 shadow-lg bg-slate-300 p-12 text-slate-800">
-          <header>
-            <DialogTitle className="font-bold">Cadastrar produto</DialogTitle>
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-2 right-2"
-            >
-              <XMarkIcon className="size-5" />
-            </button>
-          </header>
-
-          <form
-            action=""
-            method="post"
-            className="flex flex-col gap-4 text-stone-900"
-          >
-            <div className="flex flex-col gap-1">
-              <label htmlFor="txt-name" className="font-semibold">
-                Nome
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="txt-name"
-                className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="txt-namec">Nome científico</label>
-              <input type="text" name="namec" id="txt-namec" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="txt-price">Preço</label>
-              {images.map((image, i) => (
-                <>
-                  <label htmlFor={`url-img-${i}`}>Imagens</label>
-                  <input type="url" name="name" id={`txt-img-${i}`} />
-                </>
-              ))}
-
-              <button onClick={() => setImages(images.push(""))}>
-                <PlusIcon className="size-4" />
-              </button>
-            </div>
-          </form>
-        </DialogPanel>
-      </div>
-    </Dialog>
   );
 }
 

@@ -44,7 +44,7 @@ function ListagemUsuarios() {
             id="search"
             placeholder="Pesquise"
             maxLength={100}
-            className="w-full placeholder:text-slate-500"
+            className="w-full placeholder:text-slate-500 focus:outline-none"
           />
         </span>
       </ListingFilter>
