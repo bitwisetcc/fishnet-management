@@ -15,9 +15,13 @@ function Login() {
 
   async function onSubmit(e) {
     e.stopPropagation();
+    console.log("eiiii")
 
     login(e.target.email.value, e.target.password.value)
-      .then(() => navigate("/"))
+      .then(() => {
+        console.log("autenticação completa")
+        navigate("/");
+      })
       .catch((e) => setError(e.message));
   }
 
