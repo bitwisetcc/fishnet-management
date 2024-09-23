@@ -8,21 +8,18 @@ export function logout() {
 }
 
 export async function login(email, password) {
-  try {
-    const res = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: { "Content-Type": "application/json" },
-    });
-    const { token } = await res.json();
+  const res = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+    headers: { "Content-Type": "application/json" },
+  });
+  const { token } = await res.json();
 
-    if (token === undefined) return false;
+  if (token === undefined) return false;
 
-    localStorage.setItem("token", token);
-    return true;
-  } catch {
-    return false;
-  }
+  localStorage.setItem("token", token);
+  console.log("autenticação efetuada com sucesso")
+  return true;
 }
 
 export function useAuth() {
@@ -39,4 +36,25 @@ export function useAuth() {
       () => navigate("/login")
     );
   }, [navigate]);
+}
+
+export async function register(user) {
+  if (Object.values(user).some(v => v === ""))
+    throw new Error("Cadastro incompleto");
+
+  try {
+    const res = await fetch(`${API_URL}/auth/register`, {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: { "Content-Type": "application/json" },
+    });
+    const { token } = await res.json();
+
+    if (token === undefined) return false;
+
+    localStorage.setItem("token", token);
+    return true;
+  } catch {
+    return false;
+  }
 }

@@ -14,13 +14,11 @@ function Login() {
   const [error, setError] = useState("");
 
   async function onSubmit(e) {
-    e.preventDefault();
+    e.stopPropagation();
 
-    if (login(e.target.email.value, e.target.password.value)) {
-      navigate("/");
-    } else {
-      setError("Usuário ou senha inválidos");
-    }
+    login(e.target.email.value, e.target.password.value)
+      .then(() => navigate("/"))
+      .catch((e) => setError(e.message));
   }
 
   return (
@@ -28,7 +26,7 @@ function Login() {
       <div className="absolute inset-0 bg-blue-dark"></div>
       <div className="absolute inset-0 flex justify-center items-center">
         <div className="w-[300px] h-[300px] bg-[#CBAD51] opacity-30 rounded-full absolute -left-20 -bottom-20 animate-pulse"></div>
-        <div className="w-[200px] h-[200px] bg-[#CBAD51] opacity-20 rounded-full absolute left-40 top-40 animate-pulse"></div>
+        <div className="w-[200px] h-[200px] bg-[#CBAD51] opacity-20 rded-full absolute left-40 top-40 animate-pulse"></div>
         <div className="w-[150px] h-[150px] bg-[#CBAD51] opacity-25 rounded-full absolute right-10 bottom-10 animate-pulse"></div>
         <div className="w-[100px] h-[100px] bg-[#CBAD51] opacity-30 rounded-full absolute left-20 top-20 animate-pulse"></div>
         <div className="w-[180px] h-[180px] bg-[#CBAD51] opacity-20 rounded-full absolute right-40 bottom-40 animate-pulse"></div>

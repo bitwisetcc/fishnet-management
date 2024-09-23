@@ -3,12 +3,15 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"mongodb.mongodb-vscode",
 				"esbenp.prettier-vscode",
 				"bradlc.vscode-tailwindcss",
+				"eamodio.gitlens"
 			]
 		}
 	},
