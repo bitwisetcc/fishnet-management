@@ -15,11 +15,10 @@ export async function login(email, password) {
   });
   const { token } = await res.json();
 
-  if (token === undefined) return false;
+  if (token === undefined) throw Error("Credenciais inválidas");
 
   localStorage.setItem("token", token);
   console.log("autenticação efetuada com sucesso")
-  return true;
 }
 
 export function useAuth() {
