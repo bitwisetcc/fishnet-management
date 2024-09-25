@@ -18,7 +18,6 @@ import { Link } from "react-router-dom";
 import { listAllProducts } from "../lib/query";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
-
 function AddProduct({ open, setOpen }) {
   const [images, setImages] = useState([""]);
 
@@ -35,7 +34,7 @@ function AddProduct({ open, setOpen }) {
               <XMarkIcon className="size-5" />
             </button>
           </header>
-
+          
           <form action="" method="post" className="flex flex-col gap-4 text-stone-900">
             <div className="flex flex-col gap-1">
               <label htmlFor="txt-name" className="font-semibold">
@@ -50,18 +49,39 @@ function AddProduct({ open, setOpen }) {
             </div>
             <div className="flex flex-col gap-2">
               <label htmlFor="txt-namec">Nome científico</label>
-              <input type="text" name="namec" id="txt-namec" />
+              <input type="text" name="namec" id="txt-namec" className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" />
             </div>
             <div className="flex flex-col gap-2">
               <label htmlFor="txt-price">Preço</label>
+              <input type="number" name="price" id="txt-price" className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label>Imagens</label>
               {images.map((image, i) => (
-                <div key={i}>
-                  <label htmlFor={`url-img-${i}`}>Imagens</label>
-                  <input type="url" name="image" id={`txt-img-${i}`} />
+                <div key={i} className="flex items-center gap-2">
+                  <input
+                    type="url"
+                    name="image"
+                    id={`txt-img-${i}`}
+                    placeholder="URL da imagem"
+                    className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600 w-full"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newImages = images.slice();
+                      newImages.splice(i, 1); // Remove a imagem da lista
+                      setImages(newImages);
+                    }}
+                    className="text-red-500 hover:text-red-700 transition-colors"
+                  >
+                    Remover
+                  </button>
                 </div>
               ))}
-              <button type="button" onClick={() => setImages([...images, ""])}>
+              <button type="button" onClick={() => setImages([...images, ""])} className="mt-2 flex items-center gap-1 text-sky-600 hover:text-sky-800 transition-colors">
                 <PlusIcon className="size-4" />
+                Adicionar Imagem
               </button>
             </div>
           </form>
@@ -87,12 +107,10 @@ function ListagemProduto() {
     });
   }, []);
 
-  
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchTerm(value);
 
-    
     const filtered = products.filter((product) =>
       product.name.toLowerCase().includes(value)
     );
@@ -188,6 +206,7 @@ function ListagemProduto() {
               <span>R${product.price}</span>
               <span>{product.name.length}</span>
               <span className="truncate text-nowrap underline hover:text-yellow-light">
+
                 <Link to={product.pictures[0]}>{product.pictures[0]}</Link>
               </span>
               <ArrowTopRightOnSquareIcon className="size-5 text-slate-800 hover:text-yellow-light cursor-pointer transition-colors duration-200" />

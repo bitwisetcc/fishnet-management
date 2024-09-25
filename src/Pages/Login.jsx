@@ -87,7 +87,7 @@ function Login() {
               Esqueceu a senha?
             </a>
             <a
-              href="/reset-password"
+              href="/users/new"
               className="text-blue-dark hover:text-yellow-light w-max"
             >
               Não tem uma conta? Crie agora!

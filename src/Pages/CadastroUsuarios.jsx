@@ -38,9 +38,10 @@ function CadastroUsuarios() {
         className="bg-slate-100 text-slate-800 border border-slate-400 rounded-lg p-6 lg:p-9 shadow-lg z-10 flex flex-col lg:flex-row w-10/12 lg:w-2/3"
         onSubmit={submit}
       >
-        <section className="flex-1 flex items-center justify-center lg:border-r border-r-slate-300 lg:mr-8 lg:pr-5 mb-4 lg:mb-0 m-auto">
-          <img src={logo} alt="Logo FishNet" className="size-16 lg:size-32" />
+        <section className="flex-1 flex items-center justify-center lg:border-r border-r-slate-300 lg:mr-8 lg:pr-5 mb-4 lg:mb-0">
+          <img src={logo} alt="Logo FishNet" className="w-16 lg:w-32 m-auto" />
         </section>
+    
         <section className="flex-1">
           <div className="overflow-y-scroll max-h-[67vh] lg:max-h-[80vh] pb-4">
             <h2 className="text-2xl font-semibold">Crie sua conta</h2>
