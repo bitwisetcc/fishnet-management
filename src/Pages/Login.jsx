@@ -1,6 +1,6 @@
 import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import React, { FormEvent, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TitleContext } from "../App";
 import { login } from "../lib/auth";
@@ -8,14 +8,14 @@ import logo from "../LogoSemFundo.png";
 
 function Login() {
   const navigate = useNavigate();
-  const setTitle: any = useContext(TitleContext);
+  const setTitle = useContext(TitleContext);
   setTitle("Login");
 
   const [error, setError] = useState("");
 
-  function submit(e: FormEvent<HTMLFormElement>) {
+  function submit(e) {
     e.preventDefault();
-    const form = e.target as HTMLFormElement;
+    const form = e.target;
 
     login(form.email.value, form.password.value)
       .then(() => navigate("/"))
