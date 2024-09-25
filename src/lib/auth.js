@@ -18,7 +18,7 @@ export async function login(email, password) {
   if (token === undefined) throw Error("Credenciais inválidas");
 
   localStorage.setItem("token", token);
-  console.log("autenticação efetuada com sucesso")
+  console.log("Autenticação completa");
 }
 
 export function useAuth() {
@@ -38,8 +38,10 @@ export function useAuth() {
 }
 
 export async function register(user) {
-  if (Object.values(user).some(v => v === ""))
+  if (Object.values(user).some((v) => v === ""))
     throw new Error("Cadastro incompleto");
+
+  user.role = "staff";
 
   try {
     const res = await fetch(`${API_URL}/auth/register`, {

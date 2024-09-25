@@ -8,13 +8,12 @@ function parseProduct(prod) {
     feeding: String(prod.feeding),
     tankSize: String(prod.tank_size),
     sizes: prod.size.match(/(\d*\scm)+/g) || ["Tamanho não informado"],
-    price: Number(prod.price.replace("$", "").trim()),
   };
 }
 
 export async function listAllProducts(page = 1, limit = 10) {
   try {
-    const data = await fetch(`${API_URL}/itens`);
+    const data = await fetch(`${API_URL}/prods`);
     const prods = await data.json();
     const start = (page - 1) * limit;
     const end = start + limit;
@@ -26,7 +25,7 @@ export async function listAllProducts(page = 1, limit = 10) {
 }
 
 export async function getProductById(id) {
-  const data = await fetch(`${API_URL}/itens/${id}`);
+  const data = await fetch(`${API_URL}/prods/${id}`);
   const prod = await data.json();
   return parseProduct(prod);
 }
