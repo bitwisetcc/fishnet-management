@@ -10,10 +10,16 @@ import {
   IdentificationIcon,
   MapIcon,
 } from "@heroicons/react/24/outline";
+import { register } from "../lib/auth";
 
 function CadastroUsuarios() {
   const setTitle = useContext(TitleContext);
   setTitle("Cadastro de Usuários");
+
+  function submit(e) {
+    register(Object.fromEntries(new FormData(e.target)))
+      .then(console.log)
+  }
 
   return (
     <article className="flex items-center justify-center h-[100vh] relative overflow-hidden">
@@ -30,7 +36,7 @@ function CadastroUsuarios() {
 
       <form
         className="bg-slate-100 text-slate-800 border border-slate-400 rounded-lg p-6 lg:p-9 shadow-lg z-10 flex flex-col lg:flex-row w-10/12 lg:w-2/3"
-        action="/users/new"
+        onSubmit={submit}
       >
         <section className="flex-1 flex items-center justify-center lg:border-r border-r-slate-300 lg:mr-8 lg:pr-5 mb-4 lg:mb-0 m-auto">
           <img src={logo} alt="Logo FishNet" className="size-16 lg:size-32" />

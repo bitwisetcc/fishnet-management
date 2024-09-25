@@ -188,7 +188,7 @@ function ListagemProduto() {
               <span>R${product.price}</span>
               <span>{product.name.length}</span>
               <span className="truncate text-nowrap underline hover:text-yellow-light">
-                <Link to={product.picture}>{product.picture}</Link>
+                <Link to={product.pictures[0]}>{product.pictures[0]}</Link>
               </span>
               <ArrowTopRightOnSquareIcon className="size-5 text-slate-800 hover:text-yellow-light cursor-pointer transition-colors duration-200" />
               <span className="flex gap-2">

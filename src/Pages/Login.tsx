@@ -1,26 +1,25 @@
 import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
-import { useContext, useState } from "react";
-import { TitleContext } from "../App";
-import logo from "../LogoSemFundo.png";
-import { useNavigate } from "react-router-dom";
-import { login } from "../lib/auth";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import React, { FormEvent, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { TitleContext } from "../App";
+import { login } from "../lib/auth";
+import logo from "../LogoSemFundo.png";
 
 function Login() {
   const navigate = useNavigate();
-  const setTitle = useContext(TitleContext);
+  const setTitle: any = useContext(TitleContext);
   setTitle("Login");
 
   const [error, setError] = useState("");
 
-  async function onSubmit(e) {
+  function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
 
-    if (login(e.target.email.value, e.target.password.value)) {
-      navigate("/");
-    } else {
-      setError("Usuário ou senha inválidos");
-    }
+    login(form.email.value, form.password.value)
+      .then(() => navigate("/"))
+      .catch((e) => setError(e.message));
   }
 
   return (
@@ -38,8 +37,7 @@ function Login() {
 
       <form
         className="bg-slate-100 text-slate-800 border border-slate-400 rounded-lg p-9 shadow-lg z-10 flex w-2/3"
-        action="/"
-        onSubmit={onSubmit}
+        onSubmit={(e) => submit(e)}
       >
         <section className="flex-1 flex items-center justify-center border-r border-r-slate-300 mr-8 pr-5">
           <img src={logo} alt="Logo FishNet" className="size-32" />
@@ -49,12 +47,13 @@ function Login() {
           <h2 className="text-2xl font-semibold">Bem vindo(a)!</h2>
 
           {error && (
-            <p className="text-red-500 rounded-xl border border-red-500 bg-red-300 flex flex-row items-center">
+            <p className="text-red-500 rounded-md border border-red-500 bg-red-300 flex flex-row items-center p-2 mt-2">
               <XMarkIcon className="size-5 text-red-800" />
               {error}
             </p>
           )}
-          <div className="flex flex-col mt-6 gap-5">
+
+          <div className="flex flex-col mt-4 gap-5">
             <div>
               <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
                 <UserIcon className="size-9 py-2 text-gray-500" />
