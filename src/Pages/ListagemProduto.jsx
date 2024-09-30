@@ -35,27 +35,91 @@ function AddProduct({ open, setOpen }) {
             </button>
           </header>
           
-          <form action="" method="post" className="flex flex-col gap-4 text-stone-900">
-            <div className="flex flex-col gap-1">
-              <label htmlFor="txt-name" className="font-semibold">
-                Nome
+          <form action="" method="post" className="flex flex-col gap-4 text-stone-900 overflow-y-scroll max-h-[67vh] lg:max-h-[60vh]">
+            <div className="flex flex-col gap-1 max-w-4xl">
+              <label htmlFor="txt-name">
+                Nome do Peixe
               </label>
               <input
                 type="text"
                 name="name"
                 id="txt-name"
                 className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600"
+                placeholder="Digite o nome do peixe a ser cadastrado"
               />
             </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="txt-namec">Nome científico</label>
-              <input type="text" name="namec" id="txt-namec" className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" />
+            <div className="flex flex-col gap-2 max-w-4xl">
+              <label htmlFor="txt-namec">Família do Peixe</label>
+              <input 
+                type="text" 
+                name="familyname" 
+                id="txt-familyname" 
+                className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" 
+                placeholder="Digite o nome da família do peixe a ser cadastrado"
+              />
             </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="txt-price">Preço</label>
-              <input type="number" name="price" id="txt-price" className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" />
+            <div className="flex flex-col gap-2 max-w-4xl">
+              <label htmlFor="txt-namec">Origem</label>
+              <input 
+                type="text" 
+                name="origemname" 
+                id="txt-origemname" 
+                className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" 
+                placeholder="Digite o nome da origem do peixe a ser cadastrado"  
+              />
+            </div>  
+            <div className="flex flex-col gap-2 max-w-4xl">
+              <label htmlFor="txt-price">pH</label>
+              <input 
+                type="number" 
+                name="ph" 
+                id="txt-ph" 
+                className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" 
+                placeholder="Digite o pH do peixe a ser cadastrado"
+              />
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 max-w-4xl">
+              <label htmlFor="txt-namec">Expectativa de Vida</label>
+              <input 
+                type="text" 
+                name="expname" 
+                id="txt-expname" 
+                className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" 
+                placeholder="Digite a expectativa de vida do peixe a ser cadastrado"
+              />
+            </div>
+            <div className="flex flex-col gap-2 max-w-4xl">
+              <label htmlFor="txt-namec">Tamanho Adulto</label>
+              <input 
+                type="text" 
+                name="tmadulto" 
+                id="txt-tmadulto" 
+                className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" 
+                placeholder="Digite o tamanho adulto do peixe a ser cadastrado"
+            />
+            </div>
+            <div className="flex flex-col gap-2 max-w-4xl">
+              <label htmlFor="txt-namec">Temperatura</label>
+              <input 
+                type="text" 
+                name="temper" 
+                id="txt-temper" 
+                className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" 
+                placeholder="Digite a temperatura do peixe a ser cadastrado"  
+              />
+            </div>
+            <div className="flex flex-col gap-2 max-w-4xl">
+              <label htmlFor="txt-namec">Descrição de Especificação</label>
+              <input 
+                type="text" 
+                name="desc" 
+                id="txt-desc" 
+                className="bg-stone-200 border py-1 px-2 border-stone-500 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600" 
+                placeholder="Digite a descrição do peixe a ser cadastrado"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2 max-w-4xl">
               <label>Imagens</label>
               {images.map((image, i) => (
                 <div key={i} className="flex items-center gap-2">
@@ -79,12 +143,17 @@ function AddProduct({ open, setOpen }) {
                   </button>
                 </div>
               ))}
-              <button type="button" onClick={() => setImages([...images, ""])} className="mt-2 flex items-center gap-1 text-sky-600 hover:text-sky-800 transition-colors">
+              <button type="button" onClick={() => setImages([...images, ""])} className="mt-2 flex items-center gap-1 text-blue-dark hover:text-sky-800 transition-colors">
                 <PlusIcon className="size-4" />
                 Adicionar Imagem
               </button>
             </div>
+            
           </form>
+          <div className="flex flex-row justify-end p-4 gap-4 mt-5">
+              <button className="action">Cadastrar</button>
+              <button className="alternate">Limpar</button>
+            </div>
         </DialogPanel>
       </div>
     </Dialog>

@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import Header from "./components/Header";
 import NavBar from "./components/NavBar";
-import CadastroProdutos from "./Pages/CadastroProdutos";
 import CadastroUsuarios from "./Pages/CadastroUsuarios";
 import Config from "./Pages/Config";
 import Dashboard from "./Pages/Dashboard";
@@ -36,7 +35,6 @@ const App = () => {
                 <Route path="/users" element={<ListagemUsuarios />} />
                 <Route path="/client" element={<ListagemClientes />} />
                 <Route path="/prods" element={<ListagemProduto />} />
-                <Route path="/prods/new" element={<CadastroProdutos />} />
                 <Route path="/users/new" element={<CadastroUsuarios />} />
                 <Route path="/vendas" element={<ListagemVendas />} />
                 <Route path="/profile" element={<TelaPerfilUser />} />
