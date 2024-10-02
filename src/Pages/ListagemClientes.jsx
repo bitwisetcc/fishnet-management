@@ -15,8 +15,10 @@ import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { Link } from "react-router-dom";
 import { listUsersByRole } from "../lib/query";
+import { useAuth } from "../lib/auth";
 
 function ListagemClientes() {
+  useAuth();
   const setTitle = useContext(TitleContext);
   setTitle("Lista de Clientes");
 

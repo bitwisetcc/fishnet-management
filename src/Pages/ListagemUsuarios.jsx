@@ -14,8 +14,10 @@ import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { Link } from "react-router-dom";
 import { listAllProducts, listUsersByRole } from "../lib/query";
+import { useAuth } from "../lib/auth";
 
 function ListagemUsuarios() {
+  useAuth();
   const setTitle = useContext(TitleContext);
   setTitle("Lista de Funcionários");
 

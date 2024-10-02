@@ -13,7 +13,7 @@ import logo from "../LogoGold.jpeg";
 import { BriefcaseIcon } from "@heroicons/react/24/outline";
 import { logout } from "../lib/auth";
 
-const Header = ({ title }) => {
+const Header = ({ title, profile }) => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const location = useLocation();
   const menuRef = useRef(null); 
@@ -41,17 +41,18 @@ const Header = ({ title }) => {
         <MiniNav />
         <h1 className="text-3xl text-sky-950 font-bold">{title}</h1>
       </div>
-      <div className="relative z-50">
+      <div className="relative z-50 flex gap-3 items-center">
+        {profile.name && <span className="font-semibold text-sky-900">{profile.name}</span>}
         <img
           className="rounded-full w-14 h-14 shadow-sm object-cover cursor-pointer"
-          src={perfilphoto}
+          src={profile.picture}
           alt="Perfil"
           onClick={() => setProfileMenuOpen(!profileMenuOpen)}
         />
         {profileMenuOpen && (
           <ul
             ref={menuRef} 
-            className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-lg"
+            className="absolute right-0 top-10 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-lg"
           >
             <li>
               <Link

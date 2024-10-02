@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "./query";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { ProfileContext } from "../App";
 
 export function logout() {
   localStorage.removeItem("token");
@@ -23,6 +24,7 @@ export async function login(email, password) {
 
 export function useAuth() {
   const navigate = useNavigate();
+  const setProfile = useContext(ProfileContext);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,10 +33,14 @@ export function useAuth() {
       return () => {};
     }
 
-    fetch(`${API_URL}/auth/check`, { headers: { Authorization: token } }).catch(
-      () => navigate("/login")
-    );
-  }, [navigate]);
+    fetch(`${API_URL}/auth/check`, { headers: { Authorization: token } })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setProfile(data);
+      })
+      .catch(() => navigate("/login"));
+  }, [navigate, setProfile]);
 }
 
 export async function register(user) {
