@@ -13,25 +13,17 @@ import { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { Link } from "react-router-dom";
-import { listAllProducts } from "../lib/query";
+import { listAllProducts, listUsersByRole } from "../lib/query";
 
 function ListagemUsuarios() {
   const setTitle = useContext(TitleContext);
   setTitle("Lista de Funcionários");
 
-  const [products, setProds] = useState([]);
+  const [users, setUsers] = useState([]);
   const [registerOpen, setRegisterOpen] = useState(false);
   useEffect(() => {
-    listAllProducts().then(setProds);
+    listUsersByRole("staff").then(setUsers);
   }, []);
-
-  const users = [
-    { id: "1", name: "John Doe", tel: "1234567890", email: "john@example.com", cpf: "123456789", addr: "123 Main St", uf: "CA" },
-    { id: "2", name: "Jane Smith", tel: "9876543210", email: "jane@example.com", cpf: "987654321", addr: "456 Elm St", uf: "NY" },
-    { id: "3", name: "Bob Johnson", tel: "5555555555", email: "bob@example.com", cpf: "555555555", addr: "789 Oak St", uf: "TX" },
-    { id: "4", name: "Alice Williams", tel: "1111111111", email: "alice@example.com", cpf: "111111111", addr: "321 Pine St", uf: "FL" },
-    { id: "5", name: "Mike Davis", tel: "9999999999", email: "mike@example.com", cpf: "999999999", addr: "654 Cedar St", uf: "WA" },
-  ];
 
   return (
     <>
@@ -76,10 +68,13 @@ function ListagemUsuarios() {
           </header>
 
           {users.map((user) => (
-            <section className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2">
+            <section
+              className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2"
+              key={user._id}
+            >
               <span className="w-8">
                 <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
-                  {user.id.slice(0, 6)}...
+                  {user._id.slice(0, 6)}...
                 </span>
               </span>
               <span className="text-nowrap truncate">{user.name}</span>

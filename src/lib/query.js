@@ -1,4 +1,4 @@
-export const API_URL = "https://fishnet-api-py.onrender.com"
+export const API_URL = "https://fishnet-api-py.onrender.com";
 
 function parseProduct(prod) {
   return {
@@ -28,4 +28,28 @@ export async function getProductById(id) {
   const data = await fetch(`${API_URL}/prods/${id}`);
   const prod = await data.json();
   return parseProduct(prod);
+}
+
+export async function listUsersByRole(role, page = 1, limit = 10) {
+  try {
+    let users = [];
+
+    if (typeof role === "object") {
+      for (const r of role) {
+        const req = await fetch(`${API_URL}/users/role/${r}`);
+        const data = await req.json();
+        users = users.concat(data);
+      }
+    } else {
+      const data = await fetch(`${API_URL}/users/role/${role}`);
+      users = await data.json();
+    }
+
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    return users.slice(start, end);
+  } catch (error) {
+    console.error(error.message);
+    return [];
+  }
 }
