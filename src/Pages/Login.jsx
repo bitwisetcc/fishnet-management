@@ -1,15 +1,12 @@
 import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TitleContext } from "../App";
 import { login } from "../lib/auth";
 import logo from "../LogoSemFundo.png";
 
 function Login() {
   const navigate = useNavigate();
-  const setTitle = useContext(TitleContext);
-  setTitle("Login");
 
   const [error, setError] = useState("");
 

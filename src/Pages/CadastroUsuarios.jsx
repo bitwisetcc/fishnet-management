@@ -1,5 +1,3 @@
-import { useContext } from "react";
-import { TitleContext } from "../App";
 import logo from "../LogoSemFundo.png";
 import { Link } from "react-router-dom";
 import {
@@ -9,16 +7,24 @@ import {
   PhoneIcon,
   IdentificationIcon,
   MapIcon,
+  LinkIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { register } from "../lib/auth";
+import { useState } from "react";
 
 function CadastroUsuarios() {
-  const setTitle = useContext(TitleContext);
-  setTitle("Cadastro de Usuários");
+  const [error, setError] = useState("");
+
 
   function submit(e) {
-    register(Object.fromEntries(new FormData(e.target)))
-      .then(console.log)
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target));
+    data.role = "staff";
+    if (data.password !== data.passwordConfirm) {
+      setError("Senhas não correspondentes");
+    }
+    register(data).then(console.log).catch(setError);
   }
 
   return (
@@ -41,10 +47,17 @@ function CadastroUsuarios() {
         <section className="flex-1 flex items-center justify-center lg:border-r border-r-slate-300 lg:mr-8 lg:pr-5 mb-4 lg:mb-0">
           <img src={logo} alt="Logo FishNet" className="w-16 lg:w-32 m-auto" />
         </section>
-    
+
         <section className="flex-1">
           <div className="overflow-y-scroll max-h-[67vh] lg:max-h-[80vh] pb-4">
             <h2 className="text-2xl font-semibold">Crie sua conta</h2>
+
+            {error && (
+            <p className="text-red-500 rounded-md border border-red-500 bg-red-300 flex flex-row items-center p-2 mt-2">
+              <XMarkIcon className="size-5 text-red-800" />
+              {error}
+            </p>
+          )}
 
             <div className="flex flex-col mt-6 gap-5">
               <div>
@@ -52,8 +65,8 @@ function CadastroUsuarios() {
                   <UserIcon className="size-9 py-2 text-gray-500" />
                   <input
                     type="text"
-                    name="nome"
-                    id="nome"
+                    name="name"
+                    id="name"
                     required
                     placeholder="Nome completo"
                     className="flex-1 p-2 bg-transparent outline-none"
@@ -147,6 +160,20 @@ function CadastroUsuarios() {
 
               <div>
                 <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
+                  <LinkIcon className="size-9 py-2 text-gray-500" />
+                  <input
+                    type="url"
+                    name="pictire"
+                    id="picture"
+                    required
+                    placeholder="URL para foto"
+                    className="flex-1 p-2 bg-transparent outline-none"
+                  />
+                </span>
+              </div>
+
+              <div>
+                <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
                   <LockClosedIcon className="size-9 py-2 text-gray-500" />
                   <input
                     type="password"
@@ -154,6 +181,20 @@ function CadastroUsuarios() {
                     id="password"
                     required
                     placeholder="Senha"
+                    className="flex-1 p-2 bg-transparent outline-none"
+                  />
+                </span>
+              </div>
+
+              <div>
+                <span className="flex bg-white rounded-lg items-center shadow-sm border border-slate-200">
+                  <LockClosedIcon className="size-9 py-2 text-gray-500" />
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    required
+                    placeholder="Confirme a senha"
                     className="flex-1 p-2 bg-transparent outline-none"
                   />
                 </span>

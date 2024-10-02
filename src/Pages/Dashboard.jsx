@@ -1,6 +1,6 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ArrowTopRightOnSquareIcon as LinkIcon } from "@heroicons/react/24/solid";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { TitleContext } from "../App";
 import { useAuth } from "../lib/auth";
@@ -10,7 +10,6 @@ import graph from "../plot.png";
 function Dashboard() {
   useAuth();
   const setTitle = useContext(TitleContext);
-  setTitle("Dashboard");
 
   const avatarApi =
     "https://api.dicebear.com/9.x/adventurer/svg?seed=$flip=true&radius=50&earringsProbability=25&glassesProbability=25&backgroundColor=d1d4f9,b6e3f4,c0aede,ffd5dc";
@@ -34,6 +33,8 @@ function Dashboard() {
   ];
 
   const [timeFilter, setTimeFilter] = useState("Mês");
+
+  useEffect(() => setTitle("Dashboard"), [setTitle]);
 
   return (
     <div className="p-5">

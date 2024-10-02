@@ -8,7 +8,6 @@ import {
   WrenchScrewdriverIcon,
   PresentationChartLineIcon,
 } from "@heroicons/react/24/solid";
-import perfilphoto from "../coisadenerd.jpg";
 import logo from "../LogoGold.jpeg";
 import { BriefcaseIcon } from "@heroicons/react/24/outline";
 import { logout } from "../lib/auth";
