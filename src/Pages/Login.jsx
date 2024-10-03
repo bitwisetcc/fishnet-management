@@ -1,13 +1,14 @@
 import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../lib/auth";
 import logo from "../LogoSemFundo.png";
+import { TitleContext } from "../App";
 
 function Login() {
   const navigate = useNavigate();
-
+  const setTitle = useContext(TitleContext);
   const [error, setError] = useState("");
 
   function submit(e) {
@@ -18,6 +19,8 @@ function Login() {
       .then(() => navigate("/"))
       .catch((e) => setError(e.message));
   }
+
+  useEffect(() => setTitle(""), [setTitle]);
 
   return (
     <article className="flex items-center justify-center h-[100vh] relative overflow-hidden">

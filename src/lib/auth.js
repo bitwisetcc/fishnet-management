@@ -22,7 +22,7 @@ export async function login(email, password) {
   console.log("Autenticação completa");
 }
 
-export function useAuth() {
+export function useAuth(setter = null) {
   const navigate = useNavigate();
   const setProfile = useContext(ProfileContext);
 
@@ -36,11 +36,12 @@ export function useAuth() {
     fetch(`${API_URL}/auth/check`, { headers: { Authorization: token } })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+        console.log(data);
         setProfile(data);
+        if (setter !== null) setter(data);
       })
       .catch(() => navigate("/login"));
-  }, [navigate, setProfile]);
+  }, [navigate, setProfile, setter]);
 }
 
 export async function register(user) {
