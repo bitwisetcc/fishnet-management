@@ -8,6 +8,35 @@ import { price } from "../lib/format";
 import graph from "../plot.png";
 
 function Dashboard() {
+  const [relatorio, setRelatorio] = useState(null);
+
+    useEffect(() => {
+        const fetchRelatorio = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/order');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setRelatorio(data);
+            } catch (error) {
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRelatorio();
+    }, []);
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    }
+
   useAuth();
   const setTitle = useContext(TitleContext);
 
@@ -41,12 +70,12 @@ function Dashboard() {
       <section className="grid md:grid-cols-3 gap-4 mb-5">
         <DashboardPanel
           title="Relatório Mensal"
-          content="R$538.976"
-          description="Aumento de 7,9% em relação ao último mês"
+          content="R${relatorio.total_vendas}"
+          description="Aumento de {relatorio.aumento_em_porcentagem.toFixed(2)}% em relação ao último mês"
         />
         <DashboardPanel title="Clientes Atingidos">
-          <ClientStats count={72} label="Clientes distintos" />
-          <ClientStats count={105} label="Compras realizadas" />
+          <ClientStats count={72} label="{relatorio.clientes_atingidos}" />
+          <ClientStats count={105} label="{relatorio.total_compras_realizadas}" />
         </DashboardPanel>
         <DashboardPanel title="Atalhos">
           <Shortcut label="Backup de Dados" />
