@@ -3,6 +3,8 @@ import { API_URL } from "./query";
 import { useContext, useEffect } from "react";
 import { ProfileContext } from "../App";
 
+const allowed_roles = ["admin", "staff"];
+
 export function logout() {
   localStorage.removeItem("token");
   window.location.reload();
@@ -14,9 +16,10 @@ export async function login(email, password) {
     body: JSON.stringify({ email, password }),
     headers: { "Content-Type": "application/json" },
   });
-  const { token } = await res.json();
+  const { token, role } = await res.json();
 
   if (token === undefined) throw Error("Credenciais inválidas");
+  if (!allowed_roles.includes(role)) throw Error("Cargo inválido");
 
   localStorage.setItem("token", token);
   console.log("Autenticação completa");
@@ -37,6 +40,7 @@ export function useAuth(setter = null) {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        if (!allowed_roles.includes(data.role)) navigate("/login?error=role")
         setProfile(data);
         if (setter !== null) setter(data);
       })

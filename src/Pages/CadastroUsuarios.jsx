@@ -1,5 +1,5 @@
 import logo from "../LogoSemFundo.png";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   UserIcon,
   LockClosedIcon,
@@ -11,21 +11,28 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { register } from "../lib/auth";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { TitleContext } from "../App";
 
 function CadastroUsuarios() {
-  const [error, setError] = useState("");
-
+  const [errorMsg, setErrorMsg] = useState("");
+  const setTitle = useContext(TitleContext);
 
   function submit(e) {
+    setErrorMsg(null);
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target));
     data.role = "staff";
+
     if (data.password !== data.passwordConfirm) {
-      setError("Senhas não correspondentes");
+      setErrorMsg("Senhas não correspondentes");
+      return;
     }
-    register(data).then(console.log).catch(setError);
+
+    register(data).then(console.log).catch(setErrorMsg);
   }
+
+  useEffect(() => setTitle(null), [setTitle]);
 
   return (
     <article className="flex items-center justify-center h-[100vh] relative overflow-hidden">
@@ -52,12 +59,14 @@ function CadastroUsuarios() {
           <div className="overflow-y-scroll max-h-[67vh] lg:max-h-[80vh] pb-4">
             <h2 className="text-2xl font-semibold">Crie sua conta</h2>
 
-            {error && (
-            <p className="text-red-500 rounded-md border border-red-500 bg-red-300 flex flex-row items-center p-2 mt-2">
-              <XMarkIcon className="size-5 text-red-800" />
-              {error}
-            </p>
-          )}
+            {errorMsg && (
+              <p className="text-red-500 rounded-md border border-red-500 bg-red-300 flex flex-row items-center p-2 mt-2">
+                <button onClick={() => setErrorMsg(null)}>
+                  <XMarkIcon className="size-5 text-red-800" />
+                </button>
+                {errorMsg}
+              </p>
+            )}
 
             <div className="flex flex-col mt-6 gap-5">
               <div>
@@ -107,8 +116,8 @@ function CadastroUsuarios() {
                   <MapIcon className="size-9 py-2 text-gray-500" />
                   <input
                     type="text"
-                    name="endereco"
-                    id="endereco"
+                    name="addr"
+                    id="addr"
                     required
                     placeholder="Endereço"
                     className="flex-1 p-2 bg-transparent outline-none"
@@ -121,8 +130,8 @@ function CadastroUsuarios() {
                   <MapIcon className="size-9 py-2 text-gray-500" />
                   <input
                     type="text"
-                    name="cidade"
-                    id="cidade"
+                    name="city"
+                    id="city"
                     required
                     placeholder="Cidade"
                     className="flex-1 p-2 bg-transparent outline-none"
@@ -191,8 +200,8 @@ function CadastroUsuarios() {
                   <LockClosedIcon className="size-9 py-2 text-gray-500" />
                   <input
                     type="password"
-                    name="password"
-                    id="password"
+                    name="passwordConfirm"
+                    id="passwordConfirm"
                     required
                     placeholder="Confirme a senha"
                     className="flex-1 p-2 bg-transparent outline-none"

@@ -18,7 +18,7 @@ export const ProfileContext = createContext({ name: "", picture: "" });
 const App = () => {
   const [title, setTitle] = useState("");
   const [profile, setProfile] = useState({ name: "", picture: "" });
-  const escapeLayout = title === "";
+  const escapeLayout = title === null;
 
   return (
     <Router>
