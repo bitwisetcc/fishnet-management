@@ -10,18 +10,20 @@ function TelaPerfilUser() {
   const setTitle = useContext(TitleContext);
   const [profile, setProfile] = useState({});
   const [pictureDialogOpen, setPictureDialogOpen] = useState(false);
-  useAuth(setProfile);
+  useAuth();
 
   function changeProfilePicture(profilePic) {
     fetch(`${API_URL}/users/me`, {
       method: "PUT",
-      headers: { Authorization: localStorage.getItem("token") },
-      body: { profilePic },
+      headers: {
+        Authorization: localStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ picture: profilePic }),
     })
       .then((res) => {
         profile.picture = profilePic;
         setProfile(profile);
-        console.log(res);
       })
       .catch(console.error);
   }
@@ -107,6 +109,7 @@ function TelaPerfilUser() {
               className="flex gap-2"
               onSubmit={(e) => {
                 e.preventDefault();
+                // console.log(e.target.pfp.value);
                 changeProfilePicture(e.target.pfp.value);
               }}
             >

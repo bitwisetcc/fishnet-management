@@ -39,7 +39,6 @@ export function useAuth(setter = null) {
     fetch(`${API_URL}/auth/check`, { headers: { Authorization: token } })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (!allowed_roles.includes(data.role)) navigate("/login?error=role")
         setProfile(data);
         if (setter !== null) setter(data);
