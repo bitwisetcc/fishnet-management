@@ -1,14 +1,16 @@
 import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { login } from "../lib/auth";
 import logo from "../LogoSemFundo.png";
+import { TitleContext } from "../App";
 
 function Login() {
+  const { error } = useParams();
   const navigate = useNavigate();
-
-  const [error, setError] = useState("");
+  const setTitle = useContext(TitleContext);
+  const [errorMsg, setErrorMsg] = useState("");
 
   function submit(e) {
     e.preventDefault();
@@ -16,8 +18,24 @@ function Login() {
 
     login(form.email.value, form.password.value)
       .then(() => navigate("/"))
-      .catch((e) => setError(e.message));
+      .catch((e) => setErrorMsg(e.message));
   }
+
+  useEffect(() => setTitle(null), [setTitle]);
+  useEffect(() => {
+    switch (error) {
+      case undefined:
+        break;
+
+      case "role":
+        setErrorMsg("Cargo inválido");
+        break;
+
+      default:
+        setErrorMsg("Erro de autenticação");
+        break;
+    }
+  }, [error]);
 
   return (
     <article className="flex items-center justify-center h-[100vh] relative overflow-hidden">
@@ -43,10 +61,12 @@ function Login() {
         <section className="flex-1">
           <h2 className="text-2xl font-semibold">Bem vindo(a)!</h2>
 
-          {error && (
+          {errorMsg && (
             <p className="text-red-500 rounded-md border border-red-500 bg-red-300 flex flex-row items-center p-2 mt-2">
-              <XMarkIcon className="size-5 text-red-800" />
-              {error}
+              <button onClick={() => setErrorMsg(null)}>
+                <XMarkIcon className="size-5 text-red-800" />
+              </button>
+              {errorMsg}
             </p>
           )}
 
