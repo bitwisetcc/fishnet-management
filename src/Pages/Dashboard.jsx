@@ -8,35 +8,6 @@ import { price } from "../lib/format";
 import graph from "../plot.png";
 
 function Dashboard() {
-  const [relatorio, setRelatorio] = useState(null);
-
-    useEffect(() => {
-        const fetchRelatorio = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/order');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setRelatorio(data);
-            } catch (error) {
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchRelatorio();
-    }, []);
-
-    if (loading) {
-      return <div>Loading...</div>;
-    }
-
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    }
-
   useAuth();
   const setTitle = useContext(TitleContext);
 
