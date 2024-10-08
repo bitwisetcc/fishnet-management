@@ -39,6 +39,14 @@ input {
 }
 
 .shadow-right-lg {
-  box-shadow: 10px 0 15px -3px rgba(0, 0, 0, 0.1), 10px 0 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 10px 0 15px -3px rgba(0, 0, 0, 0.1),
+    10px 0 6px -2px rgba(0, 0, 0, 0.05);
 }
 
+.field {
+  @apply flex flex-col gap-1 max-w-4xl;
+}
+
+.field input {
+  @apply bg-stone-200 border py-1 px-2 border-slate-400 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600 focus:shadow;
+}
