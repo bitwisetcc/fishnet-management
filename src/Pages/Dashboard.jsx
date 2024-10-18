@@ -10,6 +10,12 @@ import graph from "../plot.png";
 function Dashboard() {
   useAuth();
   const setTitle = useContext(TitleContext);
+  const [relatorio, setRelatorio] = useState({
+    total_vendas: 0,
+    aumento_em_porcentagem: 0,
+    clientes_atingidos: 0,
+    total_compras_realizadas: 0,
+  });
 
   const avatarApi =
     "https://api.dicebear.com/9.x/adventurer/svg?seed=$flip=true&radius=50&earringsProbability=25&glassesProbability=25&backgroundColor=d1d4f9,b6e3f4,c0aede,ffd5dc";
@@ -34,19 +40,27 @@ function Dashboard() {
 
   const [timeFilter, setTimeFilter] = useState("Mês");
 
-  useEffect(() => setTitle("Dashboard"), [setTitle]);
+  useEffect(() => {
+    setTitle("Dashboard");
+
+    // Fetch relatorio data from Flask API
+    fetch("http://localhost:5000/dash/order")
+      .then((response) => response.json())
+      .then((data) => setRelatorio(data))
+      .catch((error) => console.error("Erro ao buscar dados do relatório:", error));
+  }, [setTitle]);
 
   return (
     <div className="p-5">
       <section className="grid md:grid-cols-3 gap-4 mb-5">
         <DashboardPanel
           title="Relatório Mensal"
-          content="R${relatorio.total_vendas}"
-          description="Aumento de {relatorio.aumento_em_porcentagem.toFixed(2)}% em relação ao último mês"
+          content={`R$ ${relatorio.total_vendas}`}
+          description={`Aumento de ${relatorio.aumento_em_porcentagem.toFixed(2)}% em relação ao último mês`}
         />
         <DashboardPanel title="Clientes Atingidos">
-          <ClientStats count={72} label="{relatorio.clientes_atingidos}" />
-          <ClientStats count={105} label="{relatorio.total_compras_realizadas}" />
+          <ClientStats count={relatorio.clientes_atingidos} label="Clientes Atingidos" />
+          <ClientStats count={relatorio.total_compras_realizadas} label="Total de Compras" />
         </DashboardPanel>
         <DashboardPanel title="Atalhos">
           <Shortcut label="Backup de Dados" />
