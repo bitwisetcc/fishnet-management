@@ -32,8 +32,8 @@ function AddProduct({ open, setOpen }) {
         delete data[key];
       }
     }
-    console.dir(data);
-    fetch(`${API_URL}/prods`, {
+
+    fetch(`${API_URL}/prods/new`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },

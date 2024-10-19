@@ -41,8 +41,8 @@ function Dashboard() {
       <section className="grid md:grid-cols-3 gap-4 mb-5">
         <DashboardPanel
           title="Relatório Mensal"
-          content="R${relatorio.total_vendas}"
-          description="Aumento de {relatorio.aumento_em_porcentagem.toFixed(2)}% em relação ao último mês"
+          content="R$ {relatorio.total_vendas}"
+          description="Variação de {relatorio.aumento_em_porcentagem.toFixed(2)}% em relação ao último mês"
         />
         <DashboardPanel title="Clientes Atingidos">
           <ClientStats count={72} label="{relatorio.clientes_atingidos}" />

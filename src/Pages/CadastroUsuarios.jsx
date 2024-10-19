@@ -158,8 +158,8 @@ function CadastroUsuarios() {
                   <IdentificationIcon className="size-9 py-2 text-gray-500" />
                   <input
                     type="text"
-                    name="cpfCnpj"
-                    id="cpfCnpj"
+                    name="cpf"
+                    id="cpf"
                     required
                     placeholder="CPF ou CNPJ"
                     className="flex-1 p-2 bg-transparent outline-none"
@@ -172,7 +172,7 @@ function CadastroUsuarios() {
                   <LinkIcon className="size-9 py-2 text-gray-500" />
                   <input
                     type="url"
-                    name="pictire"
+                    name="picture"
                     id="picture"
                     required
                     placeholder="URL para foto"
