@@ -1,5 +1,5 @@
-// export const API_URL = "https://fishnet-api-py.onrender.com";
-export const API_URL = "http://localhost:5000";
+export const API_URL = "https://fishnet-api-py.onrender.com";
+// export const API_URL = "http://localhost:5000";
 
 function parseProduct(prod) {
   return {
