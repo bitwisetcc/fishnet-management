@@ -15,7 +15,7 @@ import logo from "../LogoGold.jpeg";
 
 const NavBar = () => {
   return (
-    <nav className="hidden sticky md:flex flex-col justify-between items-center list-none pb-12 p-5 mr-2 h-[100vh] top-0 left-0 bg-blue-dark shadow-right-lg">
+    <nav className="md:flex hidden sticky flex-col justify-between items-center list-none pb-12 p-5 mr-2 h-[100vh] top-0 left-0 bg-blue-dark shadow-right-lg">
       <ul className="list-none flex flex-col space-y-7 items-center">
         <img
           src={logo}

@@ -20,7 +20,7 @@ import { useAuth } from "../lib/auth";
 function ListagemClientes() {
   useAuth();
   const setTitle = useContext(TitleContext);
-  setTitle("Lista de Clientes");
+  setTitle("Clientes");
 
   const [activeTab, setActiveTab] = useState("Todos");
   const [users, setUsers] = useState([]);
