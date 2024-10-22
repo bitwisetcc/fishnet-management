@@ -41,7 +41,12 @@ const Header = ({ title, profile }) => {
         <h1 className="text-3xl text-sky-950 font-bold">{title}</h1>
       </div>
       <div className="relative z-50 flex gap-3 items-center">
-        {profile.name && <span className="font-semibold text-sky-900">{profile.name}</span>}
+        {/* Modificação aqui: escondendo o nome em telas pequenas */}
+        {profile.name && (
+          <span className="hidden md:inline font-semibold text-sky-900">
+            {profile.name}
+          </span>
+        )}
         <img
           className="rounded-full w-14 h-14 shadow-sm object-cover cursor-pointer"
           src={profile.picture}

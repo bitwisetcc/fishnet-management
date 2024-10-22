@@ -34,6 +34,14 @@ function Dashboard() {
 
   const [timeFilter, setTimeFilter] = useState("Mês");
 
+  // Exemplo de um objeto relatorio fictício, a ser substituído por dados reais
+  const relatorio = {
+    total_vendas: 1500,
+    aumento_em_porcentagem: 12.5,
+    clientes_atingidos: 72,
+    total_compras_realizadas: 105,
+  };
+
   useEffect(() => setTitle("Dashboard"), [setTitle]);
 
   return (
@@ -41,12 +49,12 @@ function Dashboard() {
       <section className="grid md:grid-cols-3 gap-4 mb-5">
         <DashboardPanel
           title="Relatório Mensal"
-          content="R$ {relatorio.total_vendas}"
-          description="Variação de {relatorio.aumento_em_porcentagem.toFixed(2)}% em relação ao último mês"
+          content={`R$ ${relatorio.total_vendas}`}
+          description={`Variação de ${relatorio.aumento_em_porcentagem.toFixed(2)}% em relação ao último mês`}
         />
         <DashboardPanel title="Clientes Atingidos">
-          <ClientStats count={72} label="{relatorio.clientes_atingidos}" />
-          <ClientStats count={105} label="{relatorio.total_compras_realizadas}" />
+          <ClientStats count={relatorio.clientes_atingidos} label="Clientes atingidos" />
+          <ClientStats count={relatorio.total_compras_realizadas} label="Compras realizadas" />
         </DashboardPanel>
         <DashboardPanel title="Atalhos">
           <Shortcut label="Backup de Dados" />
@@ -58,7 +66,7 @@ function Dashboard() {
         <DashboardPanel title="Relatório Anual">
           <img
             src={graph}
-            className="rounded shadow-1xl w-full"
+            className="rounded shadow-xl w-full"
             alt="gráfico de vendas anual"
           />
         </DashboardPanel>
