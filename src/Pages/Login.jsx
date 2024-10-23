@@ -51,15 +51,15 @@ function Login() {
       </div>
 
       <form
-        className="bg-slate-100 text-slate-800 border border-slate-400 rounded-lg p-9 shadow-lg z-10 flex w-2/3"
+        className="bg-slate-100 text-slate-800 border border-slate-400 rounded-lg p-9 shadow-lg z-10 flex flex-col md:flex-row w-[90%] max-w-[800px]"
         onSubmit={(e) => submit(e)}
       >
-        <section className="flex-1 flex items-center justify-center border-r border-r-slate-300 mr-8 pr-5">
-          <img src={logo} alt="Logo FishNet" className="size-32" />
+        <section className="flex-1 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-300 mb-8 md:mb-0 md:mr-8 pr-0 md:pr-5">
+          <img src={logo} alt="Logo FishNet" className="w-32 h-32" />
         </section>
 
         <section className="flex-1">
-          <h2 className="text-2xl font-semibold">Bem vindo(a)!</h2>
+          <h2 className="text-2xl font-semibold text-center md:text-left">Bem vindo(a)!</h2>
 
           {errorMsg && (
             <p className="text-red-500 rounded-md border border-red-500 bg-red-300 flex flex-row items-center p-2 mt-2">

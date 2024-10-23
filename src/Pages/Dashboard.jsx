@@ -6,7 +6,6 @@ import { TitleContext } from "../App";
 import { useAuth } from "../lib/auth";
 import { price } from "../lib/format";
 import graph from "../plot.png";
-import { API_URL } from "../lib/query";
 
 function Dashboard() {
   useAuth();
@@ -41,12 +40,12 @@ function Dashboard() {
     setTitle("Dashboard");
 
     // Fetch relatorio data from Flask API
-    fetch(`${API_URL}/dash/order`)
+    fetch("http://localhost:5000/dash/order")
       .then((response) => response.json())
       .then((data) => setRelatorio(data))
       .catch((error) => console.error("Erro ao buscar dados do relatório:", error));
 
-    fetch(`${API_URL}/api/clients`)
+    fetch("http://localhost:5000/api/clients")
       .then((response) => response.json())
       .then((data) => setClients(data))
       .catch((error) => console.error("Erro ao buscar dados dos clientes:", error));
