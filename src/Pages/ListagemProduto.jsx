@@ -72,6 +72,7 @@ function AddProduct({ open, setOpen }) {
                 name="name"
                 id="txt-name"
                 placeholder="Glowlight Tetra"
+                maxLength={80}
               />
             </div>
             <div className="field">
@@ -81,6 +82,7 @@ function AddProduct({ open, setOpen }) {
                 name="scientificName"
                 id="txt-scientificName"
                 placeholder="Hemigrammus erythrozonus"
+                maxLength={80}
               />
             </div>
             <div className="field">
@@ -102,6 +104,7 @@ function AddProduct({ open, setOpen }) {
                 name="origin"
                 id="txt-origin"
                 placeholder="Guiana"
+                maxLength={50}
               />
             </div>
             <div className="field">
@@ -111,6 +114,17 @@ function AddProduct({ open, setOpen }) {
                 name="ph"
                 id="txt-ph"
                 placeholder="5.5 - 7.5"
+                maxLength={12}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="txt-ph">Tamanho mínimo de tanque</label>
+              <input
+                type="text"
+                name="tank_size"
+                id="txt-tank_size"
+                placeholder="6L"
+                maxLength={7}
               />
             </div>
             <div className="field">
@@ -120,6 +134,7 @@ function AddProduct({ open, setOpen }) {
                 name="temperature"
                 id="txt-temperature"
                 placeholder="15 - 20ºC"
+                maxLength={12}
               />
             </div>
             <div className="field">
@@ -131,6 +146,7 @@ function AddProduct({ open, setOpen }) {
                 name="expectancy"
                 id="txt-expectancy"
                 placeholder="30"
+                max={1000}
               />
             </div>
             <div className="field">
@@ -140,7 +156,16 @@ function AddProduct({ open, setOpen }) {
                 name="size"
                 id="size"
                 placeholder="1.3 - 2.5cm"
+                maxLength={20}
               />
+            </div>
+            <div className="field">
+              <label htmlFor="sl-feeding">Alimentação</label>
+              <select name="feeding" id="sl-feeding">
+                <option value="Omnivorous">Onívoro</option>
+                <option value="Carnivorous">Carnívoro</option>
+                <option value="Herbivorous">Herbívoro</option>
+              </select>
             </div>
             <div className="field">
               <label htmlFor="txt-desc">Descrição</label>
