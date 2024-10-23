@@ -17,16 +17,12 @@ function Dashboard() {
     total_compras_realizadas: 0,
   });
 
+  const [clients, setClients] = useState([]);
+
   const avatarApi =
     "https://api.dicebear.com/9.x/adventurer/svg?seed=$flip=true&radius=50&earringsProbability=25&glassesProbability=25&backgroundColor=d1d4f9,b6e3f4,c0aede,ffd5dc";
 
   const statusMessages = ["Finalizado", "Pendente", "Cancelado"];
-
-  const clients = [
-    { id: 1, name: "Gabriel", total: 450, date: "2021-09-01", status: 0 },
-    { id: 2, name: "Minos", total: 450, date: "2021-09-01", status: 0 },
-    { id: 3, name: "Charlie", total: 450, date: "2021-09-01", status: 1 },
-  ];
 
   const timeFilters = [
     "Hoje",
@@ -48,6 +44,11 @@ function Dashboard() {
       .then((response) => response.json())
       .then((data) => setRelatorio(data))
       .catch((error) => console.error("Erro ao buscar dados do relatório:", error));
+
+    fetch("http://localhost:5000/api/clients")
+      .then((response) => response.json())
+      .then((data) => setClients(data))
+      .catch((error) => console.error("Erro ao buscar dados dos clientes:", error));
   }, [setTitle]);
 
   return (
@@ -87,6 +88,7 @@ function Dashboard() {
             filters={timeFilters}
           />
         </header>
+        {}
         <ClientList
           clients={clients}
           avatarApi={avatarApi}
@@ -150,15 +152,15 @@ function ClientList({ clients, avatarApi, statusMessages }) {
   return (
     <section className="flex flex-col gap-4 overflow-x-auto md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
       {clients.map((client) => (
-        <div className="flex w-full md:w-auto items-center" key={client.id}>
+        <div className="flex w-full md:w-auto items-center" key={client._id}>
           <img
-            src={avatarApi.replace("$", client.name + 91)}
-            alt={`Avatar de ${client.name}`}
+            src={avatarApi.replace("$", client.customer + 91)}
+            alt={`Avatar de ${client.customer}`}
             className="rounded-full w-14 h-14 border border-slate-100 mr-5"
           />
           <div className="grid grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
-            <span>{client.name}</span>
-            <span>{price(client.total)}</span>
+            <span>{client.customer}</span>
+            <span>{price(client.order_total)}</span>
             <span>{new Date(client.date).toLocaleDateString("pt-BR")}</span>
             <StatusBadge status={client.status} messages={statusMessages} />
             <span className="justify-self-end">
