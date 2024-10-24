@@ -44,12 +44,19 @@ function Dashboard() {
     fetch(`${API_URL}/dash/order`)
       .then((response) => response.json())
       .then((data) => setRelatorio(data))
-      .catch((error) => console.error("Erro ao buscar dados do relatório:", error));
+      .catch((error) =>
+        console.error("Erro ao buscar dados do relatório:", error)
+      );
 
-    fetch(`${API_URL}/api/clients`)
+    fetch(`${API_URL}/dash/order/top3/Este ano`)
       .then((response) => response.json())
-      .then((data) => setClients(data))
-      .catch((error) => console.error("Erro ao buscar dados dos clientes:", error));
+      .then((data) => {
+        console.log(data);
+        setClients(data.orders);
+      })
+      .catch((error) =>
+        console.error("Erro ao buscar dados dos clientes:", error)
+      );
   }, [setTitle]);
 
   return (
@@ -58,11 +65,19 @@ function Dashboard() {
         <DashboardPanel
           title="Relatório Mensal"
           content={`R$ ${relatorio.total_vendas}`}
-          description={`Aumento de ${relatorio.aumento_em_porcentagem.toFixed(2)}% em relação ao último mês`}
+          description={`Aumento de ${relatorio.aumento_em_porcentagem.toFixed(
+            2
+          )}% em relação ao último mês`}
         />
         <DashboardPanel title="Clientes Atingidos">
-          <ClientStats count={relatorio.clientes_atingidos} label="Clientes Atingidos" />
-          <ClientStats count={relatorio.total_compras_realizadas} label="Total de Compras" />
+          <ClientStats
+            count={relatorio.clientes_atingidos}
+            label="Clientes Atingidos"
+          />
+          <ClientStats
+            count={relatorio.total_compras_realizadas}
+            label="Total de Compras"
+          />
         </DashboardPanel>
         <DashboardPanel title="Atalhos">
           <Shortcut label="Backup de Dados" />
