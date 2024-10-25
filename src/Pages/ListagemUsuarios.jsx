@@ -19,7 +19,7 @@ import { useAuth } from "../lib/auth";
 function ListagemUsuarios() {
   useAuth();
   const setTitle = useContext(TitleContext);
-  setTitle("Lista de Funcionários");
+  setTitle("Funcionários  ");
 
   const [users, setUsers] = useState([]);
   const [registerOpen, setRegisterOpen] = useState(false);
