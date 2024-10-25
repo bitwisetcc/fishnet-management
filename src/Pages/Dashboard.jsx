@@ -5,10 +5,13 @@ import { Link } from "react-router-dom";
 import { TitleContext } from "../App";
 import { useAuth } from "../lib/auth";
 import { price } from "../lib/format";
-import graph from "../plot.png";
+import { Bar } from 'react-chartjs-2';
+import { Chart, LinearScale, registerables } from "chart.js";
 
 function Dashboard() {
   useAuth();
+  Chart.register(LinearScale);
+  Chart.register(...registerables);
   const setTitle = useContext(TitleContext);
   const [relatorio, setRelatorio] = useState({
     total_vendas: 0,
@@ -17,39 +20,98 @@ function Dashboard() {
     total_compras_realizadas: 0,
   });
 
-  const [clients, setClients] = useState([]);
-
-  const avatarApi =
-    "https://api.dicebear.com/9.x/adventurer/svg?seed=$flip=true&radius=50&earringsProbability=25&glassesProbability=25&backgroundColor=d1d4f9,b6e3f4,c0aede,ffd5dc";
-
-  const statusMessages = ["Finalizado", "Pendente", "Cancelado"];
-
-  const timeFilters = [
-    "Hoje",
-    "Ontem",
-    "Semana",
-    "Mês",
-    "Mês passado",
-    "Este ano",
-    "Ano passado",
-  ];
-
+  const [topSales, setTopSales] = useState([]);
   const [timeFilter, setTimeFilter] = useState("Mês");
+  const [annualData, setAnnualData] = useState({ labels: [], data: [] });
 
   useEffect(() => {
     setTitle("Dashboard");
 
-    // Fetch relatorio data from Flask API
     fetch("http://localhost:5000/dash/order")
       .then((response) => response.json())
       .then((data) => setRelatorio(data))
       .catch((error) => console.error("Erro ao buscar dados do relatório:", error));
 
-    fetch("http://localhost:5000/api/clients")
+    fetchTopSales(timeFilter);
+    fetchAnnualSalesData();
+  }, [setTitle, timeFilter]);
+
+  const fetchTopSales = (filter) => {
+    fetch(`http://localhost:5000/dash/order/top3/${filter}`)
       .then((response) => response.json())
-      .then((data) => setClients(data))
-      .catch((error) => console.error("Erro ao buscar dados dos clientes:", error));
-  }, [setTitle]);
+      .then((data) => setTopSales(data))
+      .catch((error) => console.error("Erro ao buscar melhores vendas:", error));
+  };
+
+  const fetchAnnualSalesData = () => {
+    fetch("http://localhost:5000/dash/annual-sales")
+      .then((response) => response.json())
+      .then((data) => {
+        const labels = Object.keys(data);
+        const salesData = Object.values(data);
+        setAnnualData({ labels, data: salesData });
+      })
+      .catch((error) => console.error("Erro ao buscar dados anuais:", error));
+  };
+
+  const chartData = {
+    labels: annualData.labels,
+    datasets: [
+      {
+        label: 'Total de Vendas',
+        data: annualData.data,
+        backgroundColor: 'rgba(30, 144, 255, 0.6)', // Azul marinho
+        borderColor: 'rgba(255, 215, 0, 1)', // Dourado
+        borderWidth: 2,
+        tension: 0.3, // Adiciona suavidade às linhas
+      },
+    ],
+  };
+  
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: {
+          color: 'rgba(255, 255, 255, 0.8)', // Cor da fonte da legenda
+        },
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Fundo do tooltip
+        titleColor: 'rgba(255, 215, 0, 1)', // Cor do título do tooltip
+        bodyColor: 'rgba(255, 255, 255, 0.9)', // Cor do corpo do tooltip
+        callbacks: {
+          label: (tooltipItem) => `R$ ${price(tooltipItem.raw)}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)', // Cor da grade do eixo X
+        },
+        ticks: {
+          color: 'rgba(255, 255, 255, 0.8)', // Cor das marcas do eixo X
+        },
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Vendas (R$)',
+          color: 'rgba(255, 255, 255, 0.9)', // Cor do título do eixo Y
+        },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)', // Cor da grade do eixo Y
+        },
+        ticks: {
+          color: 'rgba(255, 255, 255, 0.8)', // Cor das marcas do eixo Y
+        },
+      },
+    },
+  };
 
   return (
     <div className="p-5">
@@ -71,11 +133,7 @@ function Dashboard() {
 
       <section>
         <DashboardPanel title="Relatório Anual">
-          <img
-            src={graph}
-            className="rounded shadow-1xl w-full"
-            alt="gráfico de vendas anual"
-          />
+          <Bar data={chartData} options={chartOptions} />
         </DashboardPanel>
       </section>
 
@@ -85,14 +143,21 @@ function Dashboard() {
           <FilterDropdown
             selectedFilter={timeFilter}
             onFilterChange={setTimeFilter}
-            filters={timeFilters}
+            filters={[
+              "Hoje",
+              "Ontem",
+              "Semana",
+              "Mês",
+              "Mês passado",
+              "Este ano",
+              "Ano passado"
+            ]}
           />
         </header>
-        {}
         <ClientList
-          clients={clients}
-          avatarApi={avatarApi}
-          statusMessages={statusMessages}
+          clients={topSales}
+          avatarApi="https://api.dicebear.com/9.x/adventurer/svg?seed=$flip=true&radius=50&earringsProbability=25&glassesProbability=25&backgroundColor=d1d4f9,b6e3f4,c0aede,ffd5dc"
+          statusMessages={["Finalizado", "Pendente", "Cancelado"]}
         />
       </section>
     </div>
