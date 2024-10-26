@@ -9,60 +9,66 @@ import {
   PrinterIcon,
 } from "@heroicons/react/24/outline";
 import Tippy from "@tippyjs/react";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { price } from "../lib/format";
-import report from "../report.pdf";
+import { API_URL } from "../lib/query"; // Importando API_URL
 
 const ListagemVendas = () => {
   const setTitle = useContext(TitleContext);
   setTitle("Vendas");
 
-  // status: finalizado, pendente, cancelado
+  const [sales, setSales] = useState([]);
+  const [filteredSales, setFilteredSales] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
+
+  // Função para buscar os dados da API
+  useEffect(() => {
+    const fetchSalesData = async () => {
+      try {
+        const response = await fetch(`${API_URL}/sales`); // Usando fetch para buscar dados
+        if (!response.ok) {
+          throw new Error("Erro ao carregar os dados de vendas");
+        }
+        const data = await response.json(); // Convertendo a resposta para JSON
+        setSales(data); // Armazenando os dados de vendas
+        setFilteredSales(data); // Inicializa vendas filtradas
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchSalesData();
+  }, []);
+
   const statusMessages = ["Finalizado", "Pendente", "Cancelado"];
-  const sales = [
-    {
-      id: 1,
-      client: "Hikari",
-      shipping: 10,
-      shippingProvider: "SEDEX",
-      total: 50,
-      payment: "Dinheiro",
-      date: "2021-10-10",
-      status: 0,
-    },
-    {
-      id: 2,
-      client: "Amity",
-      shipping: 10,
-      shippingProvider: "Correios",
-      total: 50,
-      payment: "PIX",
-      date: "2021-10-10",
-      status: 0,
-    },
-    {
-      id: 3,
-      client: "Augusto",
-      shipping: 10,
-      shippingProvider: "Loggi",
-      total: 50,
-      payment: "Débito",
-      date: "2021-10-10",
-      status: 2,
-    },
-    {
-      id: 4,
-      client: "Willow",
-      shipping: 10,
-      shippingProvider: "Correios",
-      total: 50,
-      payment: "Crédito 3X",
-      date: "2021-10-10",
-      status: 1,
-    },
-  ];
+
+  useEffect(() => {
+    const filtered = sales.filter(sale => {
+      const matchesName = sale.user.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesDate = dateFilter ? new Date(sale.date).toLocaleDateString("pt-BR") === dateFilter : true;
+      return matchesName && matchesDate;
+    });
+    setFilteredSales(filtered);
+  }, [searchTerm, dateFilter, sales]);
+
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  const getReportUrl = (saleId) => {
+    return `${API_URL}/reports/${saleId}`; // Altere para a URL real do relatório
+  };
 
   return (
     <>
@@ -75,6 +81,8 @@ const ListagemVendas = () => {
             id="search"
             placeholder="Nome do cliente"
             maxLength={90}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full placeholder:text-slate-500 focus:outline-none"
           />
         </span>
@@ -82,6 +90,8 @@ const ListagemVendas = () => {
           type="date"
           name="date"
           id="date"
+          value={dateFilter}
+          onChange={(e) => setDateFilter(e.target.value)}
           className="empty:text-slate-500"
         />
 
@@ -89,7 +99,6 @@ const ListagemVendas = () => {
           <CurrencyDollarIcon className="size-4" />
           <span>Preço</span>
           <ChevronDownIcon className="size-4 ml-4" />
-
           <div className="panel left-0 top-10">
             <input
               type="range"
@@ -108,7 +117,6 @@ const ListagemVendas = () => {
           <CheckCircleIcon className="size-4" />
           <span>Status</span>
           <ChevronDownIcon className="size-4 ml-4" />
-
           <div className="panel left-0 top-10">
             <ul className="flex flex-col gap-1 text-left">
               <li className="hover:text-slate-800">Finalizado</li>
@@ -122,7 +130,6 @@ const ListagemVendas = () => {
           <FunnelIcon className="size-4" />
           <span className="text-nowrap">Outros filtros</span>
           <ChevronDownIcon className="size-4 ml-4" />
-
           <div className="panel right-0 top-10 px-10 text-left">
             <ul className="flex flex-col gap-1">
               <li className="hover:text-slate-800">Pagamento</li>
@@ -142,7 +149,7 @@ const ListagemVendas = () => {
       </header>
 
       <div className="overflow-x-scroll md:overflow-x-hidden">
-        <article className="grid-cols-[60px_repeat(6,1fr)_70px]">
+        <article className="grid grid-cols-[60px_repeat(6,1fr)_70px] gap-4"> {/* Ajuste de espaçamento entre colunas */}
           <header className="listing col-span-8 text-slate-500">
             <span>
               <span className="bg-slate-200 rounded-lg px-2">#</span>
@@ -155,14 +162,14 @@ const ListagemVendas = () => {
             <span>Data</span>
             <span>Ações</span>
           </header>
-          {sales.map((sale) => (
-            <section className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2">
-              <span>
-                <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm">
-                  {sale.id}
+          {filteredSales.map((sale) => (
+            <section className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 gap-2" key={sale._id}> {/* Ajuste de espaçamento entre colunas */}
+              <span className="w-8">
+                <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
+                  {sale._id.slice(0, 4)}...
                 </span>
               </span>
-              <span>{sale.client}</span>
+              <span>{sale.user.name}</span>
               <span>
                 {price(sale.shipping)}
                 <span className="bg-slate-200 text-stone-600 text-sm rounded-lg px-2 ml-1">
@@ -188,7 +195,7 @@ const ListagemVendas = () => {
                 {new Date(sale.date).toLocaleString("pt-BR").split(",")[0]}
               </span>
               <span className="flex gap-2">
-                <a href={report} target="_blank">
+                <a href={getReportUrl(sale._id)} target="_blank" rel="noopener noreferrer">
                   <DocumentTextIcon className="size-5" />
                 </a>
                 <button>
