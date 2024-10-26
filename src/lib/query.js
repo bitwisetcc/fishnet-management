@@ -12,10 +12,29 @@ function parseProduct(prod) {
   };
 }
 
-export async function listAllProducts(page = 1, limit = 10) {
+export async function listAllProducts(page = 1, limit = 20) {
   try {
     const data = await fetch(`${API_URL}/prods`);
     const prods = await data.json();
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    return prods.slice(start, end).map(parseProduct);
+  } catch (error) {
+    console.error(error.message);
+    return [];
+  }
+}
+
+export async function getProductByFilter(filters, page = 1, limit = 20) {
+  try {
+    const query = new URLSearchParams({ ...filters, page, limit }).toString();
+    const data = await fetch(`${API_URL}/prods/filtros?${query}`);
+    const prods = await data.json();
+
+    if (!Array.isArray(prods)) {
+      return [];
+    }
+
     const start = (page - 1) * limit;
     const end = start + limit;
     return prods.slice(start, end).map(parseProduct);
@@ -54,3 +73,5 @@ export async function listUsersByRole(role, page = 1, limit = 10) {
     return [];
   }
 }
+
+
