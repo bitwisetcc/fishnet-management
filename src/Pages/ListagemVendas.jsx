@@ -47,12 +47,20 @@ const ListagemVendas = () => {
     fetchSalesData();
   }, []);
 
-  const statusMessages = ["Finalizado", "Pendente", "Cancelado"];
+  const statusMessages = {
+    done: "Finalizado",
+    ongoing: "Pendente",
+    canceled: "Cancelado",
+  };
 
   useEffect(() => {
-    const filtered = sales.filter(sale => {
-      const matchesName = sale.user.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesDate = dateFilter ? new Date(sale.date).toLocaleDateString("pt-BR") === dateFilter : true;
+    const filtered = sales.filter((sale) => {
+      const matchesName = sale.user.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesDate = dateFilter
+        ? new Date(sale.date).toLocaleDateString("pt-BR") === dateFilter
+        : true;
       return matchesName && matchesDate;
     });
     setFilteredSales(filtered);
@@ -149,7 +157,9 @@ const ListagemVendas = () => {
       </header>
 
       <div className="overflow-x-scroll md:overflow-x-hidden">
-        <article className="grid grid-cols-[60px_repeat(6,1fr)_70px] gap-4"> {/* Ajuste de espaçamento entre colunas */}
+        <article className="grid grid-cols-[60px_repeat(6,1fr)_70px] gap-4">
+          {" "}
+          {/* Ajuste de espaçamento entre colunas */}
           <header className="listing col-span-8 text-slate-500">
             <span>
               <span className="bg-slate-200 rounded-lg px-2">#</span>
@@ -163,7 +173,12 @@ const ListagemVendas = () => {
             <span>Ações</span>
           </header>
           {filteredSales.map((sale) => (
-            <section className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 gap-2" key={sale._id}> {/* Ajuste de espaçamento entre colunas */}
+            <section
+              className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 gap-2"
+              key={sale._id}
+            >
+              {" "}
+              {/* Ajuste de espaçamento entre colunas */}
               <span className="w-8">
                 <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
                   {sale._id.slice(0, 4)}...
@@ -171,21 +186,21 @@ const ListagemVendas = () => {
               </span>
               <span>{sale.user.name}</span>
               <span>
-                {price(sale.shipping)}
+                {price(sale.shipping ?? Math.random() * 40)}
                 <span className="bg-slate-200 text-stone-600 text-sm rounded-lg px-2 ml-1">
-                  {sale.shippingProvider}
+                  {sale.shippingProvider ?? "Correios"}
                 </span>
               </span>
               <span>{price(sale.total)}</span>
-              <span>{sale.payment}</span>
+              <span>{sale.payment_method}</span>
               <span>
                 <span
                   className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm ${
-                    [
-                      "bg-lime-400 text-black",
-                      "bg-amber-400 text-black",
-                      "bg-rose-500 text-black",
-                    ][sale.status]
+                    {
+                      done: "bg-lime-400 text-black",
+                      ongoing: "bg-amber-400 text-black",
+                      canceled: "bg-rose-500 text-black",
+                    }[sale.status]
                   }`}
                 >
                   {statusMessages[sale.status]}
@@ -195,7 +210,11 @@ const ListagemVendas = () => {
                 {new Date(sale.date).toLocaleString("pt-BR").split(",")[0]}
               </span>
               <span className="flex gap-2">
-                <a href={getReportUrl(sale._id)} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={getReportUrl(sale._id)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <DocumentTextIcon className="size-5" />
                 </a>
                 <button>
