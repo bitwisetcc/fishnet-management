@@ -69,7 +69,7 @@ function Dashboard() {
       },
     ],
   };
-  
+
   const chartOptions = {
     responsive: true,
     plugins: {
@@ -115,6 +115,32 @@ function Dashboard() {
     },
   };
 
+  const handleBackup = () => {
+    fetch("http://localhost:5000/dash/backup")
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "backup_orders_real_users.bson";
+        a.click();
+      })
+      .catch((error) => console.error("Erro ao fazer backup:", error));
+  };
+
+  const handleExportPdf = () => {
+    fetch("http://localhost:5000/dash/export/pdf")
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "relatorio_vendas_mes.pdf";
+        a.click();
+      })
+      .catch((error) => console.error("Erro ao exportar PDF:", error));
+  };
+
   return (
     <div className="p-5">
       <section className="grid md:grid-cols-3 gap-4 mb-5">
@@ -136,8 +162,8 @@ function Dashboard() {
           />
         </DashboardPanel>
         <DashboardPanel title="Atalhos">
-          <Shortcut label="Backup de Dados" />
-          <Shortcut label="Exportar dados" />
+          <Shortcut label="Backup de Dados" onClick={handleBackup} />
+          <Shortcut label="Exportar dados" onClick={handleExportPdf} />
         </DashboardPanel>
       </section>
 
@@ -193,9 +219,9 @@ function ClientStats({ count, label }) {
   );
 }
 
-function Shortcut({ label }) {
+function Shortcut({ label, onClick }) {
   return (
-    <p className="flex items-center justify-between text-lg mb-5">
+    <p className="flex items-center justify-between text-lg mb-5" onClick={onClick}>
       {label}
       <LinkIcon className="size-4 inline text-black hover:text-yellow-light transition-colors duration-300" />
     </p>
