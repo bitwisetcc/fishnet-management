@@ -62,10 +62,10 @@ function Dashboard() {
       {
         label: 'Total de Vendas',
         data: annualData.data,
-        backgroundColor: 'rgba(30, 144, 255, 0.6)', // Azul marinho
-        borderColor: 'rgba(255, 215, 0, 1)', // Dourado
+        backgroundColor: 'rgba(30, 144, 255, 0.6)',
+        borderColor: 'rgba(255, 215, 0, 1)',
         borderWidth: 2,
-        tension: 0.3, // Adiciona suavidade às linhas
+        tension: 0.3,
       },
     ],
   };
@@ -77,13 +77,13 @@ function Dashboard() {
         display: true,
         position: 'top',
         labels: {
-          color: 'rgba(255, 255, 255, 0.8)', // Cor da fonte da legenda
+          color: 'rgba(255, 255, 255, 0.8)',
         },
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Fundo do tooltip
-        titleColor: 'rgba(255, 215, 0, 1)', // Cor do título do tooltip
-        bodyColor: 'rgba(255, 255, 255, 0.9)', // Cor do corpo do tooltip
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        titleColor: 'rgba(255, 215, 0, 1)',
+        bodyColor: 'rgba(255, 255, 255, 0.9)',
         callbacks: {
           label: (tooltipItem) => `R$ ${price(tooltipItem.raw)}`,
         },
@@ -92,10 +92,10 @@ function Dashboard() {
     scales: {
       x: {
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)', // Cor da grade do eixo X
+          color: 'rgba(255, 255, 255, 0.1)',
         },
         ticks: {
-          color: 'rgba(255, 255, 255, 0.8)', // Cor das marcas do eixo X
+          color: 'rgba(255, 255, 255, 0.8)',
         },
       },
       y: {
@@ -103,42 +103,16 @@ function Dashboard() {
         title: {
           display: true,
           text: 'Vendas (R$)',
-          color: 'rgba(255, 255, 255, 0.9)', // Cor do título do eixo Y
+          color: 'rgba(255, 255, 255, 0.9)',
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)', // Cor da grade do eixo Y
+          color: 'rgba(255, 255, 255, 0.1)',
         },
         ticks: {
-          color: 'rgba(255, 255, 255, 0.8)', // Cor das marcas do eixo Y
+          color: 'rgba(255, 255, 255, 0.8)',
         },
       },
     },
-  };
-
-  const handleBackup = () => {
-    fetch("http://localhost:5000/dash/backup")
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "backup_orders_real_users.bson";
-        a.click();
-      })
-      .catch((error) => console.error("Erro ao fazer backup:", error));
-  };
-
-  const handleExportPdf = () => {
-    fetch("http://localhost:5000/dash/export/pdf")
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "relatorio_vendas_mes.pdf";
-        a.click();
-      })
-      .catch((error) => console.error("Erro ao exportar PDF:", error));
   };
 
   return (
@@ -162,8 +136,8 @@ function Dashboard() {
           />
         </DashboardPanel>
         <DashboardPanel title="Atalhos">
-          <Shortcut label="Backup de Dados" onClick={handleBackup} />
-          <Shortcut label="Exportar dados" onClick={handleExportPdf} />
+          <Shortcut label="Backup de Dados" />
+          <Shortcut label="Exportar dados" />
         </DashboardPanel>
       </section>
 
@@ -219,9 +193,9 @@ function ClientStats({ count, label }) {
   );
 }
 
-function Shortcut({ label, onClick }) {
+function Shortcut({ label }) {
   return (
-    <p className="flex items-center justify-between text-lg mb-5" onClick={onClick}>
+    <p className="flex items-center justify-between text-lg mb-5">
       {label}
       <LinkIcon className="size-4 inline text-black hover:text-yellow-light transition-colors duration-300" />
     </p>
