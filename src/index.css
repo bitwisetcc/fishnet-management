@@ -47,6 +47,6 @@ input {
   @apply flex flex-col gap-1 max-w-4xl;
 }
 
-.field input {
+.field input, .field select {
   @apply bg-stone-200 border py-1 px-2 border-slate-400 outline-none rounded focus:border-sky-600 transition-colors duration-200 focus:shadow shadow-sky-600 focus:ring-1 ring-sky-600 focus:shadow;
 }

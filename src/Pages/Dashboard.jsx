@@ -6,21 +6,24 @@ import { TitleContext } from "../App";
 import { useAuth } from "../lib/auth";
 import { price } from "../lib/format";
 import graph from "../plot.png";
+import { API_URL } from "../lib/query";
 
 function Dashboard() {
   useAuth();
   const setTitle = useContext(TitleContext);
+  const [relatorio, setRelatorio] = useState({
+    total_vendas: 0,
+    aumento_em_porcentagem: 0,
+    clientes_atingidos: 0,
+    total_compras_realizadas: 0,
+  });
+
+  const [clients, setClients] = useState([]);
 
   const avatarApi =
     "https://api.dicebear.com/9.x/adventurer/svg?seed=$flip=true&radius=50&earringsProbability=25&glassesProbability=25&backgroundColor=d1d4f9,b6e3f4,c0aede,ffd5dc";
 
   const statusMessages = ["Finalizado", "Pendente", "Cancelado"];
-
-  const clients = [
-    { id: 1, name: "Gabriel", total: 450, date: "2021-09-01", status: 0 },
-    { id: 2, name: "Minos", total: 450, date: "2021-09-01", status: 0 },
-    { id: 3, name: "Charlie", total: 450, date: "2021-09-01", status: 1 },
-  ];
 
   const timeFilters = [
     "Hoje",
@@ -34,15 +37,20 @@ function Dashboard() {
 
   const [timeFilter, setTimeFilter] = useState("Mês");
 
-  // Exemplo de um objeto relatorio fictício, a ser substituído por dados reais
-  const relatorio = {
-    total_vendas: 1500,
-    aumento_em_porcentagem: 12.5,
-    clientes_atingidos: 72,
-    total_compras_realizadas: 105,
-  };
+  useEffect(() => {
+    setTitle("Dashboard");
 
-  useEffect(() => setTitle("Dashboard"), [setTitle]);
+    // Fetch relatorio data from Flask API
+    fetch(`${API_URL}/dash/order`)
+      .then((response) => response.json())
+      .then((data) => setRelatorio(data))
+      .catch((error) => console.error("Erro ao buscar dados do relatório:", error));
+
+    fetch(`${API_URL}/api/clients`)
+      .then((response) => response.json())
+      .then((data) => setClients(data))
+      .catch((error) => console.error("Erro ao buscar dados dos clientes:", error));
+  }, [setTitle]);
 
   return (
     <div className="p-5">
@@ -50,11 +58,11 @@ function Dashboard() {
         <DashboardPanel
           title="Relatório Mensal"
           content={`R$ ${relatorio.total_vendas}`}
-          description={`Variação de ${relatorio.aumento_em_porcentagem.toFixed(2)}% em relação ao último mês`}
+          description={`Aumento de ${relatorio.aumento_em_porcentagem.toFixed(2)}% em relação ao último mês`}
         />
         <DashboardPanel title="Clientes Atingidos">
-          <ClientStats count={relatorio.clientes_atingidos} label="Clientes atingidos" />
-          <ClientStats count={relatorio.total_compras_realizadas} label="Compras realizadas" />
+          <ClientStats count={relatorio.clientes_atingidos} label="Clientes Atingidos" />
+          <ClientStats count={relatorio.total_compras_realizadas} label="Total de Compras" />
         </DashboardPanel>
         <DashboardPanel title="Atalhos">
           <Shortcut label="Backup de Dados" />
@@ -66,7 +74,7 @@ function Dashboard() {
         <DashboardPanel title="Relatório Anual">
           <img
             src={graph}
-            className="rounded shadow-xl w-full"
+            className="rounded shadow-1xl w-full"
             alt="gráfico de vendas anual"
           />
         </DashboardPanel>
@@ -81,6 +89,7 @@ function Dashboard() {
             filters={timeFilters}
           />
         </header>
+        {}
         <ClientList
           clients={clients}
           avatarApi={avatarApi}
@@ -124,7 +133,7 @@ function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
     <button className="p-1 px-3 bg-slate-200 border border-slate-100 shadow-sm rounded-lg relative group">
       Filtrar por: {selectedFilter}
       <div className="panel right-0 top-10 px-10 text-left">
-        <ul className="flex flex-col gap-1">
+        <ul className="flex flex-col gap-1 ">
           {filters.map((filter) => (
             <li
               key={filter}
@@ -144,15 +153,15 @@ function ClientList({ clients, avatarApi, statusMessages }) {
   return (
     <section className="flex flex-col gap-4 overflow-x-auto md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
       {clients.map((client) => (
-        <div className="flex w-full md:w-auto items-center" key={client.id}>
+        <div className="flex w-full md:w-auto items-center" key={client._id}>
           <img
-            src={avatarApi.replace("$", client.name + 91)}
-            alt={`Avatar de ${client.name}`}
+            src={avatarApi.replace("$", client.customer + 91)}
+            alt={`Avatar de ${client.customer}`}
             className="rounded-full w-14 h-14 border border-slate-100 mr-5"
           />
-          <div className="grid grid-cols-2 sm:grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
-            <span>{client.name}</span>
-            <span>{price(client.total)}</span>
+          <div className="grid grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
+            <span>{client.customer}</span>
+            <span>{price(client.order_total)}</span>
             <span>{new Date(client.date).toLocaleDateString("pt-BR")}</span>
             <StatusBadge status={client.status} messages={statusMessages} />
             <span className="justify-self-end">
