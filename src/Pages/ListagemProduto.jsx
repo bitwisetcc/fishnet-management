@@ -134,8 +134,8 @@ function ListagemProduto() {
   useEffect(() => setTitle("Produtos"), [setTitle]);
 
   const loadProducts = async () => {
-    const activeFilters = { ...filters }; // Include all existing filters
-    activeFilters.page = currentPage; // Add the current page
+    const activeFilters = { ...filters };
+    activeFilters.page = currentPage;
   
     if (priceOrder !== "none") {
       delete activeFilters.ordemAlfabetica;
@@ -143,8 +143,6 @@ function ListagemProduto() {
     } else if (sortOrder !== "none") {
       activeFilters.ordem = sortOrder === "asc" ? "A-Z" : "Z-A";
     }
-  
-    console.log("Parâmetros da requisição:", activeFilters); // Log for verification
   
     try {
       const data = await getProductByFilter(activeFilters);
@@ -189,14 +187,14 @@ function ListagemProduto() {
 
   const handleSortByName = () => {
     setPriceOrder("none");
-  
+    setCurrentPage(1);
     const newOrder = sortOrder === "none" ? "asc" : sortOrder === "asc" ? "desc" : "none";
     setSortOrder(newOrder);
   };
 
   const handleSortByPrice = () => {
     setSortOrder("none");
-  
+    setCurrentPage(1);
     const newPriceOrder = priceOrder === "none" ? "asc" : priceOrder === "asc" ? "desc" : "none";
     setPriceOrder(newPriceOrder);
   };

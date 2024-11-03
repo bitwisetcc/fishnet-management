@@ -24,9 +24,9 @@ export async function listAllProducts(page = 1, limit = 20) {
   }
 }
 
-export async function getProductByFilter(filters, page = 1) {
+export async function getProductByFilter(filters) {
   try {
-    const query = new URLSearchParams({ ...filters, page }).toString();
+    const query = new URLSearchParams({ ...filters }).toString();
     const data = await fetch(`${API_URL}/prods/filtros?${query}`);
     const prods = await data.json();
 
