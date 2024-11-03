@@ -1,5 +1,4 @@
 export const API_URL = "https://fishnet-api-py.onrender.com";
-// export const API_URL = "http://localhost:5000";
 
 function parseProduct(prod) {
   return {
@@ -25,9 +24,9 @@ export async function listAllProducts(page = 1, limit = 20) {
   }
 }
 
-export async function getProductByFilter(filters, page = 1, limit = 20) {
+export async function getProductByFilter(filters, page = 1) {
   try {
-    const query = new URLSearchParams({ ...filters, page, limit }).toString();
+    const query = new URLSearchParams({ ...filters, page }).toString();
     const data = await fetch(`${API_URL}/prods/filtros?${query}`);
     const prods = await data.json();
 
@@ -35,9 +34,7 @@ export async function getProductByFilter(filters, page = 1, limit = 20) {
       return [];
     }
 
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    return prods.slice(start, end).map(parseProduct);
+    return prods.map(parseProduct);
   } catch (error) {
     console.error(error.message);
     return [];

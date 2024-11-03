@@ -1,7 +1,5 @@
 import {
   ArrowTopRightOnSquareIcon,
-  ChevronDownIcon,
-  CurrencyDollarIcon,
   FunnelIcon,
   LockClosedIcon,
   MagnifyingGlassIcon,
@@ -85,8 +83,8 @@ function FilterProduct({ open, setOpen }) {
       }
     }
 
-    fetch(`${API_URL}/prods/new`, {
-      method: "POST",
+    fetch(`${API_URL}/prods/`, {
+      method: "GET",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },
     })
@@ -130,28 +128,41 @@ function ListagemProduto() {
   const [filteringOpen, setFilteringOpen] = useState(false);
   const [filters, setFilters] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 20; 
+  const [sortOrder, setSortOrder] = useState("none");
+  const [priceOrder, setPriceOrder] = useState("none");
 
   useEffect(() => setTitle("Produtos"), [setTitle]);
 
-  // Atualiza produtos ao carregar ou mudar página/filtros
-  useEffect(() => {
-    const loadProducts = async () => {
-      let data;
-      if (Object.keys(filters).length > 0) {
-        // Se houver filtros, usar getProductByFilter
-        data = await getProductByFilter({ ...filters, page: currentPage, limit });
+  const loadProducts = async () => {
+    const activeFilters = { ...filters }; // Include all existing filters
+    activeFilters.page = currentPage; // Add the current page
+  
+    if (priceOrder !== "none") {
+      delete activeFilters.ordemAlfabetica;
+      activeFilters.ordem = priceOrder === "asc" ? "crescente" : "decrescente";
+    } else if (sortOrder !== "none") {
+      activeFilters.ordem = sortOrder === "asc" ? "A-Z" : "Z-A";
+    }
+  
+    console.log("Parâmetros da requisição:", activeFilters); // Log for verification
+  
+    try {
+      const data = await getProductByFilter(activeFilters);
+      console.log("Resposta da API:", data);
+      if (data && Array.isArray(data)) {
+        setProducts(data);
+        setFilteredProducts(data);
       } else {
-        // Caso contrário, usar listAllProducts
-        data = await listAllProducts(currentPage, limit);
+        console.error("Formato de dados inesperado", data);
       }
+    } catch (error) {
+      console.error("Erro ao carregar produtos:", error);
+    }
+  }; 
 
-      setProducts(data);
-      setFilteredProducts(data);
-    };
-
+  useEffect(() => {
     loadProducts();
-  }, [filters, currentPage]);
+  }, [filters, currentPage, sortOrder, priceOrder]);
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
@@ -173,13 +184,25 @@ function ListagemProduto() {
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
-    setCurrentPage(1); // Resetar para a primeira página ao aplicar novos filtros
+    setCurrentPage(1);
+  };
+
+  const handleSortByName = () => {
+    setPriceOrder("none");
+  
+    const newOrder = sortOrder === "none" ? "asc" : sortOrder === "asc" ? "desc" : "none";
+    setSortOrder(newOrder);
+  };
+
+  const handleSortByPrice = () => {
+    setSortOrder("none");
+  
+    const newPriceOrder = priceOrder === "none" ? "asc" : priceOrder === "asc" ? "desc" : "none";
+    setPriceOrder(newPriceOrder);
   };
 
   return (
     <>
-      <AddProduct open={registerOpen} setOpen={setRegisterOpen} />
-      <FilterProduct open={filteringOpen} setOpen={setFilteringOpen} />
       <ListingProducts onFilterChange={handleFilterChange}>
         <div className="flex flex-col md:flex-row md:items-center gap-2">
           {/* Barra de pesquisa */}
@@ -199,7 +222,7 @@ function ListagemProduto() {
 
           {/* Botões */}
           <div className="flex gap-2">
-            <button className="flex items-center gap-1 relative group cursor-pointer" onClick={() => setFilteringOpen(true)}>
+            <button className="flex items-center gap-2 relative group cursor-pointer" onClick={() => setFilteringOpen(true)}>
               <FunnelIcon className="size-6" />
               <span className="hidden md:inline">Filtros</span>
             </button>
@@ -221,8 +244,12 @@ function ListagemProduto() {
         <article className="grid">
           <header className="listing col-span-7 flex items-center bg-slate-100 p-2 rounded-lg shadow-md">
             <span className="font-semibold flex items-center justify-center">Foto</span>
-            <span className="font-semibold flex items-center justify-start">Nome</span>
-            <span className="font-semibold flex items-center justify-center">Preço</span>
+            <span className="font-semibold flex items-center justify-start cursor-pointer" onClick={handleSortByName}>
+              Nome {sortOrder === "asc" ? "↓" : sortOrder === "desc" ? "↑" : ""}
+            </span>
+            <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByPrice}>
+              Preço {priceOrder === "asc" ? "↓" : priceOrder === "desc" ? "↑" : ""}
+            </span>
             <span className="font-semibold flex items-center justify-center">Estoque</span>
             <span className="font-semibold flex items-center justify-center">Insights</span>
             <span className="font-semibold flex items-center justify-center">Ações</span>
@@ -261,7 +288,7 @@ function ListagemProduto() {
               <span className="flex items-center justify-center">
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" className="sr-only peer" />
-                  <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition duration-200"></div>
+                  <div className="w-10 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition duration-200"></div>
                   <span className="absolute w-4 h-4 bg-white rounded-full shadow transition duration-200 peer-checked:translate-x-5 peer-checked:shadow-lg"></span>
                 </label>
               </span>
@@ -269,8 +296,6 @@ function ListagemProduto() {
           ))}
         </article>
       </div>
-
-
 
       <footer className="flex justify-between my-8 items-center">
         <button
@@ -290,6 +315,7 @@ function ListagemProduto() {
           <ChevronRightIcon className="size-5" />
         </button>
       </footer>
+
     </>
   );
 }
