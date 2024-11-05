@@ -1,5 +1,7 @@
 import {
   ArrowTopRightOnSquareIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   FunnelIcon,
   LockClosedIcon,
   MagnifyingGlassIcon,
@@ -7,14 +9,13 @@ import {
   PlusCircleIcon,
   PrinterIcon,
   XMarkIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
+  PlusIcon,
 } from "@heroicons/react/24/outline";
 import { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import ListingProducts from "../components/ListingProducts";
 import { Link } from "react-router-dom";
-import { API_URL, listAllProducts, getProductByFilter } from "../lib/query";
+import { API_URL, getProductByFilter } from "../lib/query";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
 function AddProduct({ open, setOpen }) {
@@ -214,56 +215,171 @@ function AddProduct({ open, setOpen }) {
   );
 }
 
-function FilterProduct({ open, setOpen }) {
-  const [images, setImages] = useState([""]);
+function FilterProduct({ open, setOpen, onSaveFilters }) {
+  const [selectedEnvironment, setSelectedEnvironment] = useState(null);
+  const [selectedDiet, setSelectedDiet] = useState(null);
+  const [selectedBehavior, setSelectedBehavior] = useState(null);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
 
-  function submit(e) {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.target));
-    data.pictures = [];
+  const clearFilters = () => {
+    setSelectedEnvironment(null);
+    setSelectedDiet(null);
+    setSelectedBehavior(null);
+    setMinPrice('');
+    setMaxPrice('');
+  };
 
-    for (const key in data) {
-      if (key.startsWith("image-")) {
-        data.pictures.push(data[key]);
-        delete data[key];
-      }
-    }
+  const [filters, setFilters] = useState({
+    feeding: '',
+    tankSize: '',
+    // Add other filters as needed
+  });
 
-    fetch(`${API_URL}/prods/`, {
-      method: "GET",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => res.json())
-      .then(console.log)
-      .catch(console.error);
-  }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
+
+  const handleSave = () => {
+    const selectedFilters = {
+      ...filters,
+      tags: selectedEnvironment,
+      feeding: selectedDiet,
+      behavior: selectedBehavior,
+      minPrice: minPrice ? Number(minPrice) : undefined, // Convert to number or undefined if empty
+      maxPrice: maxPrice ? Number(maxPrice) : undefined, // Convert to number or undefined if empty
+    };
+    onSaveFilters(selectedFilters); // Sends the filters to `ListagemProduto`
+    setOpen(false); // Closes the modal
+  };
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
-      <div className="fixed inset-0 flex items-center justify-end bg-zinc-800/50 p-4">
-        <DialogPanel className="h-full w-full md:w-[45%] lg:w-[25%] mx-0 space-y-4 rounded-lg border border-slate-500 shadow-lg bg-slate-300 p-8 text-slate-800">
-          <header className="relative">
-            <DialogTitle className="font-bold text-xl">Filtros</DialogTitle>
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-0 right-0"
-            >
-              <XMarkIcon className="size-5 text-slate-800" />
+      <div className="fixed inset-0 flex items-center justify-center md:justify-end bg-[#11223a]/80 p-4">
+        <DialogPanel className="h-full w-full sm:max-w-md md:w-[45%] lg:w-[25%] mx-0 space-y-6 rounded-lg border border-[#cbd5e1] shadow-xl bg-[#f7f9fb] p-6 md:p-8 text-[#11223a] overflow-y-auto">
+          <header className="relative flex justify-between items-center mb-6">
+            <DialogTitle className="font-bold text-lg sm:text-xl md:text-2xl">Filtros</DialogTitle>
+            <button onClick={() => setOpen(false)} className="text-[#11223a] hover:text-[#c7ae5d]">
+              <XMarkIcon className="h-6 w-6" />
             </button>
           </header>
-          <form
-            className="flex flex-col gap-4 text-stone-900 overflow-y-scroll max-h-[67vh] lg:max-h-[60vh] px-2"
-            onSubmit={submit}
-          >
-            {/* Campos de formulário... */}
-          </form>
+
+          {/* Seção de Filtros */}
+          <section className="space-y-6">
+            {/* Filtro de Ambiente */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Ambiente</h3>
+              <div className="flex flex-col gap-2">
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedEnvironment === 'fresh' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedEnvironment(selectedEnvironment === 'fresh' ? null : 'fresh')}
+                >
+                  🌿 Água doce
+                </button>
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedEnvironment === 'salt' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedEnvironment(selectedEnvironment === 'salt' ? null : 'salt')}
+                >
+                  🌊 Água salgada
+                </button>
+              </div>
+            </div>
+
+            {/* Filtro de Alimentação */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Alimentação</h3>
+              <div className="flex flex-col gap-2">
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedDiet === 'herb' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedDiet(selectedDiet === 'herb' ? null : 'herb')}
+                >
+                  🌱 Herbívoro
+                </button>
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedDiet === 'omni' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedDiet(selectedDiet === 'omni' ? null : 'omni')}
+                >
+                  🍽️ Onívoro
+                </button>
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedDiet === 'carn' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedDiet(selectedDiet === 'carn' ? null : 'carn')}
+                >
+                  🍖 Carnívoro
+                </button>
+              </div>
+            </div>
+
+            {/* Filtro de Valores */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Valores</h3>
+              <label htmlFor="min-price" className="block mb-1 text-[#11223a]">Preço mínimo: R$</label>
+              <input
+                type="number"
+                id="min-price"
+                min={0}
+                step={10}
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
+              <label htmlFor="max-price" className="block mb-1 mt-4 text-[#11223a]">Preço máximo: R$</label>
+              <input
+                type="number"
+                id="max-price"
+                min={0}
+                step={10}
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
+            </div>
+
+            {/* Filtro de Comportamento Social */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Comportamento Social</h3>
+              <div className="flex flex-col gap-2">
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedBehavior === 'peaceful' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedBehavior(selectedBehavior === 'peaceful' ? null : 'peaceful')}
+                >
+                  🕊️ Pacífico
+                </button>
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedBehavior === 'aggressive' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedBehavior(selectedBehavior === 'aggressive' ? null : 'aggressive')}
+                >
+                  🦈 Agressivo
+                </button>
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedBehavior === 'schooling' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedBehavior(selectedBehavior === 'schooling' ? null : 'schooling')}
+                >
+                  🐟 Em cardume
+                </button>
+              </div>
+            </div>
+
+            {/* Botões de Ação */}
+            <div className="flex gap-4 mt-6">
+              <button className="flex-1 rounded bg-[#c7ae5d] px-4 py-2 text-white hover:bg-[#11223a]" onClick={handleSave}>
+                Salvar
+              </button>
+              <button className="flex-1 rounded px-4 py-2 border border-red-600 hover:bg-red-600 text-red-600 hover:text-white" onClick={clearFilters}>
+                Limpar
+              </button>
+            </div>
+          </section>
         </DialogPanel>
       </div>
     </Dialog>
-
   );
 }
+
 
 function ListagemProduto() {
   const setTitle = useContext(TitleContext);
@@ -280,8 +396,7 @@ function ListagemProduto() {
   useEffect(() => setTitle("Produtos"), [setTitle]);
 
   const loadProducts = async () => {
-    const activeFilters = { ...filters };
-    activeFilters.page = currentPage;
+    const activeFilters = { ...filters, page: currentPage };
   
     if (priceOrder !== "none") {
       delete activeFilters.ordemAlfabetica;
@@ -292,17 +407,12 @@ function ListagemProduto() {
   
     try {
       const data = await getProductByFilter(activeFilters);
-      console.log("Resposta da API:", data);
-      if (data && Array.isArray(data)) {
-        setProducts(data);
-        setFilteredProducts(data);
-      } else {
-        console.error("Formato de dados inesperado", data);
-      }
+      setProducts(data);
+      setFilteredProducts(data);
     } catch (error) {
       console.error("Erro ao carregar produtos:", error);
     }
-  }; 
+  };
 
   useEffect(() => {
     loadProducts();
@@ -345,6 +455,22 @@ function ListagemProduto() {
     setPriceOrder(newPriceOrder);
   };
 
+  {/* Filtros */}
+
+  const fetchProducts = async (appliedFilters) => {
+    const filteredProducts = await getProductByFilter(appliedFilters);
+    setProducts(filteredProducts);
+  };
+
+  useEffect(() => {
+    loadProducts(); // Carrega os produtos ao montar o componente ou atualizar filtros
+  }, [filters]);
+
+  const handleSaveFilters = (selectedFilters) => {
+    setFilters(selectedFilters);
+    setCurrentPage(1);
+  };
+  
   return (
     <>
       <ListingProducts onFilterChange={handleFilterChange}>
@@ -459,6 +585,9 @@ function ListagemProduto() {
           <ChevronRightIcon className="size-5" />
         </button>
       </footer>
+
+      <AddProduct open={registerOpen} setOpen={setRegisterOpen} />
+      <FilterProduct open={filteringOpen} setOpen={setFilteringOpen} onSaveFilters={handleSaveFilters} />
 
     </>
   );

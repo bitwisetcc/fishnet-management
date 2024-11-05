@@ -26,7 +26,15 @@ export async function listAllProducts(page = 1, limit = 20) {
 
 export async function getProductByFilter(filters) {
   try {
-    const query = new URLSearchParams({ ...filters }).toString();
+    // Filtra o objeto `filters`, removendo chaves com valores nulos, indefinidos ou vazios
+    const filteredFilters = Object.fromEntries(
+      Object.entries(filters).filter(
+        ([, value]) => value !== null && value !== undefined && value !== ""
+      )
+    );
+
+    // Constrói a query apenas com os filtros selecionados
+    const query = new URLSearchParams(filteredFilters).toString();
     const data = await fetch(`${API_URL}/prods/filtros?${query}`);
     const prods = await data.json();
 
