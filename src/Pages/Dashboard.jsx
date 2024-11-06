@@ -7,6 +7,7 @@ import { useAuth } from "../lib/auth";
 import { price } from "../lib/format";
 import { Bar } from 'react-chartjs-2';
 import { Chart, LinearScale, registerables } from "chart.js";
+import { API_URL } from "../lib/query"
 
 function Dashboard() {
   useAuth();
@@ -28,7 +29,7 @@ function Dashboard() {
   useEffect(() => {
     setTitle("Dashboard");
 
-    fetchData("http://localhost:5000/dash/order", setRelatorio);
+    fetchData(`http://${API_URL}/dash/order`, setRelatorio);
     fetchTopSales(timeFilter);
     fetchAnnualSalesData();
   }, [setTitle, timeFilter]);
@@ -47,11 +48,11 @@ function Dashboard() {
   };
 
   const fetchTopSales = (filter) => {
-    fetchData(`http://localhost:5000/dash/order/top3/${filter}`, setTopSales);
+    fetchData(`http://${API_URL}/dash/order/top3/${filter}`, setTopSales);
   };
 
   const fetchAnnualSalesData = () => {
-    fetch("http://localhost:5000/dash/annual-sales")
+    fetch(`http://${API_URL}/dash/annual-sales`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Erro ${response.status}: ${response.statusText}`);
