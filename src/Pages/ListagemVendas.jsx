@@ -13,7 +13,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { price } from "../lib/format";
-import { API_URL } from "../lib/query"; // Importando API_URL
+import { API_URL } from "../lib/query"; // Certifique-se de que está importando corretamente
 
 const ListagemVendas = () => {
   const setTitle = useContext(TitleContext);
@@ -25,18 +25,47 @@ const ListagemVendas = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState("");
+  const [priceFilter, setPriceFilter] = useState([10, 500]);
+  const [statusFilter, setStatusFilter] = useState(""); // Para filtro de status
+  const [paymentMethodFilter, setPaymentMethodFilter] = useState("");
 
   // Função para buscar os dados da API
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
-        const response = await fetch(`${API_URL}/sales`); // Usando fetch para buscar dados
+        const url = new URL(`${API_URL}/sales`);
+
+        // Adicionando filtros de busca na URL
+        if (searchTerm) {
+          url.searchParams.append("search", searchTerm);
+        }
+        if (dateFilter) {
+          url.searchParams.append("date", dateFilter);
+        }
+        if (priceFilter) {
+          url.searchParams.append("min_price", priceFilter[0]);
+          url.searchParams.append("max_price", priceFilter[1]);
+        }
+        if (statusFilter) {
+          url.searchParams.append("status", statusFilter);
+        }
+        if (paymentMethodFilter) {
+          url.searchParams.append("payment_method", paymentMethodFilter);
+        }
+
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Erro ao carregar os dados de vendas");
         }
+
         const data = await response.json(); // Convertendo a resposta para JSON
-        setSales(data); // Armazenando os dados de vendas
-        setFilteredSales(data); // Inicializa vendas filtradas
+        if (Array.isArray(data)) {
+          setSales(data); // Armazenando os dados de vendas
+          setFilteredSales(data); // Inicializa vendas filtradas
+        } else {
+          setError("Estrutura de dados inválida");
+        }
+
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -45,7 +74,7 @@ const ListagemVendas = () => {
     };
 
     fetchSalesData();
-  }, []);
+  }, [searchTerm, dateFilter, priceFilter, statusFilter, paymentMethodFilter]); // Recarregar sempre que os filtros mudarem
 
   const statusMessages = {
     done: "Finalizado",
@@ -53,18 +82,9 @@ const ListagemVendas = () => {
     canceled: "Cancelado",
   };
 
-  useEffect(() => {
-    const filtered = sales.filter((sale) => {
-      const matchesName = sale.user.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-      const matchesDate = dateFilter
-        ? new Date(sale.date).toLocaleDateString("pt-BR") === dateFilter
-        : true;
-      return matchesName && matchesDate;
-    });
-    setFilteredSales(filtered);
-  }, [searchTerm, dateFilter, sales]);
+  const getReportUrl = (saleId) => {
+    return `${API_URL}/reports/${saleId}`; // Altere para a URL real do relatório
+  };
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -73,10 +93,6 @@ const ListagemVendas = () => {
   if (error) {
     return <p>{error}</p>;
   }
-
-  const getReportUrl = (saleId) => {
-    return `${API_URL}/reports/${saleId}`; // Altere para a URL real do relatório
-  };
 
   return (
     <>
@@ -112,11 +128,17 @@ const ListagemVendas = () => {
               type="range"
               name="price"
               id="price"
+              min="10"
+              max="500"
+              value={priceFilter[1]}
+              onChange={(e) =>
+                setPriceFilter([priceFilter[0], parseInt(e.target.value)])
+              }
               className="accent-alt-dimm"
             />
             <div className="flex justify-between text-sm">
-              <span>R$10,00</span>
-              <span>R$500,00</span>
+              <span>R$ {priceFilter[0]}</span>
+              <span>R$ {priceFilter[1]}</span>
             </div>
           </div>
         </button>
@@ -127,9 +149,24 @@ const ListagemVendas = () => {
           <ChevronDownIcon className="size-4 ml-4" />
           <div className="panel left-0 top-10">
             <ul className="flex flex-col gap-1 text-left">
-              <li className="hover:text-slate-800">Finalizado</li>
-              <li className="hover:text-slate-800">Pendente</li>
-              <li className="hover:text-slate-800">Cancelado</li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setStatusFilter("done")}
+              >
+                Finalizado
+              </li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setStatusFilter("ongoing")}
+              >
+                Pendente
+              </li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setStatusFilter("canceled")}
+              >
+                Cancelado
+              </li>
             </ul>
           </div>
         </button>
@@ -140,10 +177,24 @@ const ListagemVendas = () => {
           <ChevronDownIcon className="size-4 ml-4" />
           <div className="panel right-0 top-10 px-10 text-left">
             <ul className="flex flex-col gap-1">
-              <li className="hover:text-slate-800">Pagamento</li>
-              <li className="hover:text-slate-800">Frete</li>
-              <li className="hover:text-slate-800">Empresa</li>
-              <li className="hover:text-slate-800">Pessoal</li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setPaymentMethodFilter("Cartão de crédito")}
+              >
+                Cartão de crédito
+              </li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setPaymentMethodFilter("Boleto")}
+              >
+                Boleto
+              </li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setPaymentMethodFilter("Pix")}
+              >
+                Pix
+              </li>
             </ul>
           </div>
         </button>
@@ -158,8 +209,6 @@ const ListagemVendas = () => {
 
       <div className="overflow-x-scroll md:overflow-x-hidden">
         <article className="grid grid-cols-[60px_repeat(6,1fr)_70px] gap-4">
-          {" "}
-          {/* Ajuste de espaçamento entre colunas */}
           <header className="listing col-span-8 text-slate-500">
             <span>
               <span className="bg-slate-200 rounded-lg px-2">#</span>
@@ -172,59 +221,46 @@ const ListagemVendas = () => {
             <span>Data</span>
             <span>Ações</span>
           </header>
-          {filteredSales.map((sale) => (
-            <section
-              className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 gap-2"
-              key={sale._id}
-            >
-              {" "}
-              {/* Ajuste de espaçamento entre colunas */}
-              <span className="w-8">
-                <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
-                  {sale._id.slice(0, 4)}...
+          {filteredSales.length > 0 ? (
+            filteredSales.map((sale) => (
+              <section
+                className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 gap-2"
+                key={sale._id}
+              >
+                <span className="w-8">
+                  <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
+                    {sale._id.slice(0, 4)}...
+                  </span>
                 </span>
-              </span>
-              <span>{sale.user.name}</span>
-              <span>
-                {price(sale.shipping ?? Math.random() * 40)}
-                <span className="bg-slate-200 text-stone-600 text-sm rounded-lg px-2 ml-1">
-                  {sale.shippingProvider ?? "Correios"}
+                <span>{sale.user?.name || "Cliente desconhecido"}</span>
+                <span>
+                  {price(sale.shipping ?? Math.random() * 40)}
+                  <span className="bg-slate-100 py-0.5 px-2 rounded text-xs ml-2">
+                    {sale.paymentMethod || "Não especificado"}
+                  </span>
                 </span>
-              </span>
-              <span>{price(sale.total)}</span>
-              <span>{sale.payment_method}</span>
-              <span>
-                <span
-                  className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm ${
-                    {
-                      done: "bg-lime-400 text-black",
-                      ongoing: "bg-amber-400 text-black",
-                      canceled: "bg-rose-500 text-black",
-                    }[sale.status]
-                  }`}
-                >
-                  {statusMessages[sale.status]}
+                <span>{price(sale.total)}</span>
+                <span>
+                  {statusMessages[sale.status] || "Status desconhecido"}
                 </span>
-              </span>
-              <span>
-                {new Date(sale.date).toLocaleString("pt-BR").split(",")[0]}
-              </span>
-              <span className="flex gap-2">
-                <a
-                  href={getReportUrl(sale._id)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <DocumentTextIcon className="size-5" />
-                </a>
-                <button>
-                  <Tippy placement="left" content="Copiar e-mail">
-                    <EnvelopeIcon className="size-5" />
+                <span>{new Date(sale.date).toLocaleDateString("pt-BR")}</span>
+                <span>
+                  <Tippy content="Relatório">
+                    <a
+                      className="action"
+                      href={getReportUrl(sale._id)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <DocumentTextIcon className="size-5" />
+                    </a>
                   </Tippy>
-                </button>
-              </span>
-            </section>
-          ))}
+                </span>
+              </section>
+            ))
+          ) : (
+            <p className="col-span-8">Sem vendas para exibir</p>
+          )}
         </article>
       </div>
     </>
