@@ -13,6 +13,7 @@ function Dashboard() {
   Chart.register(LinearScale);
   Chart.register(...registerables);
   const setTitle = useContext(TitleContext);
+
   const [relatorio, setRelatorio] = useState({
     total_vendas: 0,
     aumento_em_porcentagem: 0,
@@ -27,27 +28,36 @@ function Dashboard() {
   useEffect(() => {
     setTitle("Dashboard");
 
-    fetch("http://localhost:5000/dash/order")
-      .then((response) => response.json())
-      .then((data) => setRelatorio(data))
-      .catch((error) =>
-        console.error("Erro ao buscar dados do relatório:", error)
-      );
-
+    fetchData("http://localhost:5000/dash/order", setRelatorio);
     fetchTopSales(timeFilter);
     fetchAnnualSalesData();
   }, [setTitle, timeFilter]);
 
+  const fetchData = async (url, setState) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+      }
+      const data = await response.json();
+      setState(data);
+    } catch (error) {
+      console.error(`Erro ao buscar dados de ${url}:`, error);
+    }
+  };
+
   const fetchTopSales = (filter) => {
-    fetch(`http://localhost:5000/dash/order/top3/${filter}`)
-      .then((response) => response.json())
-      .then((data) => setTopSales(data))
-      .catch((error) => console.error("Erro ao buscar melhores vendas:", error));
+    fetchData(`http://localhost:5000/dash/order/top3/${filter}`, setTopSales);
   };
 
   const fetchAnnualSalesData = () => {
     fetch("http://localhost:5000/dash/annual-sales")
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erro ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         const labels = Object.keys(data);
         const salesData = Object.values(data);
@@ -229,12 +239,12 @@ function ClientList({ clients, avatarApi, statusMessages }) {
       {clients.map((client) => (
         <div className="flex w-full md:w-auto items-center" key={client._id}>
           <img
-            src={avatarApi.replace("$", client.customer + 91)}
-            alt={`Avatar de ${client.customer}`}
+            src={avatarApi.replace("$", client.customer_id + 91)}
+            alt={`Avatar de ${client.customer_name}`}
             className="rounded-full w-14 h-14 border border-slate-100 mr-5"
           />
           <div className="grid grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
-            <span>{client.customer}</span>
+            <span>{client.customer_name}</span>
             <span>{price(client.order_total)}</span>
             <span>{new Date(client.date).toLocaleDateString("pt-BR")}</span>
             <StatusBadge status={client.status} messages={statusMessages} />
