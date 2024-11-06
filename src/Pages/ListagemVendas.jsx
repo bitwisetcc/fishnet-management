@@ -26,8 +26,11 @@ const ListagemVendas = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState([10, 500]);
-  const [statusFilter, setStatusFilter] = useState(""); // Para filtro de status
+  const [statusFilter, setStatusFilter] = useState(null); // Para filtro de status
   const [paymentMethodFilter, setPaymentMethodFilter] = useState("");
+  const [minDate, setMinDate] = useState("");
+  const [maxDate, setMaxDate] = useState("");
+
 
   // Função para buscar os dados da API
   useEffect(() => {
@@ -37,6 +40,8 @@ const ListagemVendas = () => {
         if (!response.ok) {
           throw new Error("Erro ao carregar os dados de vendas");
         }
+
+        console.log()
 
         const data = await response.json(); // Convertendo a resposta para JSON
         setSales(data); // Armazenando os dados de vendas
@@ -60,16 +65,23 @@ const ListagemVendas = () => {
 
   useEffect(() => {
     const filtered = sales.filter((sale) => {
+      const saleDate = new Date(sale.date);
+  
       const matchesName = sale.customer.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
-      const matchesDate = dateFilter
-        ? new Date(sale.date).toLocaleDateString("pt-BR") === dateFilter
-        : true;
-      return matchesName && matchesDate;
+  
+      const matchesDateRange =
+        (!minDate || saleDate >= new Date(minDate)) &&
+        (!maxDate || saleDate <= new Date(maxDate));
+  
+      const matchesStatus = statusFilter == null || sale.status == statusFilter;
+
+      return matchesName && matchesDateRange && matchesStatus;
     });
     setFilteredSales(filtered);
-  }, [searchTerm, dateFilter, sales]);
+  }, [searchTerm, minDate, maxDate, sales, statusFilter]);
+  
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -96,13 +108,23 @@ const ListagemVendas = () => {
           />
         </span>
         <input
-          type="date"
-          name="date"
-          id="date"
-          value={dateFilter}
-          onChange={(e) => setDateFilter(e.target.value)}
-          className="empty:text-slate-500"
-        />
+  type="date"
+  name="minDate"
+  id="minDate"
+  value={minDate}
+  onChange={(e) => setMinDate(e.target.value)}
+  className="empty:text-slate-500"
+/>
+
+<input
+  type="date"
+  name="maxDate"
+  id="maxDate"
+  value={maxDate}
+  onChange={(e) => setMaxDate(e.target.value)}
+  className="empty:text-slate-500"
+/>
+
 
         <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
           <CurrencyDollarIcon className="size-4" />
@@ -136,19 +158,19 @@ const ListagemVendas = () => {
             <ul className="flex flex-col gap-1 text-left">
               <li
                 className="hover:text-slate-800"
-                onClick={() => setStatusFilter("done")}
+                onClick={() => setStatusFilter(1)}
               >
                 Finalizado
               </li>
               <li
                 className="hover:text-slate-800"
-                onClick={() => setStatusFilter("ongoing")}
+                onClick={() => setStatusFilter(0)}
               >
                 Pendente
               </li>
               <li
                 className="hover:text-slate-800"
-                onClick={() => setStatusFilter("canceled")}
+                onClick={() => setStatusFilter(2)}
               >
                 Cancelado
               </li>
@@ -234,7 +256,7 @@ const ListagemVendas = () => {
               <span>
                 <span
                   className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm text-black ${
-                    ["bg-lime-400", "bg-amber-400", "bg-rose-500"][sale.status]
+                    ["bg-amber-400", "bg-lime-400", "bg-rose-500"][sale.status]
                   }`}
                 >
                   {statusMessages[sale.status]}
