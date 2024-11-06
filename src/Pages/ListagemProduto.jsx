@@ -421,11 +421,11 @@ function ListagemProduto() {
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchTerm(value);
+  
+    // Atualiza os filtros com o termo de pesquisa
+    const updatedFilters = { ...filters, name: value };
 
-    const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(value)
-    );
-    setFilteredProducts(filtered);
+    setFilters(updatedFilters);
   };
 
   const handleNextPage = () => {
@@ -576,7 +576,7 @@ function ListagemProduto() {
           <ChevronLeftIcon className="size-5" />
           Anterior
         </button>
-        <span>{currentPage} / 21 </span>
+        <span>{currentPage} / 20 </span>
         <button
           className="action"
           onClick={handleNextPage}
