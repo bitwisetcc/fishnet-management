@@ -1,5 +1,4 @@
 export const API_URL = "https://fishnet-api-py.onrender.com";
-// export const API_URL = "http://localhost:5000";
 
 function parseProduct(prod) {
   return {
@@ -12,13 +11,38 @@ function parseProduct(prod) {
   };
 }
 
-export async function listAllProducts(page = 1, limit = 10) {
+export async function listAllProducts(page = 1, limit = 20) {
   try {
     const data = await fetch(`${API_URL}/prods`);
     const prods = await data.json();
     const start = (page - 1) * limit;
     const end = start + limit;
     return prods.slice(start, end).map(parseProduct);
+  } catch (error) {
+    console.error(error.message);
+    return [];
+  }
+}
+
+export async function getProductByFilter(filters) {
+  try {
+    // Filtra o objeto `filters`, removendo chaves com valores nulos, indefinidos ou vazios
+    const filteredFilters = Object.fromEntries(
+      Object.entries(filters).filter(
+        ([, value]) => value !== null && value !== undefined && value !== ""
+      )
+    );
+
+    // Constrói a query apenas com os filtros selecionados
+    const query = new URLSearchParams(filteredFilters).toString();
+    const data = await fetch(`${API_URL}/prods/filtros?${query}`);
+    const prods = await data.json();
+
+    if (!Array.isArray(prods)) {
+      return [];
+    }
+
+    return prods.map(parseProduct);
   } catch (error) {
     console.error(error.message);
     return [];
@@ -54,3 +78,5 @@ export async function listUsersByRole(role, page = 1, limit = 10) {
     return [];
   }
 }
+
+
