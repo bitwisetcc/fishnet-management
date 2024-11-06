@@ -1,19 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
-  ArrowTopRightOnSquareIcon,
-  ChevronDownIcon,
-  CurrencyDollarIcon,
-  FunnelIcon,
   LockClosedIcon,
   MagnifyingGlassIcon,
   PencilSquareIcon,
   PlusCircleIcon,
   PrinterIcon,
 } from "@heroicons/react/24/outline";
-import { useContext, useEffect } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
-import { Link } from "react-router-dom";
 import { listUsersByRole } from "../lib/query";
 import { useAuth } from "../lib/auth";
 
@@ -25,21 +19,30 @@ function ListagemClientes() {
   const [activeTab, setActiveTab] = useState("Todos");
   const [users, setUsers] = useState([]);
   const [registerOpen, setRegisterOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     listUsersByRole(["cpf", "cnpj"]).then(setUsers).catch(console.error);
   }, []);
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleTabClick = (tab, role) => {
+    setActiveTab(tab);
+    listUsersByRole(role).then(setUsers).catch(console.error);
+  };
+
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <>
       <div className="flex gap-2 border-b mb-4">
         <button
-          onClick={() => {
-            setActiveTab("Todos");
-            listUsersByRole(["cpf", "cnpj"])
-              .then(setUsers)
-              .catch(console.error);
-          }}
+          onClick={() => handleTabClick("Todos", ["cpf", "cnpj"])}
           className={`px-4 py-2 text-lg ${
             activeTab === "Todos" ? "border-b-2 border-yellow-light" : ""
           }`}
@@ -47,27 +50,17 @@ function ListagemClientes() {
           Todos
         </button>
         <button
-          onClick={() => {
-            setActiveTab("Pessoa Física");
-            listUsersByRole(["cpf"]).then(setUsers).catch(console.error);
-          }}
+          onClick={() => handleTabClick("Pessoa Física", ["cpf"])}
           className={`px-4 py-2 text-lg ${
-            activeTab === "Pessoa Física"
-              ? "border-b-2 border-yellow-light"
-              : ""
+            activeTab === "Pessoa Física" ? "border-b-2 border-yellow-light" : ""
           }`}
         >
           Pessoa Física
         </button>
         <button
-          onClick={() => {
-            setActiveTab("Pessoa Jurídica");
-            listUsersByRole(["cnpj"]).then(setUsers).catch(console.error);
-          }}
+          onClick={() => handleTabClick("Pessoa Jurídica", ["cnpj"])}
           className={`px-4 py-2 text-lg ${
-            activeTab === "Pessoa Jurídica"
-              ? "border-b-2 border-yellow-light"
-              : ""
+            activeTab === "Pessoa Jurídica" ? "border-b-2 border-yellow-light" : ""
           }`}
         >
           Pessoa Jurídica
@@ -83,6 +76,8 @@ function ListagemClientes() {
             id="search"
             placeholder="Pesquise"
             maxLength={100}
+            value={searchQuery}
+            onChange={handleSearchChange}
             className="w-full placeholder:text-slate-500 focus:outline-none"
           />
         </span>
@@ -114,7 +109,7 @@ function ListagemClientes() {
             <span>Ações</span>
           </header>
 
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <section
               className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2"
               key={user._id}
@@ -127,7 +122,7 @@ function ListagemClientes() {
               <span className="text-nowrap truncate">{user.name}</span>
               <span>{user.tel}</span>
               <span>{user.email}</span>
-              <span>{user.cpf}</span>
+              <span>{user.cpf || user.cnpj}</span>
               <span>{user.addr}</span>
               <span>{user.uf}</span>
               <span className="flex gap-2">

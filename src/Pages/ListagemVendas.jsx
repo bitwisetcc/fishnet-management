@@ -13,7 +13,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { price } from "../lib/format";
-import { API_URL } from "../lib/query"; // Importando API_URL
+import { API_URL } from "../lib/query"; // Certifique-se de que está importando corretamente
 
 const ListagemVendas = () => {
   const setTitle = useContext(TitleContext);
@@ -25,6 +25,9 @@ const ListagemVendas = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState("");
+  const [priceFilter, setPriceFilter] = useState([10, 500]);
+  const [statusFilter, setStatusFilter] = useState(""); // Para filtro de status
+  const [paymentMethodFilter, setPaymentMethodFilter] = useState("");
 
   // Função para buscar os dados da API
   useEffect(() => {
@@ -34,6 +37,7 @@ const ListagemVendas = () => {
         if (!response.ok) {
           throw new Error("Erro ao carregar os dados de vendas");
         }
+
         const data = await response.json(); // Convertendo a resposta para JSON
         setSales(data); // Armazenando os dados de vendas
         setFilteredSales(data); // Inicializa vendas filtradas
@@ -46,7 +50,7 @@ const ListagemVendas = () => {
     };
 
     fetchSalesData();
-  }, []);
+  }, [searchTerm, dateFilter, priceFilter, statusFilter, paymentMethodFilter]); // Recarregar sempre que os filtros mudarem
 
   const statusMessages = ["Pendente", "Finalizado", "Cancelado"];
 
@@ -70,10 +74,6 @@ const ListagemVendas = () => {
   if (error) {
     return <p>{error}</p>;
   }
-
-  const getReportUrl = (saleId) => {
-    return `${API_URL}/reports/${saleId}`; // Altere para a URL real do relatório
-  };
 
   return (
     <>
@@ -109,11 +109,17 @@ const ListagemVendas = () => {
               type="range"
               name="price"
               id="price"
+              min="10"
+              max="500"
+              value={priceFilter[1]}
+              onChange={(e) =>
+                setPriceFilter([priceFilter[0], parseInt(e.target.value)])
+              }
               className="accent-alt-dimm"
             />
             <div className="flex justify-between text-sm">
-              <span>R$10,00</span>
-              <span>R$500,00</span>
+              <span>R$ {priceFilter[0]}</span>
+              <span>R$ {priceFilter[1]}</span>
             </div>
           </div>
         </button>
@@ -124,9 +130,24 @@ const ListagemVendas = () => {
           <ChevronDownIcon className="size-4 ml-4" />
           <div className="panel left-0 top-10">
             <ul className="flex flex-col gap-1 text-left">
-              <li className="hover:text-slate-800">Finalizado</li>
-              <li className="hover:text-slate-800">Pendente</li>
-              <li className="hover:text-slate-800">Cancelado</li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setStatusFilter("done")}
+              >
+                Finalizado
+              </li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setStatusFilter("ongoing")}
+              >
+                Pendente
+              </li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setStatusFilter("canceled")}
+              >
+                Cancelado
+              </li>
             </ul>
           </div>
         </button>
@@ -137,10 +158,24 @@ const ListagemVendas = () => {
           <ChevronDownIcon className="size-4 ml-4" />
           <div className="panel right-0 top-10 px-10 text-left">
             <ul className="flex flex-col gap-1">
-              <li className="hover:text-slate-800">Pagamento</li>
-              <li className="hover:text-slate-800">Frete</li>
-              <li className="hover:text-slate-800">Empresa</li>
-              <li className="hover:text-slate-800">Pessoal</li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setPaymentMethodFilter("Cartão de crédito")}
+              >
+                Cartão de crédito
+              </li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setPaymentMethodFilter("Boleto")}
+              >
+                Boleto
+              </li>
+              <li
+                className="hover:text-slate-800"
+                onClick={() => setPaymentMethodFilter("Pix")}
+              >
+                Pix
+              </li>
             </ul>
           </div>
         </button>
@@ -155,8 +190,6 @@ const ListagemVendas = () => {
 
       <div className="overflow-x-scroll md:overflow-x-hidden">
         <article className="grid grid-cols-[60px_repeat(6,1fr)_70px] gap-4">
-          {" "}
-          {/* Ajuste de espaçamento entre colunas */}
           <header className="listing col-span-8 text-slate-500">
             <span>
               <span className="bg-slate-200 rounded-lg px-2">#</span>
@@ -202,26 +235,24 @@ const ListagemVendas = () => {
                 >
                   {statusMessages[sale.status]}
                 </span>
-              </span>
-              <span>
-                {new Date(sale.date).toLocaleString("pt-BR").split(",")[0]}
-              </span>
-              <span className="flex gap-2">
-                <a
-                  href={getReportUrl(sale._id)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <DocumentTextIcon className="size-5" />
-                </a>
-                <button>
-                  <Tippy placement="left" content="Copiar e-mail">
-                    <EnvelopeIcon className="size-5" />
+                <span>{new Date(sale.date).toLocaleDateString("pt-BR")}</span>
+                <span>
+                  <Tippy content="Relatório">
+                    <a
+                      className="action"
+                      href={getReportUrl(sale._id)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <DocumentTextIcon className="size-5" />
+                    </a>
                   </Tippy>
-                </button>
-              </span>
-            </section>
-          ))}
+                </span>
+              </section>
+            ))
+          ) : (
+            <p className="col-span-8">Sem vendas para exibir</p>
+          )}
         </article>
       </div>
     </>
