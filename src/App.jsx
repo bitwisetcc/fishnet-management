@@ -31,6 +31,7 @@ const App = () => {
               <main className={escapeLayout ? "" : "mx-7"}>
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/users" element={<ListagemUsuarios />} />
                   <Route path="/client" element={<ListagemClientes />} />
                   <Route path="/prods" element={<ListagemProduto />} />
