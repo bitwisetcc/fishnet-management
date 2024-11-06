@@ -54,6 +54,10 @@ const ListagemVendas = () => {
 
   const statusMessages = ["Pendente", "Finalizado", "Cancelado"];
 
+  const getReportUrl = (saleId) => {
+    return `${API_URL}/reports/${saleId}`; // Altere para a URL real do relatório
+  };
+
   useEffect(() => {
     const filtered = sales.filter((sale) => {
       const matchesName = sale.customer.name
@@ -235,24 +239,22 @@ const ListagemVendas = () => {
                 >
                   {statusMessages[sale.status]}
                 </span>
-                <span>{new Date(sale.date).toLocaleDateString("pt-BR")}</span>
-                <span>
-                  <Tippy content="Relatório">
-                    <a
-                      className="action"
-                      href={getReportUrl(sale._id)}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <DocumentTextIcon className="size-5" />
-                    </a>
-                  </Tippy>
-                </span>
-              </section>
-            ))
-          ) : (
-            <p className="col-span-8">Sem vendas para exibir</p>
-          )}
+              </span>
+              <span>{new Date(sale.date).toLocaleDateString("pt-BR")}</span>
+              <span>
+                <Tippy content="Relatório">
+                  <a
+                    className="action"
+                    href={getReportUrl(sale._id)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <DocumentTextIcon className="size-5" />
+                  </a>
+                </Tippy>
+              </span>
+            </section>
+          ))}
         </article>
       </div>
     </>
