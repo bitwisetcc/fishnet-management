@@ -30,13 +30,14 @@ const ListagemVendas = () => {
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
-        const response = await fetch(`${API_URL}/sales`); // Usando fetch para buscar dados
+        const response = await fetch(`${API_URL}/sales/filter`); // Usando fetch para buscar dados
         if (!response.ok) {
           throw new Error("Erro ao carregar os dados de vendas");
         }
         const data = await response.json(); // Convertendo a resposta para JSON
         setSales(data); // Armazenando os dados de vendas
         setFilteredSales(data); // Inicializa vendas filtradas
+        console.log(data);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -47,15 +48,11 @@ const ListagemVendas = () => {
     fetchSalesData();
   }, []);
 
-  const statusMessages = {
-    done: "Finalizado",
-    ongoing: "Pendente",
-    canceled: "Cancelado",
-  };
+  const statusMessages = ["Pendente", "Finalizado", "Cancelado"];
 
   useEffect(() => {
     const filtered = sales.filter((sale) => {
-      const matchesName = sale.user.name
+      const matchesName = sale.customer.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
       const matchesDate = dateFilter
@@ -184,7 +181,7 @@ const ListagemVendas = () => {
                   {sale._id.slice(0, 4)}...
                 </span>
               </span>
-              <span>{sale.user.name}</span>
+              <span>{sale.customer.name}</span>
               <span>
                 {price(sale.shipping ?? Math.random() * 40)}
                 <span className="bg-slate-200 text-stone-600 text-sm rounded-lg px-2 ml-1">
@@ -192,15 +189,15 @@ const ListagemVendas = () => {
                 </span>
               </span>
               <span>{price(sale.total)}</span>
-              <span>{sale.payment_method}</span>
+              <span>
+                <span className="bg-slate-200 rounded-lg px-2 text-stone-600">
+                  {sale.payment_provider ?? sale.payment_method}
+                </span>
+              </span>
               <span>
                 <span
-                  className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm ${
-                    {
-                      done: "bg-lime-400 text-black",
-                      ongoing: "bg-amber-400 text-black",
-                      canceled: "bg-rose-500 text-black",
-                    }[sale.status]
+                  className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm text-black ${
+                    ["bg-lime-400", "bg-amber-400", "bg-rose-500"][sale.status]
                   }`}
                 >
                   {statusMessages[sale.status]}
