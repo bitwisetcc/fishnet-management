@@ -66,23 +66,38 @@ const ListagemVendas = () => {
   useEffect(() => {
     const filtered = sales.filter((sale) => {
       const saleDate = new Date(sale.date);
-  
+
       const matchesName = sale.customer.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
-  
+
       const matchesDateRange =
         (!minDate || saleDate >= new Date(minDate)) &&
         (!maxDate || saleDate <= new Date(maxDate));
-  
+
       const matchesStatus = statusFilter == null || sale.status == statusFilter;
 
-      return matchesName && matchesDateRange && matchesStatus;
-    });
-    setFilteredSales(filtered);
-  }, [searchTerm, minDate, maxDate, sales, statusFilter]);
-  
+      const matchesPaymentMethod =
+        !paymentMethodFilter ||
+        sale.payment_method.trim().toLowerCase() === paymentMethodFilter.trim().toLowerCase();
 
+      // Filtro de preço
+      const matchesPriceRange =
+        sale.total >= priceFilter[0] && sale.total <= priceFilter[1];
+
+      return (
+        matchesName &&
+        matchesDateRange &&
+        matchesStatus &&
+        matchesPaymentMethod &&
+        matchesPriceRange
+      );
+    });
+
+    setFilteredSales(filtered);
+  }, [searchTerm, minDate, maxDate, sales, statusFilter, paymentMethodFilter, priceFilter]);
+
+  
   if (loading) {
     return <p>Carregando...</p>;
   }
@@ -136,7 +151,7 @@ const ListagemVendas = () => {
               name="price"
               id="price"
               min="10"
-              max="500"
+              max="1000"
               value={priceFilter[1]}
               onChange={(e) =>
                 setPriceFilter([priceFilter[0], parseInt(e.target.value)])
@@ -186,21 +201,21 @@ const ListagemVendas = () => {
             <ul className="flex flex-col gap-1">
               <li
                 className="hover:text-slate-800"
-                onClick={() => setPaymentMethodFilter("Cartão de crédito")}
+                onClick={() => setPaymentMethodFilter("mastercard")}
               >
-                Cartão de crédito
+                mastercard
               </li>
               <li
                 className="hover:text-slate-800"
-                onClick={() => setPaymentMethodFilter("Boleto")}
+                onClick={() => setPaymentMethodFilter("visa")}
               >
-                Boleto
+                visa
               </li>
               <li
                 className="hover:text-slate-800"
-                onClick={() => setPaymentMethodFilter("Pix")}
+                onClick={() => setPaymentMethodFilter("pix")}
               >
-                Pix
+                pix
               </li>
             </ul>
           </div>
