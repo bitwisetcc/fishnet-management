@@ -7,12 +7,14 @@ import { useAuth } from "../lib/auth";
 import { price } from "../lib/format";
 import { Bar } from 'react-chartjs-2';
 import { Chart, LinearScale, registerables } from "chart.js";
+import { API_URL } from "../lib/query";
 
 function Dashboard() {
   useAuth();
   Chart.register(LinearScale);
   Chart.register(...registerables);
   const setTitle = useContext(TitleContext);
+
   const [relatorio, setRelatorio] = useState({
     total_vendas: 0,
     aumento_em_porcentagem: 0,
@@ -27,27 +29,36 @@ function Dashboard() {
   useEffect(() => {
     setTitle("Dashboard");
 
-    fetch("http://localhost:5000/dash/order")
-      .then((response) => response.json())
-      .then((data) => setRelatorio(data))
-      .catch((error) =>
-        console.error("Erro ao buscar dados do relatório:", error)
-      );
-
+    fetchData(`http://${API_URL}/dash/order`, setRelatorio);
     fetchTopSales(timeFilter);
     fetchAnnualSalesData();
   }, [setTitle, timeFilter]);
 
+  const fetchData = async (url, setState) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+      }
+      const data = await response.json();
+      setState(data);
+    } catch (error) {
+      console.error(`Erro ao buscar dados de ${url}:`, error);
+    }
+  };
+
   const fetchTopSales = (filter) => {
-    fetch(`http://localhost:5000/dash/order/top3/${filter}`)
-      .then((response) => response.json())
-      .then((data) => setTopSales(data))
-      .catch((error) => console.error("Erro ao buscar melhores vendas:", error));
+    fetchData(`http://${API_URL}/dash/order/top3/${filter}`, setTopSales);
   };
 
   const fetchAnnualSalesData = () => {
-    fetch("http://localhost:5000/dash/annual-sales")
-      .then((response) => response.json())
+    fetch(`http://${API_URL}/dash/annual-sales`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erro ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         const labels = Object.keys(data);
         const salesData = Object.values(data);
@@ -77,12 +88,12 @@ function Dashboard() {
         display: true,
         position: 'top',
         labels: {
-          color: 'rgba(255, 255, 255, 0.8)',
+          color: 'rgba(0, 0, 0, 1)',
         },
       },
       tooltip: {
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        titleColor: 'rgba(255, 215, 0, 1)',
+        titleColor: 'rgba(0, 0, 0, 1)',
         bodyColor: 'rgba(255, 255, 255, 0.9)',
         callbacks: {
           label: (tooltipItem) => `R$ ${price(tooltipItem.raw)}`,
@@ -95,7 +106,7 @@ function Dashboard() {
           color: 'rgba(255, 255, 255, 0.1)',
         },
         ticks: {
-          color: 'rgba(255, 255, 255, 0.8)',
+          color: 'rgba(0, 0, 0, 0.5)',
         },
       },
       y: {
@@ -103,13 +114,13 @@ function Dashboard() {
         title: {
           display: true,
           text: 'Vendas (R$)',
-          color: 'rgba(255, 255, 255, 0.9)',
+          color: 'rgba(0, 0, 0, 1)',
         },
         grid: {
           color: 'rgba(255, 255, 255, 0.1)',
         },
         ticks: {
-          color: 'rgba(255, 255, 255, 0.8)',
+          color: 'rgba(0, 0, 0, 0.8)',
         },
       },
     },
@@ -121,7 +132,7 @@ function Dashboard() {
         <DashboardPanel
           title="Relatório Mensal"
           content={`R$ ${relatorio.total_vendas}`}
-          description={`Aumento de ${relatorio.aumento_em_porcentagem.toFixed(
+          description={`Variação de ${relatorio.aumento_em_porcentagem.toFixed(
             2
           )}% em relação ao último mês`}
         />
@@ -225,28 +236,33 @@ function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
 
 function ClientList({ clients, avatarApi, statusMessages }) {
   return (
-    <section className="flex flex-col gap-4 overflow-x-auto md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
-      {clients.map((client) => (
-        <div className="flex w-full md:w-auto items-center" key={client._id}>
-          <img
-            src={avatarApi.replace("$", client.customer + 91)}
-            alt={`Avatar de ${client.customer}`}
-            className="rounded-full w-14 h-14 border border-slate-100 mr-5"
-          />
-          <div className="grid grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
-            <span>{client.customer}</span>
-            <span>{price(client.order_total)}</span>
-            <span>{new Date(client.date).toLocaleDateString("pt-BR")}</span>
-            <StatusBadge status={client.status} messages={statusMessages} />
-            <span className="justify-self-end">
-              <Link to="/vendas">
-                <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-yellow-light" />
-              </Link>
-            </span>
-          </div>
-        </div>
-      ))}
-    </section>
+      <section className="flex flex-col gap-4 overflow-x-auto md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
+          {clients.map((client) => (
+              <div className="flex w-full md:w-auto items-center" key={client._id}>
+                  <img
+                      src={avatarApi.replace("$", client.customer_id + 91)}
+                      alt={`Avatar de ${client.customer_name}`}
+                      className="rounded-full w-14 h-14 border border-slate-100 mr-5"
+                  />
+                  <div className="grid grid-cols-6 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
+                      <span>{client.customer_name}</span>
+                      <span>{client.seller_name}</span>
+                      <span>{price(client.order_total)}</span>
+                      <span>{new Date(client.date).toLocaleDateString("pt-BR")}</span>
+                      <StatusBadge status={client.status} messages={statusMessages} />
+                      <span className="justify-self-end">
+                          <Link
+                              to={`/vendas?name=${client.customer_name}&date=${new Date(
+                                  client.date
+                              ).toISOString()}`}
+                          >
+                              <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-yellow-light" />
+                          </Link>
+                      </span>
+                  </div>
+              </div>
+          ))}
+      </section>
   );
 }
 
