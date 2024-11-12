@@ -7,7 +7,7 @@ import { useAuth } from "../lib/auth";
 import { price } from "../lib/format";
 import { Bar } from 'react-chartjs-2';
 import { Chart, LinearScale, registerables } from "chart.js";
-import { API_URL } from "../lib/query"
+import { API_URL } from "../lib/query";
 
 function Dashboard() {
   useAuth();
@@ -132,7 +132,7 @@ function Dashboard() {
         <DashboardPanel
           title="Relatório Mensal"
           content={`R$ ${relatorio.total_vendas}`}
-          description={`Aumento de ${relatorio.aumento_em_porcentagem.toFixed(
+          description={`Variação de ${relatorio.aumento_em_porcentagem.toFixed(
             2
           )}% em relação ao último mês`}
         />
