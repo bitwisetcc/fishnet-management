@@ -236,33 +236,28 @@ function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
 
 function ClientList({ clients, avatarApi, statusMessages }) {
   return (
-      <section className="flex flex-col gap-4 overflow-x-auto md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
-          {clients.map((client) => (
-              <div className="flex w-full md:w-auto items-center" key={client._id}>
-                  <img
-                      src={avatarApi.replace("$", client.customer_id + 91)}
-                      alt={`Avatar de ${client.customer_name}`}
-                      className="rounded-full w-14 h-14 border border-slate-100 mr-5"
-                  />
-                  <div className="grid grid-cols-6 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
-                      <span>{client.customer_name}</span>
-                      <span>{client.seller_name}</span>
-                      <span>{price(client.order_total)}</span>
-                      <span>{new Date(client.date).toLocaleDateString("pt-BR")}</span>
-                      <StatusBadge status={client.status} messages={statusMessages} />
-                      <span className="justify-self-end">
-                          <Link
-                              to={`/vendas?name=${client.customer_name}&date=${new Date(
-                                  client.date
-                              ).toISOString()}`}
-                          >
-                              <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-yellow-light" />
-                          </Link>
-                      </span>
-                  </div>
-              </div>
-          ))}
-      </section>
+    <section className="flex flex-col gap-4 overflow-x-auto md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
+      {clients.map((client) => (
+        <div className="flex w-full md:w-auto items-center" key={client._id}>
+          <img
+            src={avatarApi.replace("$", client.customer_id + 91)}
+            alt={`Avatar de ${client.customer_name}`}
+            className="rounded-full w-14 h-14 border border-slate-100 mr-5"
+          />
+          <div className="grid grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
+            <span>{client.customer_name}</span>
+            <span>{price(client.order_total)}</span>
+            <span>{new Date(client.date).toLocaleDateString("pt-BR")}</span>
+            <StatusBadge status={client.status} messages={statusMessages} />
+            <span className="justify-self-end">
+              <Link to="/vendas">
+                <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-yellow-light" />
+              </Link>
+            </span>
+          </div>
+        </div>
+      ))}
+    </section>
   );
 }
 

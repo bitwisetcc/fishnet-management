@@ -23,9 +23,19 @@ function ListagemUsuarios() {
 
   const [users, setUsers] = useState([]);
   const [registerOpen, setRegisterOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     listUsersByRole("staff").then(setUsers);
   }, []);
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <>
@@ -38,6 +48,8 @@ function ListagemUsuarios() {
             id="search"
             placeholder="Pesquise"
             maxLength={100}
+            value={searchQuery}
+            onChange={handleSearchChange}
             className="w-full placeholder:text-slate-500 focus:outline-none"
           />
         </span>
@@ -69,7 +81,7 @@ function ListagemUsuarios() {
             <span>Ações</span>
           </header>
 
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <section
               className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 *:ml-2"
               key={user._id}
