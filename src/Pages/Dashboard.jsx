@@ -31,13 +31,6 @@ function Dashboard() {
     let minDate = new Date(0);
     let maxDate = new Date(); // right now
 
-    // [
-    //   "Semana",
-    //   "Mês passado",
-    //   "Este ano",
-    //   "Ano passado",
-    // ]
-
     switch (timeFilter) {
       case "Hoje": {
         temp.setHours(0, 0, 0, 0);
@@ -84,7 +77,6 @@ function Dashboard() {
     }
 
     const fetchData = async (url, setState) => {
-      console.log(url)
       try {
         const response = await fetch(url);
         if (!response.ok) {

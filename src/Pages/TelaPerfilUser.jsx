@@ -109,7 +109,6 @@ function TelaPerfilUser() {
               className="flex gap-2"
               onSubmit={(e) => {
                 e.preventDefault();
-                // console.log(e.target.pfp.value);
                 changeProfilePicture(e.target.pfp.value);
               }}
             >

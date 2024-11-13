@@ -41,12 +41,9 @@ const ListagemVendas = () => {
           throw new Error("Erro ao carregar os dados de vendas");
         }
 
-        console.log()
-
         const data = await response.json(); // Convertendo a resposta para JSON
         setSales(data); // Armazenando os dados de vendas
         setFilteredSales(data); // Inicializa vendas filtradas
-        console.log(data);
         setLoading(false);
       } catch (err) {
         setError(err.message);
