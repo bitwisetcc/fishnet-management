@@ -22,7 +22,6 @@ export async function login(email, password) {
   if (!allowed_roles.includes(role)) throw Error("Cargo inválido");
 
   localStorage.setItem("token", token);
-  console.log("Autenticação completa");
 }
 
 export function useAuth(setter = null) {
