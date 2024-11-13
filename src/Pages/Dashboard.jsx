@@ -27,6 +27,49 @@ function Dashboard() {
   const [annualData, setAnnualData] = useState({ labels: [], data: [] });
 
   useEffect(() => {
+    const today = new Date();
+
+    let minDate = 0;
+    let maxDate = new Date(); // right now
+
+    // [
+    //   "Semana",
+    //   "Mês passado",
+    //   "Este ano",
+    //   "Ano passado",
+    // ]
+
+    switch (timeFilter) {
+      case "Hoje": {
+        minDate = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDay()
+        );
+        break;
+      }
+      case "Ontem": {
+        minDate = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDay() - 1
+        );
+        maxDate = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDay()
+        );
+        break;
+      }
+      case "Mês": {
+        minDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
     const fetchData = async (url, setState) => {
       try {
         const response = await fetch(url);
@@ -41,9 +84,12 @@ function Dashboard() {
     };
 
     fetchData(`${API_URL}/dash/order`, setRelatorio);
-    fetchData(`${API_URL}/dash/order/top3/${timeFilter}`, setTopSales);
+    fetchData(
+      `${API_URL}/sales/filter?count=3&ordering=-total&min_date=${minDate.getTime()}&max_date=${maxDate.getTime()}`,
+      setTopSales
+    );
     fetchAnnualSalesData();
-  }, [setTitle, timeFilter]);
+  }, [timeFilter]);
 
   useEffect(() => {
     setTitle("Dashboard");
@@ -176,7 +222,7 @@ function Dashboard() {
         <ClientList
           clients={topSales}
           avatarApi="https://api.dicebear.com/9.x/adventurer/svg?seed=$flip=true&radius=50&earringsProbability=25&glassesProbability=25&backgroundColor=d1d4f9,b6e3f4,c0aede,ffd5dc"
-          statusMessages={["Finalizado", "Pendente", "Cancelado"]}
+          statusMessages={["Pendente", "Finalizado", "Cancelado"]}
         />
       </section>
     </div>
@@ -232,21 +278,21 @@ function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
   );
 }
 
-function ClientList({ clients, avatarApi, statusMessages }) {
+function ClientList({ clients: orders, avatarApi, statusMessages }) {
   return (
     <section className="flex flex-col gap-4 overflow-x-auto md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
-      {clients.map((client) => (
-        <div className="flex w-full md:w-auto items-center" key={client._id}>
+      {orders.map((order) => (
+        <div className="flex w-full md:w-auto items-center" key={order._id}>
           <img
-            src={avatarApi.replace("$", client.customer_id + 91)}
-            alt={`Avatar de ${client.customer_name}`}
+            src={avatarApi.replace("$", order.customer.name)}
+            alt={`Avatar de ${order.customer.name}`}
             className="rounded-full w-14 h-14 border border-slate-100 mr-5"
           />
           <div className="grid grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
-            <span>{client.customer_name}</span>
-            <span>{price(client.order_total)}</span>
-            <span>{new Date(client.date).toLocaleDateString("pt-BR")}</span>
-            <StatusBadge status={client.status} messages={statusMessages} />
+            <span>{order.customer.name}</span>
+            <span>{price(order.total)}</span>
+            <span>{new Date(order.date).toLocaleDateString("pt-BR")}</span>
+            <StatusBadge status={order.status} messages={statusMessages} />
             <span className="justify-self-end">
               <Link to="/vendas">
                 <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-yellow-light" />
@@ -261,8 +307,8 @@ function ClientList({ clients, avatarApi, statusMessages }) {
 
 function StatusBadge({ status, messages }) {
   const statusStyles = [
-    "bg-lime-400 text-black",
     "bg-amber-400 text-black",
+    "bg-lime-400 text-black",
     "bg-rose-500 text-black",
   ];
 
