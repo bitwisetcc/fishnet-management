@@ -13,11 +13,19 @@ import React, { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { price } from "../lib/format";
-import { API_URL } from "../lib/query"; // Certifique-se de que está importando corretamente
+import { API_URL } from "../lib/query";
 
 const ListagemVendas = () => {
   const setTitle = useContext(TitleContext);
-  setTitle("Vendas");
+  useEffect(() => {
+    console.log("Executando setTitle");
+    setTitle((prevTitle) => {
+      if (prevTitle !== "Vendas") {
+        return "Vendas";
+      }
+      return prevTitle;
+    });
+  }, [setTitle]);
 
   const [sales, setSales] = useState([]);
   const [filteredSales, setFilteredSales] = useState([]);
@@ -26,76 +34,53 @@ const ListagemVendas = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState([10, 500]);
-  const [statusFilter, setStatusFilter] = useState(null); // Para filtro de status
+  const [statusFilter, setStatusFilter] = useState(null);
   const [paymentMethodFilter, setPaymentMethodFilter] = useState("");
   const [minDate, setMinDate] = useState("");
   const [maxDate, setMaxDate] = useState("");
+  const [dataOrder, setDataOrder] = useState("none");
 
 
   // Função para buscar os dados da API
   useEffect(() => {
     const fetchSalesData = async () => {
+      // Condiciona o ordering para ser adicionado apenas quando for +date ou -date
+      const ordering = (dataOrder === "asc") ? "-date" : (dataOrder === "desc" ? "+date" : "");
+  
       try {
-        const response = await fetch(`${API_URL}/sales/filter`); // Usando fetch para buscar dados
+        // Só inclui o parâmetro ordering na URL se ele tiver valor
+        const url = ordering ? `${API_URL}/sales/filter?ordering=${ordering}` : `${API_URL}/sales/filter`;
+  
+        const response = await fetch(url);
+        console.log(response);
+  
         if (!response.ok) {
           throw new Error("Erro ao carregar os dados de vendas");
         }
-
-        console.log()
-
-        const data = await response.json(); // Convertendo a resposta para JSON
-        setSales(data); // Armazenando os dados de vendas
-        setFilteredSales(data); // Inicializa vendas filtradas
-        console.log(data);
+  
+        const data = await response.json();
+        setSales(data);
+        setFilteredSales(data);
         setLoading(false);
       } catch (err) {
         setError(err.message);
         setLoading(false);
       }
     };
-
+  
     fetchSalesData();
-  }, [searchTerm, dateFilter, priceFilter, statusFilter, paymentMethodFilter]); // Recarregar sempre que os filtros mudarem
+  }, [dataOrder]);
 
   const statusMessages = ["Pendente", "Finalizado", "Cancelado"];
 
   const getReportUrl = (saleId) => {
-    return `${API_URL}/reports/${saleId}`; // Altere para a URL real do relatório
+    return `${API_URL}/reports/${saleId}`; 
   };
 
-  useEffect(() => {
-    const filtered = sales.filter((sale) => {
-      const saleDate = new Date(sale.date);
-
-      const matchesName = sale.customer.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-
-      const matchesDateRange =
-        (!minDate || saleDate >= new Date(minDate)) &&
-        (!maxDate || saleDate <= new Date(maxDate));
-
-      const matchesStatus = statusFilter == null || sale.status == statusFilter;
-
-      const matchesPaymentMethod =
-        !paymentMethodFilter ||
-        sale.payment_method.trim().toLowerCase() === paymentMethodFilter.trim().toLowerCase();
-
-      // Filtro de preço
-      const matchesPriceRange =
-        sale.total >= priceFilter[0] && sale.total <= priceFilter[1];
-
-      return (
-        matchesName &&
-        matchesDateRange &&
-        matchesStatus &&
-        matchesPaymentMethod &&
-        matchesPriceRange
-      );
-    });
-
-    setFilteredSales(filtered);
-  }, [searchTerm, minDate, maxDate, sales, statusFilter, paymentMethodFilter, priceFilter]);
+  const handleSortByData = () => {
+    const newDataOrder = dataOrder === "none" ? "asc" : dataOrder === "asc" ? "desc" : "none";
+    setDataOrder(newDataOrder);
+  };
 
   
   if (loading) {
@@ -123,22 +108,22 @@ const ListagemVendas = () => {
           />
         </span>
         <input
-  type="date"
-  name="minDate"
-  id="minDate"
-  value={minDate}
-  onChange={(e) => setMinDate(e.target.value)}
-  className="empty:text-slate-500"
-/>
+          type="date"
+          name="minDate"
+          id="minDate"
+          value={minDate}
+          onChange={(e) => setMinDate(e.target.value)}
+          className="empty:text-slate-500"
+        />
 
-<input
-  type="date"
-  name="maxDate"
-  id="maxDate"
-  value={maxDate}
-  onChange={(e) => setMaxDate(e.target.value)}
-  className="empty:text-slate-500"
-/>
+        <input
+          type="date"
+          name="maxDate"
+          id="maxDate"
+          value={maxDate}
+          onChange={(e) => setMaxDate(e.target.value)}
+          className="empty:text-slate-500"
+        />
 
 
         <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
@@ -240,7 +225,9 @@ const ListagemVendas = () => {
             <span>Total</span>
             <span>Pagamento</span>
             <span>Status</span>
-            <span>Data</span>
+            <span className="font-semibold cursor-pointer" onClick={handleSortByData}>
+              Data {dataOrder === "desc" ? "↓" : dataOrder === "asc" ? "↑" : "↕"}
+            </span>
             <span>Ações</span>
           </header>
           {filteredSales.map((sale) => (
@@ -294,6 +281,25 @@ const ListagemVendas = () => {
           ))}
         </article>
       </div>
+
+      {/*<footer className="flex justify-between my-8 items-center">
+        <button
+          className="action"
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+        >
+          <ChevronLeftIcon className="size-5" />
+          Anterior
+        </button>
+        <span>{currentPage} / 20 </span>
+        <button
+          className="action"
+          onClick={handleNextPage}
+        >
+          Próxima
+          <ChevronRightIcon className="size-5" />
+        </button>
+      </footer> */}
     </>
   );
 };
