@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { TitleContext } from "../App";
 import { useAuth } from "../lib/auth";
 import { price } from "../lib/format";
-import { Bar } from 'react-chartjs-2';
+import { Bar } from "react-chartjs-2";
 import { Chart, LinearScale, registerables } from "chart.js";
 import { API_URL } from "../lib/query";
 
@@ -27,32 +27,30 @@ function Dashboard() {
   const [annualData, setAnnualData] = useState({ labels: [], data: [] });
 
   useEffect(() => {
-    setTitle("Dashboard");
+    const fetchData = async (url, setState) => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Erro ${response.status}: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setState(data);
+      } catch (error) {
+        console.error(`Erro ao buscar dados de ${url}:`, error);
+      }
+    };
 
-    fetchData(`http://${API_URL}/dash/order`, setRelatorio);
-    fetchTopSales(timeFilter);
+    fetchData(`${API_URL}/dash/order`, setRelatorio);
+    fetchData(`${API_URL}/dash/order/top3/${timeFilter}`, setTopSales);
     fetchAnnualSalesData();
   }, [setTitle, timeFilter]);
 
-  const fetchData = async (url, setState) => {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Erro ${response.status}: ${response.statusText}`);
-      }
-      const data = await response.json();
-      setState(data);
-    } catch (error) {
-      console.error(`Erro ao buscar dados de ${url}:`, error);
-    }
-  };
-
-  const fetchTopSales = (filter) => {
-    fetchData(`http://${API_URL}/dash/order/top3/${filter}`, setTopSales);
-  };
+  useEffect(() => {
+    setTitle("Dashboard");
+  }, [setTitle]);
 
   const fetchAnnualSalesData = () => {
-    fetch(`http://${API_URL}/dash/annual-sales`)
+    fetch(`${API_URL}/dash/annual-sales`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Erro ${response.status}: ${response.statusText}`);
@@ -71,10 +69,10 @@ function Dashboard() {
     labels: annualData.labels,
     datasets: [
       {
-        label: 'Total de Vendas',
+        label: "Total de Vendas",
         data: annualData.data,
-        backgroundColor: 'rgba(30, 144, 255, 0.6)',
-        borderColor: 'rgba(255, 215, 0, 1)',
+        backgroundColor: "rgba(30, 144, 255, 0.6)",
+        borderColor: "rgba(255, 215, 0, 1)",
         borderWidth: 2,
         tension: 0.3,
       },
@@ -86,15 +84,15 @@ function Dashboard() {
     plugins: {
       legend: {
         display: true,
-        position: 'top',
+        position: "top",
         labels: {
-          color: 'rgba(0, 0, 0, 1)',
+          color: "rgba(0, 0, 0, 1)",
         },
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        titleColor: 'rgba(0, 0, 0, 1)',
-        bodyColor: 'rgba(255, 255, 255, 0.9)',
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        titleColor: "rgba(0, 0, 0, 1)",
+        bodyColor: "rgba(255, 255, 255, 0.9)",
         callbacks: {
           label: (tooltipItem) => `R$ ${price(tooltipItem.raw)}`,
         },
@@ -103,24 +101,24 @@ function Dashboard() {
     scales: {
       x: {
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
+          color: "rgba(255, 255, 255, 0.1)",
         },
         ticks: {
-          color: 'rgba(0, 0, 0, 0.5)',
+          color: "rgba(0, 0, 0, 0.5)",
         },
       },
       y: {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Vendas (R$)',
-          color: 'rgba(0, 0, 0, 1)',
+          text: "Vendas (R$)",
+          color: "rgba(0, 0, 0, 1)",
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
+          color: "rgba(255, 255, 255, 0.1)",
         },
         ticks: {
-          color: 'rgba(0, 0, 0, 0.8)',
+          color: "rgba(0, 0, 0, 0.8)",
         },
       },
     },
@@ -171,7 +169,7 @@ function Dashboard() {
               "Mês",
               "Mês passado",
               "Este ano",
-              "Ano passado"
+              "Ano passado",
             ]}
           />
         </header>
