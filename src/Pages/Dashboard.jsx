@@ -27,9 +27,8 @@ function Dashboard() {
   const [annualData, setAnnualData] = useState({ labels: [], data: [] });
 
   useEffect(() => {
-    const today = new Date();
-
-    let minDate = 0;
+    let temp = new Date()
+    let minDate = new Date(0);
     let maxDate = new Date(); // right now
 
     // [
@@ -41,28 +40,42 @@ function Dashboard() {
 
     switch (timeFilter) {
       case "Hoje": {
-        minDate = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDay()
-        );
+        temp.setHours(0, 0, 0, 0);
+        minDate = temp;
         break;
       }
       case "Ontem": {
-        minDate = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDay() - 1
-        );
-        maxDate = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDay()
-        );
+        temp.setHours(0, 0, 0, 0);
+        maxDate = temp;
+        temp.setDate(temp.getDate() - 1);
+        minDate = temp;
+        break;
+      }
+      case "Semana": {
+        temp.setDate(temp.getDate() - 7);
+        minDate = temp;
         break;
       }
       case "Mês": {
-        minDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        temp.setMonth(temp.getMonth() - 1);
+        minDate = temp;
+        break;
+      }
+      case "Mês Passado": {
+        temp.setHours(0, 0, 0, 0);
+        temp.setDate(1);
+        maxDate = temp;
+        temp.setMonth(temp.getMonth() - 1);
+        minDate = temp;
+        break;
+      }
+      case "Ano": {
+        minDate = new Date(temp.getFullYear(), 0, 0);
+        break;
+      }
+      case "Ano passado": {
+        minDate = new Date(temp.getFullYear() - 1, 0, 0);
+        maxDate = new Date(temp.getFullYear(), 0, 0);
         break;
       }
       default: {
@@ -71,6 +84,7 @@ function Dashboard() {
     }
 
     const fetchData = async (url, setState) => {
+      console.log(url)
       try {
         const response = await fetch(url);
         if (!response.ok) {
