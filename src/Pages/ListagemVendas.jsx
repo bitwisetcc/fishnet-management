@@ -40,24 +40,26 @@ const ListagemVendas = () => {
   const [maxDate, setMaxDate] = useState("");
   const [dataOrder, setDataOrder] = useState("none");
 
-
   // Função para buscar os dados da API
   useEffect(() => {
     const fetchSalesData = async () => {
       // Condiciona o ordering para ser adicionado apenas quando for +date ou -date
-      const ordering = (dataOrder === "asc") ? "-date" : (dataOrder === "desc" ? "+date" : "");
-  
+      const ordering =
+        dataOrder === "asc" ? "-date" : dataOrder === "desc" ? encodeURIComponent("+date") : "";
+
       try {
         // Só inclui o parâmetro ordering na URL se ele tiver valor
-        const url = ordering ? `${API_URL}/sales/filter?ordering=${ordering}` : `${API_URL}/sales/filter`;
-  
+        const url = ordering
+          ? `${API_URL}/sales/filter?ordering=${ordering}`
+          : `${API_URL}/sales/filter`;
+
         const response = await fetch(url);
         console.log(response);
-  
+
         if (!response.ok) {
           throw new Error("Erro ao carregar os dados de vendas");
         }
-  
+
         const data = await response.json();
         setSales(data);
         setFilteredSales(data);
@@ -67,22 +69,22 @@ const ListagemVendas = () => {
         setLoading(false);
       }
     };
-  
+
     fetchSalesData();
   }, [dataOrder]);
 
   const statusMessages = ["Pendente", "Finalizado", "Cancelado"];
 
   const getReportUrl = (saleId) => {
-    return `${API_URL}/reports/${saleId}`; 
+    return `${API_URL}/reports/${saleId}`;
   };
 
   const handleSortByData = () => {
-    const newDataOrder = dataOrder === "none" ? "asc" : dataOrder === "asc" ? "desc" : "none";
+    const newDataOrder =
+      dataOrder === "none" ? "asc" : dataOrder === "asc" ? "desc" : "none";
     setDataOrder(newDataOrder);
   };
 
-  
   if (loading) {
     return <p>Carregando...</p>;
   }
@@ -124,7 +126,6 @@ const ListagemVendas = () => {
           onChange={(e) => setMaxDate(e.target.value)}
           className="empty:text-slate-500"
         />
-
 
         <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
           <CurrencyDollarIcon className="size-4" />
@@ -225,8 +226,12 @@ const ListagemVendas = () => {
             <span>Total</span>
             <span>Pagamento</span>
             <span>Status</span>
-            <span className="font-semibold cursor-pointer" onClick={handleSortByData}>
-              Data {dataOrder === "desc" ? "↓" : dataOrder === "asc" ? "↑" : "↕"}
+            <span
+              className="font-semibold cursor-pointer"
+              onClick={handleSortByData}
+            >
+              Data{" "}
+              {dataOrder === "desc" ? "↓" : dataOrder === "asc" ? "↑" : "↕"}
             </span>
             <span>Ações</span>
           </header>
