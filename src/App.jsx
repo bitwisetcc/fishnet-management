@@ -22,32 +22,39 @@ const App = () => {
 
   return (
     <Router>
-      <TitleContext.Provider value={setTitle}>
-        <ProfileContext.Provider value={setProfile}>
-          <div className="flex min-h-[100vh] items-stretch bg-gray-light">
-            {escapeLayout || <NavBar />}
-            <div className="flex-1">
-              {escapeLayout || <Header title={title} profile={profile} />}
-              <main className={escapeLayout ? "" : "mx-7"}>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/users" element={<ListagemUsuarios />} />
-                  <Route path="/client" element={<ListagemClientes />} />
-                  <Route path="/prods" element={<ListagemProduto />} />
-                  <Route path="/users/new" element={<CadastroUsuarios />} />
-                  <Route path="/vendas" element={<ListagemVendas />} />
-                  <Route path="/profile" element={<TelaPerfilUser />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/config" element={<Config />} />
-                  <Route path="*" element={<h1>Página não encontrada</h1>} />
-                </Routes>
-              </main>
-            </div>
-          </div>
-        </ProfileContext.Provider>
-      </TitleContext.Provider>
-    </Router>
+  <TitleContext.Provider value={setTitle}>
+    <ProfileContext.Provider value={setProfile}>
+      <div className="flex min-h-[100vh] bg-gray-light">
+        {/* Ajusta a Navbar para que ela não seja achatada no desktop */}
+        <div className="flex-shrink-0">
+          {escapeLayout || <NavBar />}
+        </div>
+        
+        <div className="flex-1 overflow-x-auto sm:overflow-x-hidden">
+          {/* Ajusta a rolagem apenas no mobile */}
+          {escapeLayout || <Header title={title} profile={profile} />}
+          
+          <main className={escapeLayout ? "" : "mx-7"}>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/users" element={<ListagemUsuarios />} />
+              <Route path="/client" element={<ListagemClientes />} />
+              <Route path="/prods" element={<ListagemProduto />} />
+              <Route path="/users/new" element={<CadastroUsuarios />} />
+              <Route path="/vendas" element={<ListagemVendas />} />
+              <Route path="/profile" element={<TelaPerfilUser />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/config" element={<Config />} />
+              <Route path="*" element={<h1>Página não encontrada</h1>} />
+            </Routes>
+          </main>
+        </div>
+      </div>
+    </ProfileContext.Provider>
+  </TitleContext.Provider>
+</Router>
+
   );
 };
 

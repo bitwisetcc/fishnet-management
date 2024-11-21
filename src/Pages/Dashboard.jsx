@@ -98,7 +98,7 @@ function Dashboard() {
   }, [timeFilter]);
 
   useEffect(() => {
-    setTitle("Dashboard");
+    setTitle("Painel");
   }, [setTitle]);
 
   const fetchAnnualSalesData = () => {
@@ -294,7 +294,7 @@ function ClientList({ clients: orders, avatarApi, statusMessages }) {
             alt={`Avatar de ${order.customer.name}`}
             className="rounded-full w-14 h-14 border border-slate-100 mr-5"
           />
-          <div className="grid grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-y-2 sm:gap-y-0 sm:gap-x-3">
             <span>{order.customer.name}</span>
             <span>{price(order.total)}</span>
             <span>{new Date(order.date).toLocaleDateString("pt-BR")}</span>
@@ -310,6 +310,7 @@ function ClientList({ clients: orders, avatarApi, statusMessages }) {
     </section>
   );
 }
+
 
 function StatusBadge({ status, messages }) {
   const statusStyles = [
