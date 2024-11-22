@@ -72,11 +72,11 @@ export async function getProductByFilter(filters) {
     const data = await fetch(`${API_URL}/prods/filtros?${query}`);
     const prods = await data.json();
 
-    if (!Array.isArray(prods)) {
+    if (!Array.isArray(prods.match)) {
       return [];
     }
 
-    return prods.map(parseProduct);
+    return prods.match.map(parseProduct); // prods.page_count
   } catch (error) {
     console.error(error.message);
     return [];

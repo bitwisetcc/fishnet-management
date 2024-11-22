@@ -18,13 +18,7 @@ import { API_URL } from "../lib/query";
 const ListagemVendas = () => {
   const setTitle = useContext(TitleContext);
   useEffect(() => {
-    console.log("Executando setTitle");
-    setTitle((prevTitle) => {
-      if (prevTitle !== "Vendas") {
-        return "Vendas";
-      }
-      return prevTitle;
-    });
+    setTitle("Vendas");
   }, [setTitle]);
 
   const [sales, setSales] = useState([]);
@@ -58,7 +52,6 @@ const ListagemVendas = () => {
           : `${API_URL}/sales/filter`;
 
         const response = await fetch(url);
-        console.log(response);
 
         if (!response.ok) {
           throw new Error("Erro ao carregar os dados de vendas");
@@ -66,7 +59,7 @@ const ListagemVendas = () => {
 
         const data = await response.json();
         setSales(data);
-        setFilteredSales(data);
+        setFilteredSales(data.match);
         setLoading(false);
       } catch (err) {
         setError(err.message);

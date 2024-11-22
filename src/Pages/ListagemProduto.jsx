@@ -14,7 +14,6 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import ListingProducts from "../components/ListingProducts";
-import { Link } from "react-router-dom";
 import { API_URL, getProductByFilter } from "../lib/query";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 

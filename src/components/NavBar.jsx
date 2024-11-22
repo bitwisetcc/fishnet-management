@@ -11,7 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import "tippy.js/dist/tippy.css";
 
-import logo from "../LogoGold.jpeg";
+import logo from "../LogoSemFundo.png";
 
 const NavBar = () => {
   return (
@@ -20,7 +20,7 @@ const NavBar = () => {
         <img
           src={logo}
           alt="Logo"
-          className="rounded-full border border-slate-600 shadow-sm p-[6px] w-14 h-14"
+          className="rounded-full border-2 border-slate-600 shadow-sm p-[6px] w-14 h-14"
         />
         <NavItem Icon={HomeIcon} text="Início" url="/dashboard" />
         <NavItem Icon={FaFishFins} text="Produtos" url="/prods" />
