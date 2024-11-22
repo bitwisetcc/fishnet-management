@@ -45,7 +45,11 @@ const ListagemVendas = () => {
     const fetchSalesData = async () => {
       // Condiciona o ordering para ser adicionado apenas quando for +date ou -date
       const ordering =
-        dataOrder === "asc" ? "-date" : dataOrder === "desc" ? encodeURIComponent("+date") : "";
+        dataOrder === "asc"
+          ? "-date"
+          : dataOrder === "desc"
+          ? encodeURIComponent("+date")
+          : "";
 
       try {
         // Só inclui o parâmetro ordering na URL se ele tiver valor
