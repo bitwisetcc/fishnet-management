@@ -16,8 +16,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { price } from "../lib/format";
-import { API_URL } from "../lib/query";
-import loadingImage from "../LoadingImage.gif"
+import { API_URL, getSalesByFilter } from "../lib/query";
+import loadingImage from "../LoadingImage.gif";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
 function FilterProduct({ open, setOpen, onSaveFilters }) {
@@ -109,19 +109,19 @@ function FilterProduct({ open, setOpen, onSaveFilters }) {
                   className={`w-full p-2 border rounded-md ${selectedBehavior === 'peaceful' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
                   onClick={() => setSelectedBehavior(selectedBehavior === 'peaceful' ? null : 'peaceful')}
                 >
-                  🕊️ Pix
+                  📲 Pix
                 </button>
                 <button
                   className={`w-full p-2 border rounded-md ${selectedBehavior === 'aggressive' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
                   onClick={() => setSelectedBehavior(selectedBehavior === 'aggressive' ? null : 'aggressive')}
                 >
-                  🦈 Mastercard
+                  💳 Mastercard
                 </button>
                 <button
                   className={`w-full p-2 border rounded-md ${selectedBehavior === 'schooling' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
                   onClick={() => setSelectedBehavior(selectedBehavior === 'schooling' ? null : 'schooling')}
                 >
-                  🐟 Visa
+                  💳 Visa
                 </button>
               </div>
             </div>
@@ -134,19 +134,19 @@ function FilterProduct({ open, setOpen, onSaveFilters }) {
                   className={`w-full p-2 border rounded-md ${selectedBehavior === 'peaceful' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
                   onClick={() => setSelectedBehavior(selectedBehavior === 'peaceful' ? null : 'peaceful')}
                 >
-                  🕊️ Finalizado
+                  ✅ Finalizado
                 </button>
                 <button
                   className={`w-full p-2 border rounded-md ${selectedBehavior === 'aggressive' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
                   onClick={() => setSelectedBehavior(selectedBehavior === 'aggressive' ? null : 'aggressive')}
                 >
-                  🦈 Pendente
+                  ⏳ Pendente
                 </button>
                 <button
                   className={`w-full p-2 border rounded-md ${selectedBehavior === 'schooling' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
                   onClick={() => setSelectedBehavior(selectedBehavior === 'schooling' ? null : 'schooling')}
                 >
-                  🐟 Cancelado
+                  ❌ Cancelado
                 </button>
               </div>
             </div>
@@ -194,15 +194,11 @@ function FilterProduct({ open, setOpen, onSaveFilters }) {
 }
 
 const ListagemVendas = () => {
+
   const setTitle = useContext(TitleContext);
+
   useEffect(() => {
-    console.log("Executando setTitle");
-    setTitle((prevTitle) => {
-      if (prevTitle !== "Vendas") {
-        return "Vendas";
-      }
-      return prevTitle;
-    });
+    setTitle("Vendas");
   }, [setTitle]);
 
   const [sales, setSales] = useState([]);
@@ -214,49 +210,59 @@ const ListagemVendas = () => {
   const [paymentMethodFilter, setPaymentMethodFilter] = useState("");
   const [minDate, setMinDate] = useState("");
   const [maxDate, setMaxDate] = useState("");
-  const [dataOrder, setDataOrder] = useState("none");
   const [filters, setFilters] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [filteringOpen, setFilteringOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState("none");
   const [priceOrder, setPriceOrder] = useState("none");
+  const [dataOrder, setDataOrder] = useState("none");
 
 
-  // Função para buscar os dados da API
-  useEffect(() => {
-    const fetchSalesData = async () => {
-      // Condiciona o ordering para ser adicionado apenas quando for +date ou -date
-      const ordering = (dataOrder === "asc") ? "-date" : (dataOrder === "desc" ? "+date" : "");
-  
-      try {
-        // Só inclui o parâmetro ordering na URL se ele tiver valor
-        const url = ordering ? `${API_URL}/sales/filter?ordering=${ordering}` : `${API_URL}/sales/filter`;
-  
-        const response = await fetch(url);
-        console.log(response);
-  
-        if (!response.ok) {
-          throw new Error("Erro ao carregar os dados de vendas");
-        }
-  
-        const data = await response.json();
-        setSales(data);
-        setFilteredSales(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
+  const fetchSalesData = async () => {
+    setLoading(true);
+    setError(null);
+
+    const ordering =
+      dataOrder === "asc"
+        ? "+date"
+        : dataOrder === "desc"
+        ? "-date"
+        : priceOrder === "asc"
+        ? "+total"
+        : priceOrder === "desc"
+        ? "-total"
+        : sortOrder === "asc"
+        ? "+customer.name"
+        : sortOrder === "desc"
+        ? "-customer.name"
+        : "";
+
+    const combinedFilters = {
+      ...filters,
+      search: searchTerm,
+      status: statusFilter,
+      payment_method: paymentMethodFilter,
+      min_date: minDate,
+      max_date: maxDate,
+      ordering,
+      page: currentPage,
     };
-  
-    fetchSalesData();
-  }, [dataOrder]);
 
-  const statusMessages = ["Pendente", "Finalizado", "Cancelado"];
-
-  const getReportUrl = (saleId) => {
-    return `${API_URL}/reports/${saleId}`; 
+    try {
+      const salesData = await getSalesByFilter(combinedFilters);
+      console.log(salesData);
+      setSales(salesData);
+      setFilteredSales(salesData); // Caso precise de lógica extra para `filteredSales`
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchSalesData();
+  }, [filters, currentPage, sortOrder, priceOrder, dataOrder, searchTerm, statusFilter, paymentMethodFilter, minDate, maxDate]);
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
@@ -270,19 +276,21 @@ const ListagemVendas = () => {
 
   const handleSortByName = () => {
     setPriceOrder("none");
-    setCurrentPage(1);
+    setDataOrder("none");
     const newOrder = sortOrder === "none" ? "asc" : sortOrder === "asc" ? "desc" : "none";
     setSortOrder(newOrder);
   };
 
   const handleSortByPrice = () => {
     setSortOrder("none");
-    setCurrentPage(1);
+    setDataOrder("none");
     const newPriceOrder = priceOrder === "none" ? "asc" : priceOrder === "asc" ? "desc" : "none";
     setPriceOrder(newPriceOrder);
   };
 
   const handleSortByData = () => {
+    setSortOrder("none");
+    setPriceOrder("none");
     const newDataOrder = dataOrder === "none" ? "asc" : dataOrder === "asc" ? "desc" : "none";
     setDataOrder(newDataOrder);
   };
@@ -295,17 +303,24 @@ const ListagemVendas = () => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
 
-  
+  const statusMessages = ["Pendente", "Finalizado", "Cancelado"];
+
+  const getReportUrl = (saleId) => {
+    return `${API_URL}/reports/${saleId}`;
+  };
+
   if (loading) {
-    return  <div>
-    <img
-      src={loadingImage}
-      width={40}
-      height={40}
-      className="mt-5"
-      alt="Carregando..."
-    />
-  </div>;
+    return (
+      <div>
+        <img
+          src={loadingImage}
+          width={40}
+          height={40}
+          className="mt-5"
+          alt="Carregando..."
+        />
+      </div>
+    );
   }
 
   if (error) {
@@ -354,8 +369,8 @@ const ListagemVendas = () => {
             <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByName}>
               Cliente  {sortOrder === "asc" ? "↓" : sortOrder === "desc" ? "↑" : "↕"}
             </span>
-            <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByPrice}>
-              Frete {priceOrder === "asc" ? "↓" : priceOrder === "desc" ? "↑" : "↕"}
+            <span className="font-semibold flex items-center justify-center cursor-pointer">
+              Frete
             </span>
             <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByPrice}>
               Total {priceOrder === "asc" ? "↓" : priceOrder === "desc" ? "↑" : "↕"}

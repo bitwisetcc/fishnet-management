@@ -17,30 +17,21 @@ function parseSale(sale) {
     ...sale,
     id: sale._id,  // Preservando o ID original
     customer: {
-      name: sale.name,
-      surname: sale.surname,
-      email: sale.email,
-      address: sale.addr,
-      city: sale.city,
-      state: sale.state,
-      zipCode: sale.cep,
-      phone: sale.tel
+      id: sale.customer._id,
+      name: sale.customer.name,
     },
     date: new Date(sale.date).toISOString(), // Convertendo a data para o formato ISO
     items: sale.items.map(item => ({
       ...item,
-      size: item.size.match(/(\d*\scm)+/g) || ["Tamanho não informado"], // Extraindo o tamanho, se presente
-    })),
+      size: item.size && item.size.match(/\d+\s?cm/g) || ["Tamanho não informado"], // Melhor regex
+    })),    
     payment: {
       method: sale.payment_method,
       provider: sale.payment_provider,
     },
-    shipping: {
-      cost: sale.shipping,
-      provider: sale.shipping_provider,
-    },
+    shipping: sale.shipping,
     tax: sale.tax,
-    totalAmount: sale.total,
+    total: sale.total,
     status: sale.status,
   };
 }
@@ -94,14 +85,14 @@ export async function getSalesByFilter(filters) {
 
     // Constrói a query apenas com os filtros selecionados
     const query = new URLSearchParams(filteredFilters).toString();
-    const data = await fetch(`${API_URL}/sales/filtros?${query}`);
+    const data = await fetch(`${API_URL}/sales/filter?${query}`);
     const sales = await data.json();
 
     if (!Array.isArray(sales)) {
       return [];
     }
-
-    return sales.map(parseSale);  // Assumindo que você tem uma função `parseSale` similar à `parseProduct`
+    console.log("URL da requisição: ", data);
+    return sales.map(parseSale);
   } catch (error) {
     console.error(error.message);
     return [];

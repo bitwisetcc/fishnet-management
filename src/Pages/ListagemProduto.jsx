@@ -17,6 +17,7 @@ import ListingProducts from "../components/ListingProducts";
 import { Link } from "react-router-dom";
 import { API_URL, getProductByFilter } from "../lib/query";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import loadingImage from "../LoadingImage.gif";
 
 function AddProduct({ open, setOpen }) {
   const [images, setImages] = useState([""]);
@@ -392,6 +393,7 @@ function ListagemProduto() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState("none");
   const [priceOrder, setPriceOrder] = useState("none");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => setTitle("Produtos"), [setTitle]);
 
@@ -409,8 +411,10 @@ function ListagemProduto() {
       const data = await getProductByFilter(activeFilters);
       setProducts(data);
       setFilteredProducts(data);
+      setLoading(false);
     } catch (error) {
       console.error("Erro ao carregar produtos:", error);
+      setLoading(false);
     }
   };
 
@@ -470,6 +474,18 @@ function ListagemProduto() {
     setFilters(selectedFilters);
     setCurrentPage(1);
   };
+
+  if (loading) {
+    return  <div>
+    <img
+      src={loadingImage}
+      width={40}
+      height={40}
+      className="mt-5"
+      alt="Carregando..."
+    />
+  </div>;
+  }
   
   return (
     <>
