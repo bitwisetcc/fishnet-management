@@ -27,7 +27,7 @@ function Dashboard() {
   const [annualData, setAnnualData] = useState({ labels: [], data: [] });
 
   useEffect(() => {
-    let temp = new Date()
+    let temp = new Date();
     let minDate = new Date(0);
     let maxDate = new Date(); // right now
 
@@ -90,10 +90,14 @@ function Dashboard() {
     };
 
     fetchData(`${API_URL}/dash/order`, setRelatorio);
-    fetchData(
-      `${API_URL}/sales/filter?count=3&ordering=-total&min_date=${minDate.getTime()}&max_date=${maxDate.getTime()}`,
-      setTopSales
-    );
+
+    fetch(
+      `${API_URL}/sales/filter?count=3&ordering=-total&min_date=${minDate.getTime()}&max_date=${maxDate.getTime()}`
+    )
+      .then((res) => res.json())
+      .then((data) => setTopSales(data.match))
+      .catch(console.error);
+
     fetchAnnualSalesData();
   }, [timeFilter]);
 
