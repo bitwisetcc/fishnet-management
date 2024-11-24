@@ -390,6 +390,7 @@ function ListagemProduto() {
   const [filteringOpen, setFilteringOpen] = useState(false);
   const [filters, setFilters] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [sortOrder, setSortOrder] = useState("none");
   const [priceOrder, setPriceOrder] = useState("none");
   const [loading, setLoading] = useState(true);
@@ -407,9 +408,10 @@ function ListagemProduto() {
     }
   
     try {
-      const data = await getProductByFilter(activeFilters);
-      setProducts(data);
-      setFilteredProducts(data);
+      const { products, pageCount } = await getProductByFilter(activeFilters);
+      setProducts(products); // Define a lista principal de produtos
+      setFilteredProducts(products); // Atualiza a lista filtrada
+      setTotalPages(pageCount); // Atualiza o número total de páginas
       setLoading(false);
     } catch (error) {
       console.error("Erro ao carregar produtos:", error);
@@ -591,10 +593,11 @@ function ListagemProduto() {
           <ChevronLeftIcon className="size-5" />
           Anterior
         </button>
-        <span>{currentPage} / 20 </span>
+        <span>{currentPage} / {totalPages} </span>
         <button
           className="action"
           onClick={handleNextPage}
+          disabled={currentPage === totalPages}
         >
           Próxima
           <ChevronRightIcon className="size-5" />

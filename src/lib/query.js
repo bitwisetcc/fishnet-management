@@ -51,28 +51,30 @@ export async function listAllProducts(page = 1, limit = 20) {
 
 export async function getProductByFilter(filters) {
   try {
-    // Filtra o objeto `filters`, removendo chaves com valores nulos, indefinidos ou vazios
     const filteredFilters = Object.fromEntries(
       Object.entries(filters).filter(
         ([, value]) => value !== null && value !== undefined && value !== ""
       )
     );
 
-    // Constrói a query apenas com os filtros selecionados
     const query = new URLSearchParams(filteredFilters).toString();
-    const data = await fetch(`${API_URL}/prods/filtros?${query}`);
-    const prods = await data.json();
+    const response = await fetch(`${API_URL}/prods/filtros?${query}`);
+    const result = await response.json();
 
-    if (!Array.isArray(prods.match)) {
-      return [];
+    if (!result || !Array.isArray(result.match)) {
+      return { products: [], pageCount: 0 };
     }
 
-    return prods.match.map(parseProduct); // prods.page_count
+    return {
+      products: result.match.map(parseProduct),
+      pageCount: result.page_count || 1,
+    };
   } catch (error) {
     console.error(error.message);
-    return [];
+    return { products: [], pageCount: 0 };
   }
 }
+
 
 export async function getSalesByFilter(filters) {
   try {
