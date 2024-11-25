@@ -182,14 +182,7 @@ function Dashboard() {
           <Shortcut label="Exportar dados" onClick={handleExport} />
         </DashboardPanel>
       </section>
-
-      <section>
-        <DashboardPanel title="Relatório Anual">
-          <Bar data={chartData} options={chartOptions} />
-        </DashboardPanel>
-      </section>
-
-      <section className="my-9">
+<section className="my-9">
         <header className="flex justify-between mb-3">
           <h2 className="text-lg">Melhores vendas</h2>
           <FilterDropdown
@@ -212,6 +205,12 @@ function Dashboard() {
           statusMessages={["Finalizado", "Pendente", "Cancelado"]}
         />
       </section>
+      <section>
+        <DashboardPanel title="Relatório Anual">
+          <Bar data={chartData} options={chartOptions} />
+        </DashboardPanel>
+      </section>
+      <section><br></br></section>
     </div>
   );
 }
