@@ -1,22 +1,204 @@
 import {
   CheckCircleIcon,
-  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   CurrencyDollarIcon,
   DocumentTextIcon,
   EnvelopeIcon,
   FunnelIcon,
   MagnifyingGlassIcon,
   PrinterIcon,
+  PlusCircleIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Tippy from "@tippyjs/react";
 import React, { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { price } from "../lib/format";
-import { API_URL } from "../lib/query";
+import { API_URL, getSalesByFilter } from "../lib/query";
+import loadingImage from "../LoadingImage.gif";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
-const ListagemVendas = () => {
+function FilterProduct({ open, setOpen, onSaveFilters }) {
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [minData, setMinData] = useState('');
+  const [maxData, setMaxData] = useState('');
+  
+
+  const clearFilters = () => {
+    setSelectedPayment(null);
+    setSelectedStatus(null);
+    setMinPrice('');
+    setMaxPrice('');
+    setMinData('');
+    setMaxData('');
+  };
+
+  const [filters, setFilters] = useState({});
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
+
+  const handleSave = () => {
+    const selectedFilters = {
+      ...filters,
+      min_price: minPrice ? Number(minPrice) : undefined,
+      max_price: maxPrice ? Number(maxPrice) : undefined,
+      payment_method: selectedPayment,
+      status: selectedStatus,
+      min_date: minData ? new Date(minData).toISOString().split('T')[0] : undefined,
+    max_date: maxData ? new Date(maxData).toISOString().split('T')[0] : undefined,
+    };
+    
+    onSaveFilters(selectedFilters);
+    setOpen(false);
+  };
+  
+
+  return (
+    <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
+      <div className="fixed inset-0 flex items-center justify-center md:justify-end bg-[#11223a]/80 p-4">
+        <DialogPanel className="h-full w-full sm:max-w-md md:w-[45%] lg:w-[25%] mx-0 space-y-6 rounded-lg border border-[#cbd5e1] shadow-xl bg-[#f7f9fb] p-6 md:p-8 text-[#11223a] overflow-y-auto">
+          <header className="relative flex justify-between items-center mb-6">
+            <DialogTitle className="font-bold text-lg sm:text-xl md:text-2xl">Filtros</DialogTitle>
+            <button onClick={() => setOpen(false)} className="text-[#11223a] hover:text-[#c7ae5d]">
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+          </header>
+
+          {/* Seção de Filtros */}
+          <section className="space-y-6">
+
+            {/* Filtro de Valores */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Valores</h3>
+              <label htmlFor="min-price" className="block mb-1 text-[#11223a]">Preço mínimo: R$</label>
+              <input
+                type="number"
+                id="min-price"
+                min={0}
+                step={10}
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
+              <label htmlFor="max-price" className="block mb-1 mt-4 text-[#11223a]">Preço máximo: R$</label>
+              <input
+                type="number"
+                id="max-price"
+                min={0}
+                step={10}
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
+            </div>
+
+            {/* Filtro de Pagamento */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Pagamento</h3>
+              <div className="flex flex-col gap-2">
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedPayment === 'pix' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedPayment(selectedPayment === 'pix' ? null : 'pix')}
+                >
+                  📲 Pix
+                </button>
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedPayment === 'debit' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedPayment(selectedPayment === 'debit' ? null : 'debit')}
+                >
+                  💳 Débito
+                </button>
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedPayment === 'credit' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedPayment(selectedPayment === 'credit' ? null : 'credit')}
+                >
+                  💳 Crédito
+                </button>
+              </div>
+            </div>
+
+            {/* Filtro de Comportamento Social */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Status</h3>
+              <div className="flex flex-col gap-2">
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedStatus === '1' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedStatus(selectedStatus === '1' ? null : '1')}
+                >
+                  ✅ Finalizado
+                </button>
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedStatus === '0' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedStatus(selectedStatus === '0' ? null : '0')}
+                >
+                  ⏳ Pendente
+                </button>
+                <button
+                  className={`w-full p-2 border rounded-md ${selectedStatus === '2' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedStatus(selectedStatus === '2' ? null : '2')}
+                >
+                  ❌ Cancelado
+                </button>
+              </div>
+            </div>
+
+            {/* Filtro de datas */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Datas</h3>
+              <label htmlFor="min-data" className="block mb-1 text-[#11223a]">Data inicial</label>
+              <input
+                type="date"
+                id="min-data"
+                min={0}
+                step={10}
+                value={minData}
+                onChange={(e) => setMinData(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
+              <label htmlFor="max-data" className="block mb-1 mt-4 text-[#11223a]">Data final</label>
+              <input
+                type="date"
+                id="max-data"
+                min={0}
+                step={10}
+                value={maxData}
+                onChange={(e) => setMaxData(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
+            </div>
+
+
+            {/* Botões de Ação */}
+            <div className="flex gap-4 mt-6">
+              <button className="flex-1 rounded bg-[#c7ae5d] px-4 py-2 text-white hover:bg-[#11223a]" onClick={handleSave}>
+                Salvar
+              </button>
+              <button className="flex-1 rounded px-4 py-2 border border-red-600 hover:bg-red-600 text-red-600 hover:text-white" onClick={clearFilters}>
+                Limpar
+              </button>
+            </div>
+          </section>
+        </DialogPanel>
+      </div>
+    </Dialog>
+  );
+}
+
+function ListagemVendas () {
+
   const setTitle = useContext(TitleContext);
+
   useEffect(() => {
     setTitle("Vendas");
   }, [setTitle]);
@@ -26,49 +208,119 @@ const ListagemVendas = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [dateFilter, setDateFilter] = useState("");
-  const [priceFilter, setPriceFilter] = useState([10, 500]);
-  const [statusFilter, setStatusFilter] = useState(null);
-  const [paymentMethodFilter, setPaymentMethodFilter] = useState("");
-  const [minDate, setMinDate] = useState("");
-  const [maxDate, setMaxDate] = useState("");
+  const [filters, setFilters] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [filteringOpen, setFilteringOpen] = useState(false);
+  const [sortOrder, setSortOrder] = useState("none");
+  const [priceOrder, setPriceOrder] = useState("none");
   const [dataOrder, setDataOrder] = useState("none");
 
-  // Função para buscar os dados da API
+
+  const processFilters = (filters) => {
+    //console.log("Filtros recebidos:", filters); // Verificar os filtros aqui
+    return Object.fromEntries(
+      Object.entries(filters).filter(
+        ([, value]) => value !== null && value !== undefined && value !== ""
+      )
+    );
+  };
+  
+  const loadSales = async () => {
+    setError(null);
+  
+    const ordering =
+      dataOrder === "asc"
+        ? "+date"
+        : dataOrder === "desc"
+        ? "-date"
+        : priceOrder === "asc"
+        ? "+total"
+        : priceOrder === "desc"
+        ? "-total"
+        : sortOrder === "asc"
+        ? "+customer.name"
+        : sortOrder === "desc"
+        ? "-customer.name"
+        : "";
+  
+    const combinedFilters = processFilters({
+      ...filters,
+      search: searchTerm,
+      ordering,
+      page: currentPage,
+    });
+  
+    try {
+      const { sales, pageCount } = await getSalesByFilter(combinedFilters);
+      setSales(sales);
+      setFilteredSales(sales);
+      setTotalPages(pageCount);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
   useEffect(() => {
-    const fetchSalesData = async () => {
-      // Condiciona o ordering para ser adicionado apenas quando for +date ou -date
-      const ordering =
-        dataOrder === "asc"
-          ? "-date"
-          : dataOrder === "desc"
-          ? encodeURIComponent("+date")
-          : "";
+    loadSales();
+  }, [filters, currentPage, sortOrder, priceOrder, dataOrder, searchTerm ]);
 
-      try {
-        // Só inclui o parâmetro ordering na URL se ele tiver valor
-        const url = ordering
-          ? `${API_URL}/sales/filter?ordering=${ordering}`
-          : `${API_URL}/sales/filter`;
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
 
-        const response = await fetch(url);
+  const handleSaveFilters = (selectedFilters) => {
+    setFilters(selectedFilters);
+    setCurrentPage(1);
+  };
 
-        if (!response.ok) {
-          throw new Error("Erro ao carregar os dados de vendas");
-        }
+  const handleSortByName = () => {
+    setPriceOrder("none");
+    setDataOrder("none");
+    const newOrder = sortOrder === "none" ? "asc" : sortOrder === "asc" ? "desc" : "none";
+    setSortOrder(newOrder);
+  };
 
-        const data = await response.json();
-        setSales(data);
-        setFilteredSales(data.match);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
+  const handleSortByPrice = () => {
+    setSortOrder("none");
+    setDataOrder("none");
+    const newPriceOrder = priceOrder === "none" ? "asc" : priceOrder === "asc" ? "desc" : "none";
+    setPriceOrder(newPriceOrder);
+  };
 
-    fetchSalesData();
-  }, [dataOrder]);
+  const handleSortByData = () => {
+    setSortOrder("none");
+    setPriceOrder("none");
+    const newDataOrder = dataOrder === "none" ? "asc" : dataOrder === "asc" ? "desc" : "none";
+    setDataOrder(newDataOrder);
+  };
+
+  const handleSearch = (event) => {
+    const value = event.target.value.toLowerCase();
+  setSearchTerm(value);
+
+  // Limpar o timeout anterior (se houver)
+  clearTimeout(window.searchTimeout);
+
+  // Adicionar um novo timeout para chamar a função após um atraso
+  window.searchTimeout = setTimeout(() => {
+    const updatedFilters = { ...filters, username: value };
+    setFilters(updatedFilters);
+  }, 500);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
 
   const statusMessages = ["Pendente", "Finalizado", "Cancelado"];
 
@@ -76,14 +328,18 @@ const ListagemVendas = () => {
     return `${API_URL}/reports/${saleId}`;
   };
 
-  const handleSortByData = () => {
-    const newDataOrder =
-      dataOrder === "none" ? "asc" : dataOrder === "asc" ? "desc" : "none";
-    setDataOrder(newDataOrder);
-  };
-
   if (loading) {
-    return <p>Carregando...</p>;
+    return (
+      <div>
+        <img
+          src={loadingImage}
+          width={40}
+          height={40}
+          className="mt-5"
+          alt="Carregando..."
+        />
+      </div>
+    );
   }
 
   if (error) {
@@ -92,199 +348,119 @@ const ListagemVendas = () => {
 
   return (
     <>
-      <ListingFilter>
-        <span className="flex items-center text-slate-600 flex-1 gap-1">
-          <MagnifyingGlassIcon className="size-4" />
-          <input
-            type="search"
-            name="search"
-            id="search"
-            placeholder="Nome do cliente"
-            maxLength={90}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full placeholder:text-slate-500 focus:outline-none"
-          />
-        </span>
-        <input
-          type="date"
-          name="minDate"
-          id="minDate"
-          value={minDate}
-          onChange={(e) => setMinDate(e.target.value)}
-          className="empty:text-slate-500"
-        />
-
-        <input
-          type="date"
-          name="maxDate"
-          id="maxDate"
-          value={maxDate}
-          onChange={(e) => setMaxDate(e.target.value)}
-          className="empty:text-slate-500"
-        />
-
-        <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
-          <CurrencyDollarIcon className="size-4" />
-          <span>Preço</span>
-          <ChevronDownIcon className="size-4 ml-4" />
-          <div className="panel left-0 top-10">
+      <ListingFilter onFilterChange={handleFilterChange}>
+        <div className="flex flex-col md:flex-row md:items-center gap-2">
+          {/* Barra de pesquisa */}
+          <span className="flex items-center text-slate-600 flex-1 gap-1 border p-2 rounded-lg relative mb-2 md:mb-0">
+            <MagnifyingGlassIcon className="size-6" />
             <input
-              type="range"
-              name="price"
-              id="price"
-              min="10"
-              max="1000"
-              value={priceFilter[1]}
-              onChange={(e) =>
-                setPriceFilter([priceFilter[0], parseInt(e.target.value)])
-              }
-              className="accent-alt-dimm"
+              type="search"
+              name="search"
+              id="search"
+              placeholder="Cliente ou ID"
+              maxLength={100}
+              value={searchTerm}
+              onChange={handleSearch}
+              className="w-full placeholder:text-slate-500 focus:outline-none"
             />
-            <div className="flex justify-between text-sm">
-              <span>R$ {priceFilter[0]}</span>
-              <span>R$ {priceFilter[1]}</span>
-            </div>
-          </div>
-        </button>
+          </span>
 
-        <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
-          <CheckCircleIcon className="size-4" />
-          <span>Status</span>
-          <ChevronDownIcon className="size-4 ml-4" />
-          <div className="panel left-0 top-10">
-            <ul className="flex flex-col gap-1 text-left">
-              <li
-                className="hover:text-slate-800"
-                onClick={() => setStatusFilter(1)}
-              >
-                Finalizado
-              </li>
-              <li
-                className="hover:text-slate-800"
-                onClick={() => setStatusFilter(0)}
-              >
-                Pendente
-              </li>
-              <li
-                className="hover:text-slate-800"
-                onClick={() => setStatusFilter(2)}
-              >
-                Cancelado
-              </li>
-            </ul>
-          </div>
-        </button>
+          {/* Botões */}
+          <div className="flex gap-2">
+            <button className="flex items-center gap-2 relative group cursor-pointer" 
+            onClick={() => setFilteringOpen(true)}
+            >
+              <FunnelIcon className="size-6" />
+              <span className="hidden md:inline">Filtros</span>
+            </button>
 
-        <button className="flex items-center text-slate-600 gap-1 relative group cursor-pointer">
-          <FunnelIcon className="size-4" />
-          <span className="text-nowrap">Outros filtros</span>
-          <ChevronDownIcon className="size-4 ml-4" />
-          <div className="panel right-0 top-10 px-10 text-left">
-            <ul className="flex flex-col gap-1">
-              <li
-                className="hover:text-slate-800"
-                onClick={() => setPaymentMethodFilter("mastercard")}
-              >
-                mastercard
-              </li>
-              <li
-                className="hover:text-slate-800"
-                onClick={() => setPaymentMethodFilter("visa")}
-              >
-                visa
-              </li>
-              <li
-                className="hover:text-slate-800"
-                onClick={() => setPaymentMethodFilter("pix")}
-              >
-                pix
-              </li>
-            </ul>
+            <button className="action">
+              <PrinterIcon className="size-5" />
+              <span className="hidden md:inline">Imprimir</span>
+            </button>
           </div>
-        </button>
+        </div>
       </ListingFilter>
 
-      <header className="flex justify-end gap-3 my-4">
-        <button className="action">
-          <PrinterIcon className="size-5" />
-          Imprimir
-        </button>
-      </header>
-
-      <div className="overflow-x-scroll md:overflow-x-hidden">
-        <article className="grid grid-cols-[60px_repeat(6,1fr)_70px] gap-4">
-          <header className="listing col-span-8 text-slate-500">
-            <span>
-              <span className="bg-slate-200 rounded-lg px-2">#</span>
+      <div className="md:overflow-x-hidden overflow-x-scroll">
+        <article className="grid">
+          <header className="listing col-span-7 flex items-center bg-slate-100 p-2 rounded-lg shadow-md">
+            <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByName}>
+              Cliente  {sortOrder === "asc" ? "↓" : sortOrder === "desc" ? "↑" : "↕"}
             </span>
-            <span>Cliente</span>
-            <span>Frete</span>
-            <span>Total</span>
-            <span>Pagamento</span>
-            <span>Status</span>
-            <span
-              className="font-semibold cursor-pointer"
-              onClick={handleSortByData}
-            >
-              Data{" "}
-              {dataOrder === "desc" ? "↓" : dataOrder === "asc" ? "↑" : "↕"}
+            <span className="font-semibold flex items-center justify-center cursor-pointer">
+              Frete
             </span>
-            <span>Ações</span>
+            <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByPrice}>
+              Total {priceOrder === "asc" ? "↓" : priceOrder === "desc" ? "↑" : "↕"}
+            </span>
+            <span className="font-semibold flex items-center justify-center cursor-pointer">
+              Pagamento 
+            </span>
+            <span className="font-semibold flex items-center justify-center cursor-pointer">
+              Status
+            </span>
+            <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByData}>
+              Data {dataOrder === "desc" ? "↓" : dataOrder === "asc" ? "↑" : "↕"}
+            </span>
+            <span className="font-semibold flex items-center justify-center cursor-pointer">
+              Ações
+            </span>
           </header>
           {filteredSales.map((sale) => (
             <section
-              className="grid grid-cols-subgrid col-span-8 pl-[9px] my-3 gap-2"
+              className="grid grid-cols-subgrid col-span-7 p-2 my-2 rounded-lg hover:bg-slate-50 transition-colors duration-200 items-center"
               key={sale._id}
             >
-              {" "}
               {/* Ajuste de espaçamento entre colunas */}
-              <span className="w-8">
-                <span className="bg-slate-200 rounded-lg px-2 text-slate-500 text-sm truncate w-8 max-w-8">
-                  {sale._id.slice(0, 4)}...
-                </span>
+              <span className="text-nowrap font-semibold truncate flex flex-col items-center">
+                <span>{sale.customer.name}</span>
+                <span className="text-sm text-gray-500">{sale._id}</span>
               </span>
-              <span>{sale.customer.name}</span>
-              <span>
+              <span className="text-nowrap font-semibold truncate flex flex-col items-center">
                 {price(sale.shipping ?? Math.random() * 40)}
-                <span className="bg-slate-200 text-stone-600 text-sm rounded-lg px-2 ml-1">
-                  {sale.shippingProvider ?? "Correios"}
-                </span>
+                <span className="text-sm text-gray-500">{sale.shippingProvider ?? "Correios"}</span>
               </span>
-              <span>{price(sale.total)}</span>
+              <span className="font-semibold flex items-center justify-center" >{price(sale.total)}</span>
               <span>
-                <span className="bg-slate-200 rounded-lg px-2 text-stone-600">
-                  {sale.payment_provider ?? sale.payment_method}
-                </span>
+                <div className="flex items-center justify-center">
+                  <span className="inline-block bg-slate-200 rounded-lg text-stone-600 font-semibold px-2 py-1">
+                    {sale.payment_method}
+                  </span>
+                </div>
               </span>
               <span>
-                <span
-                  className={`p-1 px-2 text-sm rounded-lg font-semibold shadow-sm text-black ${
-                    ["bg-amber-400", "bg-lime-400", "bg-rose-500"][sale.status]
-                  }`}
-                >
-                  {statusMessages[sale.status]}
-                </span>
-              </span>
-              <span>{new Date(sale.date).toLocaleDateString("pt-BR")}</span>
-              <span>
-                <Tippy content="Relatório">
-                  <a
-                    className="action"
-                    href={getReportUrl(sale._id)}
-                    target="_blank"
-                    rel="noreferrer"
+                <div className="flex items-center justify-center">
+                  <span
+                    className={`inline-block p-1 px-2 text-sm rounded-lg font-semibold shadow-sm text-black ${
+                      ["bg-amber-400", "bg-lime-400", "bg-rose-500"][sale.status]
+                    }`}
                   >
+                    {statusMessages[sale.status]}
+                  </span>
+                </div>
+              </span>
+              <span className="flex items-center justify-center">{new Date(sale.date).toLocaleDateString("pt-BR")}</span>
+              <span>
+                <div className="flex items-center justify-center">
+                  <Tippy content="Relatório">
+                    <a
+                      className="action"
+                      href={getReportUrl(sale._id)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                     <DocumentTextIcon className="size-5" />
-                  </a>
-                </Tippy>
+                    </a>
+                  </Tippy>
+                </div>
               </span>
             </section>
           ))}
         </article>
       </div>
 
-      {/*<footer className="flex justify-between my-8 items-center">
+      <footer className="flex justify-between my-8 items-center">
         <button
           className="action"
           onClick={handlePreviousPage}
@@ -293,15 +469,17 @@ const ListagemVendas = () => {
           <ChevronLeftIcon className="size-5" />
           Anterior
         </button>
-        <span>{currentPage} / 20 </span>
+        <span>{currentPage} / {totalPages} </span>
         <button
           className="action"
           onClick={handleNextPage}
+          disabled={currentPage === totalPages}
         >
           Próxima
           <ChevronRightIcon className="size-5" />
         </button>
-      </footer> */}
+      </footer>
+      <FilterProduct open={filteringOpen} setOpen={setFilteringOpen} onSaveFilters={handleSaveFilters} />
     </>
   );
 };

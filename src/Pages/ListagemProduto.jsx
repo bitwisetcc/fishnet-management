@@ -16,6 +16,7 @@ import { TitleContext } from "../App";
 import ListingProducts from "../components/ListingProducts";
 import { API_URL, getProductByFilter } from "../lib/query";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import loadingImage from "../LoadingImage.gif";
 
 function AddProduct({ open, setOpen }) {
   const [images, setImages] = useState([""]);
@@ -389,8 +390,10 @@ function ListagemProduto() {
   const [filteringOpen, setFilteringOpen] = useState(false);
   const [filters, setFilters] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [sortOrder, setSortOrder] = useState("none");
   const [priceOrder, setPriceOrder] = useState("none");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => setTitle("Produtos"), [setTitle]);
 
@@ -405,11 +408,14 @@ function ListagemProduto() {
     }
   
     try {
-      const data = await getProductByFilter(activeFilters);
-      setProducts(data);
-      setFilteredProducts(data);
+      const { products, pageCount } = await getProductByFilter(activeFilters);
+      setProducts(products); // Define a lista principal de produtos
+      setFilteredProducts(products); // Atualiza a lista filtrada
+      setTotalPages(pageCount); // Atualiza o número total de páginas
+      setLoading(false);
     } catch (error) {
       console.error("Erro ao carregar produtos:", error);
+      setLoading(false);
     }
   };
 
@@ -469,6 +475,18 @@ function ListagemProduto() {
     setFilters(selectedFilters);
     setCurrentPage(1);
   };
+
+  if (loading) {
+    return  <div>
+    <img
+      src={loadingImage}
+      width={40}
+      height={40}
+      className="mt-5"
+      alt="Carregando..."
+    />
+  </div>;
+  }
   
   return (
     <>
@@ -514,10 +532,10 @@ function ListagemProduto() {
           <header className="listing col-span-7 flex items-center bg-slate-100 p-2 rounded-lg shadow-md">
             <span className="font-semibold flex items-center justify-center">Foto</span>
             <span className="font-semibold flex items-center justify-start cursor-pointer" onClick={handleSortByName}>
-              Nome {sortOrder === "asc" ? "↓" : sortOrder === "desc" ? "↑" : ""}
+              Nome {sortOrder === "asc" ? "↓" : sortOrder === "desc" ? "↑" : "↕"}
             </span>
             <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByPrice}>
-              Preço {priceOrder === "asc" ? "↓" : priceOrder === "desc" ? "↑" : ""}
+              Preço {priceOrder === "asc" ? "↓" : priceOrder === "desc" ? "↑" : "↕"}
             </span>
             <span className="font-semibold flex items-center justify-center">Estoque</span>
             <span className="font-semibold flex items-center justify-center">Insights</span>
@@ -575,10 +593,11 @@ function ListagemProduto() {
           <ChevronLeftIcon className="size-5" />
           Anterior
         </button>
-        <span>{currentPage} / 20 </span>
+        <span>{currentPage} / {totalPages} </span>
         <button
           className="action"
           onClick={handleNextPage}
+          disabled={currentPage === totalPages}
         >
           Próxima
           <ChevronRightIcon className="size-5" />

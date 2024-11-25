@@ -1,4 +1,4 @@
-export const API_URL = "https://fishnet-api-py.onrender.com";
+export const API_URL = "https://fishnet-api-py-dev.onrender.com";
 
 function parseProduct(prod) {
   return {
@@ -17,30 +17,21 @@ function parseSale(sale) {
     ...sale,
     id: sale._id,  // Preservando o ID original
     customer: {
-      name: sale.name,
-      surname: sale.surname,
-      email: sale.email,
-      address: sale.addr,
-      city: sale.city,
-      state: sale.state,
-      zipCode: sale.cep,
-      phone: sale.tel
+      id: sale.customer._id,
+      name: sale.customer.name,
     },
     date: new Date(sale.date).toISOString(), // Convertendo a data para o formato ISO
     items: sale.items.map(item => ({
       ...item,
-      size: item.size.match(/(\d*\scm)+/g) || ["Tamanho não informado"], // Extraindo o tamanho, se presente
-    })),
+      size: item.size && item.size.match(/\d+\s?cm/g) || ["Tamanho não informado"], // Melhor regex
+    })),    
     payment: {
       method: sale.payment_method,
       provider: sale.payment_provider,
     },
-    shipping: {
-      cost: sale.shipping,
-      provider: sale.shipping_provider,
-    },
+    shipping: sale.shipping,
     tax: sale.tax,
-    totalAmount: sale.total,
+    total: sale.total,
     status: sale.status,
   };
 }
@@ -60,28 +51,30 @@ export async function listAllProducts(page = 1, limit = 20) {
 
 export async function getProductByFilter(filters) {
   try {
-    // Filtra o objeto `filters`, removendo chaves com valores nulos, indefinidos ou vazios
     const filteredFilters = Object.fromEntries(
       Object.entries(filters).filter(
         ([, value]) => value !== null && value !== undefined && value !== ""
       )
     );
 
-    // Constrói a query apenas com os filtros selecionados
     const query = new URLSearchParams(filteredFilters).toString();
-    const data = await fetch(`${API_URL}/prods/filtros?${query}`);
-    const prods = await data.json();
+    const response = await fetch(`${API_URL}/prods/filtros?${query}`);
+    const result = await response.json();
 
-    if (!Array.isArray(prods.match)) {
-      return [];
+    if (!result || !Array.isArray(result.match)) {
+      return { products: [], pageCount: 0 };
     }
 
-    return prods.match.map(parseProduct); // prods.page_count
+    return {
+      products: result.match.map(parseProduct),
+      pageCount: result.page_count || 1,
+    };
   } catch (error) {
     console.error(error.message);
-    return [];
+    return { products: [], pageCount: 0 };
   }
 }
+
 
 export async function getSalesByFilter(filters) {
   try {
@@ -94,17 +87,20 @@ export async function getSalesByFilter(filters) {
 
     // Constrói a query apenas com os filtros selecionados
     const query = new URLSearchParams(filteredFilters).toString();
-    const data = await fetch(`${API_URL}/sales/filtros?${query}`);
-    const sales = await data.json();
+    const data = await fetch(`${API_URL}/sales/filter?${query}`);
+    const result = await data.json();
 
-    if (!Array.isArray(sales)) {
-      return [];
+    if (!result || !Array.isArray(result.match)) {
+      return { sales: [], pageCount: 0 };
     }
-
-    return sales.map(parseSale);  // Assumindo que você tem uma função `parseSale` similar à `parseProduct`
+    //console.log(data);
+    return {
+      sales: result.match.map(parseSale),
+      pageCount: result.page_count || 1,
+    };
   } catch (error) {
     console.error(error.message);
-    return [];
+    return { sales: [], pageCount: 0 };
   }
 }
 
