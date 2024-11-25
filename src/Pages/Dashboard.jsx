@@ -145,6 +145,7 @@ function Dashboard() {
           color: "rgba(0, 0, 0, 1)",
         },
       },
+
       tooltip: {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         titleColor: "rgba(0, 0, 0, 1)",
@@ -154,14 +155,11 @@ function Dashboard() {
         },
       },
     },
+
     scales: {
       x: {
-        grid: {
-          color: "rgba(255, 255, 255, 0.1)",
-        },
-        ticks: {
-          color: "rgba(0, 0, 0, 0.5)",
-        },
+        grid: { color: "rgba(255, 255, 255, 0.1)" },
+        ticks: { color: "rgba(0, 0, 0, 0.5)" },
       },
       y: {
         beginAtZero: true,
@@ -290,28 +288,30 @@ function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
 
 function ClientList({ clients: orders, avatarApi, statusMessages }) {
   return (
-    <section className="flex flex-col gap-4 overflow-x-auto md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
+    <ul className="grid gap-4">
       {orders.map((order) => (
-        <div className="flex w-full md:w-auto items-center" key={order._id}>
+        <li
+          className="grid grid-cols-subgrid col-span-7 content-center flex-1 bg-branco-perolado border border-slate-400 shadow rounded-lg px-4 py-2 gap-x-3 items-center pr-8"
+          key={order._id}
+        >
           <img
             src={avatarApi.replace("$", order.customer.name)}
             alt={`Avatar de ${order.customer.name}`}
             className="rounded-full w-14 h-14 border border-slate-100 mr-5"
           />
-          <div className="grid grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
-            <span>{order.customer.name}</span>
-            <span>{price(order.total)}</span>
-            <span>{new Date(order.date).toLocaleDateString("pt-BR")}</span>
-            <StatusBadge status={order.status} messages={statusMessages} />
-            <span className="justify-self-end">
-              <Link to="/vendas">
-                <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-yellow-light" />
-              </Link>
-            </span>
-          </div>
-        </div>
+          <span>{order.customer.email}</span>
+          <span>{order.customer.name}</span>
+          <span>{price(order.total)}</span>
+          <span>{new Date(order.date).toLocaleDateString("pt-BR")}</span>
+          <StatusBadge status={order.status} messages={statusMessages} />
+          <span className="justify-self-end">
+            <Link to="/vendas">
+              <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-yellow-light" />
+            </Link>
+          </span>
+        </li>
       ))}
-    </section>
+    </ul>
   );
 }
 

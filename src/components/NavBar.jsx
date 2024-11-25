@@ -27,7 +27,7 @@ const NavBar = () => {
         <NavItem Icon={PresentationChartLineIcon} text="Vendas" url="/vendas" />
         <NavItem Icon={UsersIcon} text="Clientes" url="/client" />
         <NavItem Icon={BriefcaseIcon} text="Funcionários" url="/users" />
-        <NavItem Icon={WrenchScrewdriverIcon} text="Configurações" url="/config" /> {/* Atualizado */}
+        {/* <NavItem Icon={WrenchScrewdriverIcon} text="Configurações" url="/config" /> */}
       </ul>
       <NavItem Icon={LogOutIcon} text="Sair" url="/login" />
     </nav>
