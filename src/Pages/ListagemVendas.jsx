@@ -21,25 +21,24 @@ import loadingImage from "../LoadingImage.gif";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
 function FilterProduct({ open, setOpen, onSaveFilters }) {
-  const [selectedEnvironment, setSelectedEnvironment] = useState(null);
-  const [selectedDiet, setSelectedDiet] = useState(null);
-  const [selectedBehavior, setSelectedBehavior] = useState(null);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [minData, setMinData] = useState('');
+  const [maxData, setMaxData] = useState('');
+  
 
   const clearFilters = () => {
-    setSelectedEnvironment(null);
-    setSelectedDiet(null);
-    setSelectedBehavior(null);
+    setSelectedPayment(null);
+    setSelectedStatus(null);
     setMinPrice('');
     setMaxPrice('');
+    setMinData('');
+    setMaxData('');
   };
 
-  const [filters, setFilters] = useState({
-    feeding: '',
-    tankSize: '',
-    // Add other filters as needed
-  });
+  const [filters, setFilters] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,15 +51,18 @@ function FilterProduct({ open, setOpen, onSaveFilters }) {
   const handleSave = () => {
     const selectedFilters = {
       ...filters,
-      tags: selectedEnvironment,
-      feeding: selectedDiet,
-      behavior: selectedBehavior,
-      minPrice: minPrice ? Number(minPrice) : undefined, // Convert to number or undefined if empty
-      maxPrice: maxPrice ? Number(maxPrice) : undefined, // Convert to number or undefined if empty
+      min_price: minPrice ? Number(minPrice) : undefined,
+      max_price: maxPrice ? Number(maxPrice) : undefined,
+      payment_method: selectedPayment,
+      status: selectedStatus,
+      min_date: minData ? new Date(minData).toISOString().split('T')[0] : undefined,
+    max_date: maxData ? new Date(maxData).toISOString().split('T')[0] : undefined,
     };
-    onSaveFilters(selectedFilters); // Sends the filters to `ListagemProduto`
-    setOpen(false); // Closes the modal
+    
+    onSaveFilters(selectedFilters);
+    setOpen(false);
   };
+  
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
@@ -106,22 +108,22 @@ function FilterProduct({ open, setOpen, onSaveFilters }) {
               <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Pagamento</h3>
               <div className="flex flex-col gap-2">
                 <button
-                  className={`w-full p-2 border rounded-md ${selectedBehavior === 'peaceful' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
-                  onClick={() => setSelectedBehavior(selectedBehavior === 'peaceful' ? null : 'peaceful')}
+                  className={`w-full p-2 border rounded-md ${selectedPayment === 'pix' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedPayment(selectedPayment === 'pix' ? null : 'pix')}
                 >
                   📲 Pix
                 </button>
                 <button
-                  className={`w-full p-2 border rounded-md ${selectedBehavior === 'aggressive' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
-                  onClick={() => setSelectedBehavior(selectedBehavior === 'aggressive' ? null : 'aggressive')}
+                  className={`w-full p-2 border rounded-md ${selectedPayment === 'debit' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedPayment(selectedPayment === 'debit' ? null : 'debit')}
                 >
-                  💳 Mastercard
+                  💳 Débito
                 </button>
                 <button
-                  className={`w-full p-2 border rounded-md ${selectedBehavior === 'schooling' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
-                  onClick={() => setSelectedBehavior(selectedBehavior === 'schooling' ? null : 'schooling')}
+                  className={`w-full p-2 border rounded-md ${selectedPayment === 'credit' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedPayment(selectedPayment === 'credit' ? null : 'credit')}
                 >
-                  💳 Visa
+                  💳 Crédito
                 </button>
               </div>
             </div>
@@ -131,20 +133,20 @@ function FilterProduct({ open, setOpen, onSaveFilters }) {
               <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Status</h3>
               <div className="flex flex-col gap-2">
                 <button
-                  className={`w-full p-2 border rounded-md ${selectedBehavior === 'peaceful' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
-                  onClick={() => setSelectedBehavior(selectedBehavior === 'peaceful' ? null : 'peaceful')}
+                  className={`w-full p-2 border rounded-md ${selectedStatus === '1' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedStatus(selectedStatus === '1' ? null : '1')}
                 >
                   ✅ Finalizado
                 </button>
                 <button
-                  className={`w-full p-2 border rounded-md ${selectedBehavior === 'aggressive' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
-                  onClick={() => setSelectedBehavior(selectedBehavior === 'aggressive' ? null : 'aggressive')}
+                  className={`w-full p-2 border rounded-md ${selectedStatus === '0' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedStatus(selectedStatus === '0' ? null : '0')}
                 >
                   ⏳ Pendente
                 </button>
                 <button
-                  className={`w-full p-2 border rounded-md ${selectedBehavior === 'schooling' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
-                  onClick={() => setSelectedBehavior(selectedBehavior === 'schooling' ? null : 'schooling')}
+                  className={`w-full p-2 border rounded-md ${selectedStatus === '2' ? 'bg-blue-100 border-blue-500' : 'border-[#cbd5e1] hover:bg-[#cbd5e1]'} text-[#11223a]`}
+                  onClick={() => setSelectedStatus(selectedStatus === '2' ? null : '2')}
                 >
                   ❌ Cancelado
                 </button>
@@ -154,24 +156,24 @@ function FilterProduct({ open, setOpen, onSaveFilters }) {
             {/* Filtro de datas */}
             <div>
               <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">Datas</h3>
-              <label htmlFor="min-price" className="block mb-1 text-[#11223a]">Data inicial</label>
+              <label htmlFor="min-data" className="block mb-1 text-[#11223a]">Data inicial</label>
               <input
-                type="data"
+                type="date"
                 id="min-data"
                 min={0}
                 step={10}
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
+                value={minData}
+                onChange={(e) => setMinData(e.target.value)}
                 className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
               />
-              <label htmlFor="max-price" className="block mb-1 mt-4 text-[#11223a]">Data final</label>
+              <label htmlFor="max-data" className="block mb-1 mt-4 text-[#11223a]">Data final</label>
               <input
-                type="data"
+                type="date"
                 id="max-data"
                 min={0}
                 step={10}
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
+                value={maxData}
+                onChange={(e) => setMaxData(e.target.value)}
                 className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
               />
             </div>
@@ -193,7 +195,7 @@ function FilterProduct({ open, setOpen, onSaveFilters }) {
   );
 }
 
-const ListagemVendas = () => {
+function ListagemVendas () {
 
   const setTitle = useContext(TitleContext);
 
@@ -206,22 +208,27 @@ const ListagemVendas = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState(null);
-  const [paymentMethodFilter, setPaymentMethodFilter] = useState("");
-  const [minDate, setMinDate] = useState("");
-  const [maxDate, setMaxDate] = useState("");
   const [filters, setFilters] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [filteringOpen, setFilteringOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState("none");
   const [priceOrder, setPriceOrder] = useState("none");
   const [dataOrder, setDataOrder] = useState("none");
 
 
-  const fetchSalesData = async () => {
-    setLoading(true);
+  const processFilters = (filters) => {
+    //console.log("Filtros recebidos:", filters); // Verificar os filtros aqui
+    return Object.fromEntries(
+      Object.entries(filters).filter(
+        ([, value]) => value !== null && value !== undefined && value !== ""
+      )
+    );
+  };
+  
+  const loadSales = async () => {
     setError(null);
-
+  
     const ordering =
       dataOrder === "asc"
         ? "+date"
@@ -236,33 +243,31 @@ const ListagemVendas = () => {
         : sortOrder === "desc"
         ? "-customer.name"
         : "";
-
-    const combinedFilters = {
+  
+    const combinedFilters = processFilters({
       ...filters,
       search: searchTerm,
-      status: statusFilter,
-      payment_method: paymentMethodFilter,
-      min_date: minDate,
-      max_date: maxDate,
       ordering,
       page: currentPage,
-    };
-
+    });
+  
     try {
-      const salesData = await getSalesByFilter(combinedFilters);
-      console.log(salesData);
-      setSales(salesData);
-      setFilteredSales(salesData); // Caso precise de lógica extra para `filteredSales`
+      const { sales, pageCount } = await getSalesByFilter(combinedFilters);
+      setSales(sales);
+      setFilteredSales(sales);
+      setTotalPages(pageCount);
+      setLoading(false);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
-    fetchSalesData();
-  }, [filters, currentPage, sortOrder, priceOrder, dataOrder, searchTerm, statusFilter, paymentMethodFilter, minDate, maxDate]);
+    loadSales();
+  }, [filters, currentPage, sortOrder, priceOrder, dataOrder, searchTerm ]);
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
@@ -293,6 +298,20 @@ const ListagemVendas = () => {
     setPriceOrder("none");
     const newDataOrder = dataOrder === "none" ? "asc" : dataOrder === "asc" ? "desc" : "none";
     setDataOrder(newDataOrder);
+  };
+
+  const handleSearch = (event) => {
+    const value = event.target.value.toLowerCase();
+  setSearchTerm(value);
+
+  // Limpar o timeout anterior (se houver)
+  clearTimeout(window.searchTimeout);
+
+  // Adicionar um novo timeout para chamar a função após um atraso
+  window.searchTimeout = setTimeout(() => {
+    const updatedFilters = { ...filters, username: value };
+    setFilters(updatedFilters);
+  }, 500);
   };
 
   const handleNextPage = () => {
@@ -338,10 +357,10 @@ const ListagemVendas = () => {
               type="search"
               name="search"
               id="search"
-              placeholder="Produto ou ID"
+              placeholder="Cliente ou ID"
               maxLength={100}
               value={searchTerm}
-              //onChange={handleSearch}
+              onChange={handleSearch}
               className="w-full placeholder:text-slate-500 focus:outline-none"
             />
           </span>
@@ -406,7 +425,7 @@ const ListagemVendas = () => {
               <span>
                 <div className="flex items-center justify-center">
                   <span className="inline-block bg-slate-200 rounded-lg text-stone-600 font-semibold px-2 py-1">
-                    {sale.payment_provider ?? sale.payment_method}
+                    {sale.payment_method}
                   </span>
                 </div>
               </span>
@@ -450,10 +469,11 @@ const ListagemVendas = () => {
           <ChevronLeftIcon className="size-5" />
           Anterior
         </button>
-        <span>{currentPage} / 20 </span>
+        <span>{currentPage} / {totalPages} </span>
         <button
           className="action"
           onClick={handleNextPage}
+          disabled={currentPage === totalPages}
         >
           Próxima
           <ChevronRightIcon className="size-5" />

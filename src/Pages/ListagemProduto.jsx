@@ -532,10 +532,10 @@ function ListagemProduto() {
           <header className="listing col-span-7 flex items-center bg-slate-100 p-2 rounded-lg shadow-md">
             <span className="font-semibold flex items-center justify-center">Foto</span>
             <span className="font-semibold flex items-center justify-start cursor-pointer" onClick={handleSortByName}>
-              Nome {sortOrder === "asc" ? "↓" : sortOrder === "desc" ? "↑" : ""}
+              Nome {sortOrder === "asc" ? "↓" : sortOrder === "desc" ? "↑" : "↕"}
             </span>
             <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByPrice}>
-              Preço {priceOrder === "asc" ? "↓" : priceOrder === "desc" ? "↑" : ""}
+              Preço {priceOrder === "asc" ? "↓" : priceOrder === "desc" ? "↑" : "↕"}
             </span>
             <span className="font-semibold flex items-center justify-center">Estoque</span>
             <span className="font-semibold flex items-center justify-center">Insights</span>

@@ -1,4 +1,4 @@
-export const API_URL = "https://fishnet-api-py.onrender.com";
+export const API_URL = "https://fishnet-api-py-dev.onrender.com";
 
 function parseProduct(prod) {
   return {
@@ -88,16 +88,19 @@ export async function getSalesByFilter(filters) {
     // Constrói a query apenas com os filtros selecionados
     const query = new URLSearchParams(filteredFilters).toString();
     const data = await fetch(`${API_URL}/sales/filter?${query}`);
-    const sales = await data.json();
+    const result = await data.json();
 
-    if (!Array.isArray(sales)) {
-      return [];
+    if (!result || !Array.isArray(result.match)) {
+      return { sales: [], pageCount: 0 };
     }
-    console.log("URL da requisição: ", data);
-    return sales.map(parseSale);
+    //console.log(data);
+    return {
+      sales: result.match.map(parseSale),
+      pageCount: result.page_count || 1,
+    };
   } catch (error) {
     console.error(error.message);
-    return [];
+    return { sales: [], pageCount: 0 };
   }
 }
 
