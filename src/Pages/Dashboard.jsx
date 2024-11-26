@@ -7,6 +7,7 @@ import { useAuth } from "../lib/auth";
 import { price } from "../lib/format";
 import { Bar } from "react-chartjs-2";
 import { Chart, LinearScale, registerables } from "chart.js";
+import { saveAs } from 'file-saver';
 import { API_URL } from "../lib/query";
 
 function Dashboard() {
@@ -178,6 +179,36 @@ function Dashboard() {
     },
   };
 
+  const handleBackup = async () => {
+    try {
+      const response = await fetch(`http://${API_URL}/dash/backup`, {
+        method: 'GET',
+      });
+      if (!response.ok) throw new Error('Erro ao fazer backup');
+      const blob = await response.blob();
+      saveAs(blob, 'backup_dados.bson');
+      alert('Backup realizado com sucesso!');
+    } catch (error) {
+      console.error('Erro no backup:', error);
+      alert('Erro ao realizar o backup.');
+    }
+  };
+
+  const handleExport = async () => {
+    try {
+      const response = await fetch(`http://${API_URL}/dash/export`, {
+        method: 'GET',
+      });
+      if (!response.ok) throw new Error('Erro ao exportar dados');
+      const blob = await response.blob();
+      saveAs(blob, 'relatorio_vendas.pdf');
+      alert('Exportação realizada com sucesso!');
+    } catch (error) {
+      console.error('Erro na exportação:', error);
+      alert('Erro ao exportar os dados.');
+    }
+  };
+
   return (
     <div className="p-5">
       <section className="grid md:grid-cols-3 gap-4 mb-5">
@@ -199,18 +230,11 @@ function Dashboard() {
           />
         </DashboardPanel>
         <DashboardPanel title="Atalhos">
-          <Shortcut label="Backup de Dados" />
-          <Shortcut label="Exportar dados" />
+          <Shortcut label="Backup de Dados" onClick={handleBackup} />
+          <Shortcut label="Exportar dados" onClick={handleExport} />
         </DashboardPanel>
       </section>
-
-      <section>
-        <DashboardPanel title="Relatório Anual">
-          <Bar data={chartData} options={chartOptions} />
-        </DashboardPanel>
-      </section>
-
-      <section className="my-9">
+<section className="my-9">
         <header className="flex justify-between mb-3">
           <h2 className="text-lg">Melhores vendas</h2>
           <FilterDropdown
@@ -233,6 +257,12 @@ function Dashboard() {
           statusMessages={["Pendente", "Finalizado", "Cancelado"]}
         />
       </section>
+      <section>
+        <DashboardPanel title="Relatório Anual">
+          <Bar data={chartData} options={chartOptions} />
+        </DashboardPanel>
+      </section>
+      <section><br></br></section>
     </div>
   );
 }
@@ -256,11 +286,14 @@ function ClientStats({ count, label }) {
   );
 }
 
-function Shortcut({ label }) {
+function Shortcut({ label, onClick }) {
   return (
     <p className="flex items-center justify-between text-lg mb-5">
       {label}
-      <LinkIcon className="size-4 inline text-black hover:text-yellow-light transition-colors duration-300" />
+      <LinkIcon
+        className="size-4 inline text-black hover:text-yellow-light transition-colors duration-300 cursor-pointer"
+        onClick={onClick}
+      />
     </p>
   );
 }
