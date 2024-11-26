@@ -51,18 +51,18 @@ export default function TelaPerfilUser() {
   }, []);
 
   return (
-    <article className="flex flex-col gap-5">
-      <section className="grid grid-cols-2 gap-5">
-        <div className="bg-slate-100 rounded-lg border border-slate-400 shadow p-4 flex gap-6">
+    <article className="flex flex-col gap-5 mb-20">
+      <section className="grid md:grid-cols-2 gap-5">
+        <div className="bg-slate-100 rounded-lg border border-slate-400 shadow p-4 flex flex-col md:flex-row gap-6">
           <div className="relative">
             <img
               src={profile.picture}
               alt="Foto de perfil"
-              className="w-36 object-cover aspect-square rounded-full border-[3px] border-blue-dark"
+              className="w-36 object-cover aspect-square rounded-full border-[3px] border-blue-dark m-auto"
             />
             <button
               onClick={() => setPictureDialogOpen(true)}
-              className="bg-yellow-light p-2 absolute right-1 top-24 rounded-full border-2 border-blue-dark text-blue-dark"
+              className="bg-yellow-light p-2 absolute right-16 md:right-1 top-24 rounded-full border-2 border-blue-dark text-blue-dark"
             >
               <CameraIcon className="size-5" />
             </button>
@@ -176,6 +176,7 @@ export default function TelaPerfilUser() {
           <div className="flex flex-col gap-1 mb-3">
             <span className="font-semibold">Estado:</span>
             <select
+              value={profile.state}
               name="state"
               id="state"
               className="border border-slate-300 rounded px-2 py-1 bg-slate-100"
