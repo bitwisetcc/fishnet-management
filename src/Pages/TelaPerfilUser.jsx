@@ -1,14 +1,23 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { PaperAirplaneIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import Tippy from "@tippyjs/react";
+import {
+  CameraIcon,
+  PaperAirplaneIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import React, { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import { useAuth } from "../lib/auth";
 import { API_URL } from "../lib/query";
+import { cpf } from "../lib/format";
 
-function TelaPerfilUser() {
+export default function TelaPerfilUser() {
   const setTitle = useContext(TitleContext);
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState({
+    cpf: "",
+    email: "",
+    birthdate: Date(),
+    tel: "",
+  });
   const [pictureDialogOpen, setPictureDialogOpen] = useState(false);
   useAuth();
 
@@ -30,64 +39,178 @@ function TelaPerfilUser() {
 
   useEffect(() => {
     setTitle("Minha Conta");
+  }, [setTitle]);
+
+  useEffect(() => {
     fetch(`${API_URL}/users/me`, {
       headers: { Authorization: localStorage.getItem("token") },
     })
       .then((res) => res.json())
       .then((data) => setProfile(data))
       .catch(console.error);
-  }, [setTitle]);
+  }, []);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-8 flex flex-col md:flex-row items-center border-2 border-gray-light mx-auto">
-      <div className="w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-blue-dark">
-        <Tippy
-          content="Trocar foto de perfil"
-          placement="bottom"
-          delay={50}
-          arrow
-        >
-          <button onClick={() => setPictureDialogOpen(true)}>
+    <article className="flex flex-col gap-5">
+      <section className="grid grid-cols-2 gap-5">
+        <div className="bg-slate-100 rounded-lg border border-slate-400 shadow p-4 flex gap-6">
+          <div className="relative">
             <img
               src={profile.picture}
               alt="Foto de perfil"
-              className="w-full h-full object-cover"
+              className="w-36 object-cover aspect-square rounded-full border-[3px] border-blue-dark"
             />
-          </button>
-        </Tippy>
-      </div>
-
-      <div className="md:ml-8 mt-6 md:mt-0 flex-1">
-        <h2 className="text-3xl font-bold text-blue-dark">{profile.name}</h2>
-        <p className="text-gray-700 mt-2">
-          Vendo peixes ornamentais há mais de 20 anos, tenho bastante
-          experiência no mercado.
-        </p>
-
-        <div className="mt-6">
-          <h3 className="text-xl font-semibold text-blue-dark mb-4">
-            Informações de Contato
-          </h3>
-          <ul className="space-y-2 text-gray-600">
-            <li>
-              <strong className="text-yellow-light">E-mail:</strong>{" "}
-              {profile.email}
-            </li>
-            <li>
-              <strong className="text-yellow-light">Telefone:</strong> +1
-              536-870-4273
-            </li>
-            <li>
-              <strong className="text-yellow-light">Data de Nascimento:</strong>{" "}
-              21/07/1983
-            </li>
-            <li>
-              <strong className="text-yellow-light">CPF ou CNPJ:</strong>{" "}
-              {profile.cpf}
-            </li>
-          </ul>
+            <button
+              onClick={() => setPictureDialogOpen(true)}
+              className="bg-yellow-light p-2 absolute right-1 top-24 rounded-full border-2 border-blue-dark text-blue-dark"
+            >
+              <CameraIcon className="size-5" />
+            </button>
+          </div>
+          <div className="flex-1">
+            <h2 className="font-semibold text-lg mb-2">{profile.name}</h2>
+            <div className="flex flex-col gap-1 mb-3">
+              <span className="font-semibold">E-mail:</span>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                className="border border-slate-300 rounded px-2 py-1"
+                value={profile.email}
+                onInput={(e) => {
+                  profile.email = e.target.value;
+                  setProfile(profile);
+                }}
+              />
+            </div>
+            <div className="flex flex-col gap-1 mb-3">
+              <span className="font-semibold">CPF:</span>
+              <input
+                type="text"
+                name="cpf"
+                id="cpf"
+                className="border border-slate-300 rounded px-2 py-1"
+                value={cpf(profile.cpf)}
+                onInput={(e) => {
+                  profile.cpf = e.target.value;
+                  setProfile(profile);
+                }}
+              />
+            </div>
+            <div className="flex flex-col gap-1 mb-3">
+              <span className="font-semibold">Telefone:</span>
+              <input
+                type="tel"
+                name="tel"
+                id="tel"
+                className="border border-slate-300 rounded px-2 py-1"
+                value={profile.tel}
+                onInput={(e) => {
+                  profile.tel = e.target.value;
+                  setProfile(profile);
+                }}
+              />
+            </div>
+            <div className="flex flex-col gap-1 mb-3">
+              <span className="font-semibold">Nascimento:</span>
+              <input
+                type="date"
+                name="birthdate"
+                id="birthdate"
+                className="border border-slate-300 rounded px-2 py-1"
+                value={profile.birthdate}
+                onInput={(e) => {
+                  profile.birthdate = e.target.value;
+                  setProfile(profile);
+                }}
+              />
+            </div>
+          </div>
         </div>
-      </div>
+        <div className="bg-slate-100 rounded-lg border border-slate-400 shadow p-4">
+          <div className="flex flex-col gap-1 mb-3">
+            <span className="font-semibold">Endereço:</span>
+            <input
+              type="text"
+              name="addr"
+              id="addr"
+              className="border border-slate-300 rounded px-2 py-1"
+              value={profile.addr}
+              onInput={(e) => {
+                profile.addr = e.target.value;
+                setProfile(profile);
+              }}
+            />
+          </div>
+          <div className="flex flex-col gap-1 mb-3">
+            <span className="font-semibold">Número:</span>
+            <input
+              type="number"
+              name="number"
+              id="number"
+              step={1}
+              max={10000}
+              min={1}
+              className="border border-slate-300 rounded px-2 py-1"
+              value={profile.number || 1}
+              onInput={(e) => {
+                profile.number = e.target.value;
+                setProfile(profile);
+              }}
+            />
+          </div>
+          <div className="flex flex-col gap-1 mb-3">
+            <span className="font-semibold">Cidade:</span>
+            <input
+              type="text"
+              name="city"
+              id="city"
+              className="border border-slate-300 rounded px-2 py-1"
+              value={profile.city}
+              onInput={(e) => {
+                profile.city = e.target.value;
+                setProfile(profile);
+              }}
+            />
+          </div>
+          <div className="flex flex-col gap-1 mb-3">
+            <span className="font-semibold">Estado:</span>
+            <select
+              name="state"
+              id="state"
+              className="border border-slate-300 rounded px-2 py-1 bg-slate-100"
+            >
+              <option value="AC">Acre</option>
+              <option value="AL">Alagoas</option>
+              <option value="AP">Amapá</option>
+              <option value="AM">Amazonas</option>
+              <option value="BA">Bahia</option>
+              <option value="CE">Ceará</option>
+              <option value="DF">Distrito Federal</option>
+              <option value="ES">Espírito Santo</option>
+              <option value="GO">Goiás</option>
+              <option value="MA">Maranhão</option>
+              <option value="MT">Mato Grosso</option>
+              <option value="MS">Mato Grosso do Sul</option>
+              <option value="MG">Minas Gerais</option>
+              <option value="PA">Pará</option>
+              <option value="PB">Paraíba</option>
+              <option value="PR">Paraná</option>
+              <option value="PE">Pernambuco</option>
+              <option value="PI">Piauí</option>
+              <option value="RJ">Rio de Janeiro</option>
+              <option value="RN">Rio Grande do Norte</option>
+              <option value="RS">Rio Grande do Sul</option>
+              <option value="RO">Rondônia</option>
+              <option value="RR">Roraima</option>
+              <option value="SC">Santa Catarina</option>
+              <option value="SP">São Paulo</option>
+              <option value="SE">Sergipe</option>
+              <option value="TO">Tocantins</option>
+            </select>
+          </div>
+        </div>
+      </section>
 
       <Dialog
         open={pictureDialogOpen}
@@ -104,7 +227,6 @@ function TelaPerfilUser() {
                 <XMarkIcon className="size-5" />
               </button>
             </div>
-
             <form
               className="flex gap-2"
               onSubmit={(e) => {
@@ -125,8 +247,6 @@ function TelaPerfilUser() {
           </DialogPanel>
         </div>
       </Dialog>
-    </div>
+    </article>
   );
 }
-
-export default TelaPerfilUser;

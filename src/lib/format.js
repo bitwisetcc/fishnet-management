@@ -4,3 +4,7 @@ export function price(value) {
     currency: "BRL",
   }).format(value);
 }
+
+export function cpf(doc) {
+  return doc.replace(/[^\d]/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+}
