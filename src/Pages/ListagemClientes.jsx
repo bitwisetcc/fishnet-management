@@ -124,7 +124,7 @@ function ListagemClientes() {
               type="search"
               name="search"
               id="search"
-              placeholder="Produto ou ID"
+              placeholder="Nome do usuário"
               maxLength={100}
               value={searchTerm}
               //onChange={handleSearch}
@@ -178,7 +178,7 @@ function ListagemClientes() {
               </span>
               <span className="text-nowrap flex items-center justify-center">{user.tel}</span>
               <span className="text-nowrap flex items-center justify-center">{user.email}</span>
-              <span className="text-nowrap flex items-center justify-center">{user.cpf}</span>
+              <span className="text-nowrap flex items-center justify-center">{user.cpf ?? user.cnpj}</span>
               <span className="text-nowrap flex items-center justify-center">{user.addr}</span>
               <span className="text-nowrap flex items-center justify-center">{user.uf}</span>
               <span className="flex gap-2 items-center justify-center">
