@@ -465,7 +465,7 @@ function ListagemProduto() {
                 R${product.price.toFixed(2)}
               </span>
               <span className="text-nowrap flex items-center justify-center">
-                {product.name.length}
+                {product.quantity}
               </span>
               <button
                 className="flex items-center justify-center"
