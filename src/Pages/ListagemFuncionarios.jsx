@@ -1,31 +1,25 @@
 import {
-  ArrowTopRightOnSquareIcon,
-  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  CurrencyDollarIcon,
   FunnelIcon,
   LockClosedIcon,
   MagnifyingGlassIcon,
   PencilSquareIcon,
-  PlusCircleIcon,
   PrinterIcon,
 } from "@heroicons/react/24/outline";
 import { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
-import { Link } from "react-router-dom";
-import { listAllProducts, listUsersByRole } from "../lib/query";
+import { listUsersByRole } from "../lib/query";
 import { useAuth } from "../lib/auth";
+import { phone } from "../lib/format";
 
-
-function ListagemUsuarios() {
+export default function ListagemFuncionarios() {
   useAuth();
   const setTitle = useContext(TitleContext);
   setTitle("Funcionários  ");
 
   const [users, setUsers] = useState([]);
-  const [registerOpen, setRegisterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteringOpen, setFilteringOpen] = useState(false);
@@ -56,19 +50,22 @@ function ListagemUsuarios() {
   const handleSortByName = () => {
     setPriceOrder("none");
     setCurrentPage(1);
-    const newOrder = sortOrder === "none" ? "asc" : sortOrder === "asc" ? "desc" : "none";
+    const newOrder =
+      sortOrder === "none" ? "asc" : sortOrder === "asc" ? "desc" : "none";
     setSortOrder(newOrder);
   };
 
   const handleSortByPrice = () => {
     setSortOrder("none");
     setCurrentPage(1);
-    const newPriceOrder = priceOrder === "none" ? "asc" : priceOrder === "asc" ? "desc" : "none";
+    const newPriceOrder =
+      priceOrder === "none" ? "asc" : priceOrder === "asc" ? "desc" : "none";
     setPriceOrder(newPriceOrder);
   };
 
   const handleSortByData = () => {
-    const newDataOrder = dataOrder === "none" ? "asc" : dataOrder === "asc" ? "desc" : "none";
+    const newDataOrder =
+      dataOrder === "none" ? "asc" : dataOrder === "asc" ? "desc" : "none";
     setDataOrder(newDataOrder);
   };
 
@@ -80,7 +77,6 @@ function ListagemUsuarios() {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
 
-
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -88,7 +84,7 @@ function ListagemUsuarios() {
   return (
     <>
       <ListingFilter>
-      <div className="flex flex-col md:flex-row md:items-center gap-2">
+        <div className="flex flex-col md:flex-row md:items-center gap-2">
           {/* Barra de pesquisa */}
           <span className="flex items-center text-slate-600 flex-1 gap-1 border p-2 rounded-lg relative mb-2 md:mb-0">
             <MagnifyingGlassIcon className="size-6" />
@@ -96,7 +92,7 @@ function ListagemUsuarios() {
               type="search"
               name="search"
               id="search"
-              placeholder="Produto ou ID"
+              placeholder="Nome do usuário"
               maxLength={100}
               value={searchTerm}
               //onChange={handleSearch}
@@ -106,8 +102,9 @@ function ListagemUsuarios() {
 
           {/* Botões */}
           <div className="flex gap-2">
-            <button className="flex items-center gap-2 relative group cursor-pointer" 
-            onClick={() => setFilteringOpen(true)}
+            <button
+              className="flex items-center gap-2 relative group cursor-pointer"
+              onClick={() => setFilteringOpen(true)}
             >
               <FunnelIcon className="size-6" />
               <span className="hidden md:inline">Filtros</span>
@@ -127,15 +124,30 @@ function ListagemUsuarios() {
       <div className="md:overflow-x-hidden overflow-x-scroll">
         <article className="grid">
           <header className="listing col-span-7 flex items-center bg-slate-100 p-2 rounded-lg shadow-md">
-            <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByName}>
+            <span
+              className="font-semibold flex items-center justify-center cursor-pointer"
+              onClick={handleSortByName}
+            >
               Nome {sortOrder === "asc" ? "↓" : sortOrder === "desc" ? "↑" : ""}
             </span>
-            <span className="font-semibold flex items-center justify-center">Telefone</span>
-            <span className="font-semibold flex items-center justify-center">Email</span>
-            <span className="font-semibold flex items-center justify-center">CPF/CNPJ</span>
-            <span className="font-semibold flex items-center justify-center">Endereço</span>
-            <span className="font-semibold flex items-center justify-center">UF</span>
-            <span className="font-semibold flex items-center justify-center">Ações</span>
+            <span className="font-semibold flex items-center justify-center">
+              Telefone
+            </span>
+            <span className="font-semibold flex items-center justify-center">
+              Email
+            </span>
+            <span className="font-semibold flex items-center justify-center">
+              CPF/CNPJ
+            </span>
+            <span className="font-semibold flex items-center justify-center">
+              Endereço
+            </span>
+            <span className="font-semibold flex items-center justify-center">
+              UF
+            </span>
+            <span className="font-semibold flex items-center justify-center">
+              Ações
+            </span>
           </header>
 
           {filteredUsers.map((user) => (
@@ -147,11 +159,21 @@ function ListagemUsuarios() {
                 <span>{user.name}</span>
                 <span className="text-sm text-gray-500">{user._id}</span>
               </span>
-              <span className="text-nowrap flex items-center justify-center">{user.tel}</span>
-              <span className="text-nowrap flex items-center justify-center">{user.email}</span>
-              <span className="text-nowrap flex items-center justify-center">{user.cpf}</span>
-              <span className="text-nowrap flex items-center justify-center">{user.addr}</span>
-              <span className="text-nowrap flex items-center justify-center">{user.uf}</span>
+              <span className="text-nowrap flex items-center justify-center">
+                {phone(user.tel)}
+              </span>
+              <span className="text-nowrap flex items-center justify-center">
+                {user.email}
+              </span>
+              <span className="text-nowrap flex items-center justify-center">
+                {user.cpf}
+              </span>
+              <span className="text-nowrap flex items-center justify-center">
+                {user.addr}
+              </span>
+              <span className="text-nowrap flex items-center justify-center">
+                {user.uf}
+              </span>
               <span className="flex gap-2 items-center justify-center">
                 <button className="hover:text-yellow-light transition-colors duration-200">
                   <LockClosedIcon className="size-5" />
@@ -175,10 +197,7 @@ function ListagemUsuarios() {
           Anterior
         </button>
         <span>{currentPage} / 20 </span>
-        <button
-          className="action"
-          onClick={handleNextPage}
-        >
+        <button className="action" onClick={handleNextPage}>
           Próxima
           <ChevronRightIcon className="size-5" />
         </button>
@@ -186,5 +205,3 @@ function ListagemUsuarios() {
     </>
   );
 }
-
-export default ListagemUsuarios;
