@@ -1,4 +1,4 @@
-export const API_URL = "https://fishnet-api-py-dev.onrender.com";
+export const API_URL = "https://fishnet-api-py.onrender.com";
 
 function parseProduct(prod) {
   return {
@@ -35,6 +35,18 @@ function parseSale(sale) {
     status: sale.status,
   };
 }
+
+{/* function parseClient(cli) {
+  return {
+    ...cli,
+    id: cli._id,
+    quantity: 5,
+    feeding: String(prod.feeding),
+    tankSize: String(prod.tank_size),
+    sizes: prod.size.match(/(\d*\scm)+/g) || ["Tamanho não informado"],
+  };
+
+} */}
 
 export async function listAllProducts(page = 1, limit = 20) {
   try {
