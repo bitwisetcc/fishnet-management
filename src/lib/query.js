@@ -1,30 +1,27 @@
 export const API_URL = "https://fishnet-api-py.onrender.com";
 
 function parseProduct(prod) {
-  return {
-    ...prod,
-    id: prod._id,
-    quantity: 5,
-    feeding: String(prod.feeding),
-    tankSize: String(prod.tank_size),
-    sizes: prod.size.match(/(\d*\scm)+/g) || ["Tamanho não informado"],
-  };
-
+  prod.id = prod._id;
+  prod.feeding = String(prod.feeding);
+  prod.tankSize = String(prod.tank_size);
+  return prod;
 }
 
 function parseSale(sale) {
   return {
     ...sale,
-    id: sale._id,  // Preservando o ID original
+    id: sale._id, // Preservando o ID original
     customer: {
       id: sale.customer._id,
       name: sale.customer.name,
     },
     date: new Date(sale.date).toISOString(), // Convertendo a data para o formato ISO
-    items: sale.items.map(item => ({
+    items: sale.items.map((item) => ({
       ...item,
-      size: item.size && item.size.match(/\d+\s?cm/g) || ["Tamanho não informado"], // Melhor regex
-    })),    
+      size: (item.size && item.size.match(/\d+\s?cm/g)) || [
+        "Tamanho não informado",
+      ], // Melhor regex
+    })),
     payment: {
       method: sale.payment_method,
       provider: sale.payment_provider,
@@ -87,7 +84,6 @@ export async function getProductByFilter(filters) {
   }
 }
 
-
 export async function getSalesByFilter(filters) {
   try {
     // Filtra o objeto `filters`, removendo chaves com valores nulos, indefinidos ou vazios
@@ -115,7 +111,6 @@ export async function getSalesByFilter(filters) {
     return { sales: [], pageCount: 0 };
   }
 }
-
 
 export async function getProductById(id) {
   const data = await fetch(`${API_URL}/prods/${id}`);
@@ -146,5 +141,3 @@ export async function listUsersByRole(role, page = 1, limit = 10) {
     return [];
   }
 }
-
-

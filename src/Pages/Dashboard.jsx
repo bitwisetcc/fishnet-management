@@ -7,6 +7,7 @@ import { useAuth } from "../lib/auth";
 import { price } from "../lib/format";
 import { Bar } from "react-chartjs-2";
 import { Chart, LinearScale, registerables } from "chart.js";
+import { saveAs } from 'file-saver';
 import { API_URL } from "../lib/query";
 
 function Dashboard() {
@@ -145,6 +146,7 @@ function Dashboard() {
           color: "rgba(0, 0, 0, 1)",
         },
       },
+
       tooltip: {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         titleColor: "rgba(0, 0, 0, 1)",
@@ -154,14 +156,11 @@ function Dashboard() {
         },
       },
     },
+
     scales: {
       x: {
-        grid: {
-          color: "rgba(255, 255, 255, 0.1)",
-        },
-        ticks: {
-          color: "rgba(0, 0, 0, 0.5)",
-        },
+        grid: { color: "rgba(255, 255, 255, 0.1)" },
+        ticks: { color: "rgba(0, 0, 0, 0.5)" },
       },
       y: {
         beginAtZero: true,
@@ -178,6 +177,36 @@ function Dashboard() {
         },
       },
     },
+  };
+
+  const handleBackup = async () => {
+    try {
+      const response = await fetch(`http://${API_URL}/dash/backup`, {
+        method: 'GET',
+      });
+      if (!response.ok) throw new Error('Erro ao fazer backup');
+      const blob = await response.blob();
+      saveAs(blob, 'backup_dados.bson');
+      alert('Backup realizado com sucesso!');
+    } catch (error) {
+      console.error('Erro no backup:', error);
+      alert('Erro ao realizar o backup.');
+    }
+  };
+
+  const handleExport = async () => {
+    try {
+      const response = await fetch(`http://${API_URL}/dash/export`, {
+        method: 'GET',
+      });
+      if (!response.ok) throw new Error('Erro ao exportar dados');
+      const blob = await response.blob();
+      saveAs(blob, 'relatorio_vendas.pdf');
+      alert('Exportação realizada com sucesso!');
+    } catch (error) {
+      console.error('Erro na exportação:', error);
+      alert('Erro ao exportar os dados.');
+    }
   };
 
   return (
@@ -201,18 +230,11 @@ function Dashboard() {
           />
         </DashboardPanel>
         <DashboardPanel title="Atalhos">
-          <Shortcut label="Backup de Dados" />
-          <Shortcut label="Exportar dados" />
+          <Shortcut label="Backup de Dados" onClick={handleBackup} />
+          <Shortcut label="Exportar dados" onClick={handleExport} />
         </DashboardPanel>
       </section>
-
-      <section>
-        <DashboardPanel title="Relatório Anual">
-          <Bar data={chartData} options={chartOptions} />
-        </DashboardPanel>
-      </section>
-
-      <section className="my-9">
+<section className="my-9">
         <header className="flex justify-between mb-3">
           <h2 className="text-lg">Melhores vendas</h2>
           <FilterDropdown
@@ -235,6 +257,12 @@ function Dashboard() {
           statusMessages={["Pendente", "Finalizado", "Cancelado"]}
         />
       </section>
+      <section>
+        <DashboardPanel title="Relatório Anual">
+          <Bar data={chartData} options={chartOptions} />
+        </DashboardPanel>
+      </section>
+      <section><br></br></section>
     </div>
   );
 }
@@ -258,11 +286,14 @@ function ClientStats({ count, label }) {
   );
 }
 
-function Shortcut({ label }) {
+function Shortcut({ label, onClick }) {
   return (
     <p className="flex items-center justify-between text-lg mb-5">
       {label}
-      <LinkIcon className="size-4 inline text-black hover:text-yellow-light transition-colors duration-300" />
+      <LinkIcon
+        className="size-4 inline text-black hover:text-yellow-light transition-colors duration-300 cursor-pointer"
+        onClick={onClick}
+      />
     </p>
   );
 }
@@ -290,28 +321,30 @@ function FilterDropdown({ selectedFilter, onFilterChange, filters }) {
 
 function ClientList({ clients: orders, avatarApi, statusMessages }) {
   return (
-    <section className="flex flex-col gap-4 overflow-x-auto md:overflow-x-hidden max-w-[calc(100vw-3rem)]">
+    <ul className="grid gap-4">
       {orders.map((order) => (
-        <div className="flex w-full md:w-auto items-center" key={order._id}>
+        <li
+          className="grid grid-cols-subgrid col-span-7 content-center flex-1 bg-branco-perolado border border-slate-400 shadow rounded-lg px-4 py-2 gap-x-3 items-center pr-8"
+          key={order._id}
+        >
           <img
             src={avatarApi.replace("$", order.customer.name)}
             alt={`Avatar de ${order.customer.name}`}
             className="rounded-full w-14 h-14 border border-slate-100 mr-5"
           />
-          <div className="grid grid-cols-5 content-center flex-1 bg-branco-perolado border border-slate-400 shadow-xl rounded-lg px-4 py-2 gap-x-3">
-            <span>{order.customer.name}</span>
-            <span>{price(order.total)}</span>
-            <span>{new Date(order.date).toLocaleDateString("pt-BR")}</span>
-            <StatusBadge status={order.status} messages={statusMessages} />
-            <span className="justify-self-end">
-              <Link to="/vendas">
-                <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-yellow-light" />
-              </Link>
-            </span>
-          </div>
-        </div>
+          <span>{order.customer.email}</span>
+          <span>{order.customer.name}</span>
+          <span>{price(order.total)}</span>
+          <span>{new Date(order.date).toLocaleDateString("pt-BR")}</span>
+          <StatusBadge status={order.status} messages={statusMessages} />
+          <span className="justify-self-end">
+            <Link to="/vendas">
+              <ArrowTopRightOnSquareIcon className="size-6 text-black hover:text-yellow-light" />
+            </Link>
+          </span>
+        </li>
       ))}
-    </section>
+    </ul>
   );
 }
 

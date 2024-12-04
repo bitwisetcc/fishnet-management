@@ -7,7 +7,7 @@ import Config from "./Pages/Config";
 import Dashboard from "./Pages/Dashboard";
 import ListagemClientes from "./Pages/ListagemClientes";
 import ListagemProduto from "./Pages/ListagemProduto";
-import ListagemUsuarios from "./Pages/ListagemUsuarios";
+import ListagemFuncionarios from "./Pages/ListagemFuncionarios";
 import ListagemVendas from "./Pages/ListagemVendas";
 import Login from "./Pages/Login";
 import TelaPerfilUser from "./Pages/TelaPerfilUser";
@@ -32,7 +32,7 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/users" element={<ListagemUsuarios />} />
+                  <Route path="/users" element={<ListagemFuncionarios />} />
                   <Route path="/client" element={<ListagemClientes />} />
                   <Route path="/prods" element={<ListagemProduto />} />
                   <Route path="/users/new" element={<CadastroUsuarios />} />

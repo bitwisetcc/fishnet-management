@@ -59,7 +59,9 @@ function Login() {
         </section>
 
         <section className="flex-1">
-          <h2 className="text-2xl font-semibold text-center md:text-left">Bem vindo(a)!</h2>
+          <h2 className="text-2xl font-semibold text-center md:text-left">
+            Bem vindo(a)!
+          </h2>
 
           {errorMsg && (
             <p className="text-red-500 rounded-md border border-red-500 bg-red-300 flex flex-row items-center p-2 mt-2">
@@ -103,12 +105,12 @@ function Login() {
             >
               Esqueceu a senha?
             </a>
-            <a
+            {/* <a
               href="/users/new"
               className="text-blue-dark hover:text-yellow-light w-max"
             >
               Não tem uma conta? Crie agora!
-            </a>
+            </a> */}
             <button
               type="submit"
               className="bg-blue-dark rounded-lg py-2 shadow-sm text-white"
