@@ -1,19 +1,150 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
-  ArrowTopRightOnSquareIcon,
+  ArrowDownIcon,
+  ArrowsUpDownIcon,
+  ArrowUpIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   LockClosedIcon,
   MagnifyingGlassIcon,
   PencilSquareIcon,
-  PlusCircleIcon,
   PrinterIcon,
   FunnelIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { TitleContext } from "../App";
 import ListingFilter from "../components/ListingFilter";
 import { listUsersByRole } from "../lib/query";
 import { useAuth } from "../lib/auth";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+
+function FilterClient({ open, setOpen, onSaveFilters }) {
+  const [selectedEnvironment, setSelectedEnvironment] = useState(null);
+  const [selectedDiet, setSelectedDiet] = useState(null);
+  const [selectedBehavior, setSelectedBehavior] = useState(null);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+
+  const clearFilters = () => {
+    setSelectedEnvironment(null);
+    setSelectedDiet(null);
+    setSelectedBehavior(null);
+    setMinPrice("");
+    setMaxPrice("");
+  };
+
+  const [filters, setFilters] = useState({
+    feeding: "",
+    tankSize: "",
+    // Add other filters as needed
+  });
+
+  const handleSave = () => {
+    const selectedFilters = {
+      ...filters,
+      tags: selectedEnvironment,
+      feeding: selectedDiet,
+      behavior: selectedBehavior,
+      minPrice: minPrice ? Number(minPrice) : undefined, // Convert to number or undefined if empty
+      maxPrice: maxPrice ? Number(maxPrice) : undefined, // Convert to number or undefined if empty
+    };
+    onSaveFilters(selectedFilters); // Sends the filters to `ListagemProduto`
+    setOpen(false); // Closes the modal
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      className="relative z-50"
+    >
+      <div className="fixed inset-0 flex items-center justify-center md:justify-end bg-[#11223a]/80 p-4">
+        <DialogPanel className="h-full w-full sm:max-w-md md:w-[45%] lg:w-[25%] mx-0 space-y-6 rounded-lg border border-[#cbd5e1] shadow-xl bg-[#f7f9fb] p-6 md:p-8 text-[#11223a] overflow-y-auto">
+          <header className="relative flex justify-between items-center mb-6">
+            <DialogTitle className="font-bold text-lg sm:text-xl md:text-2xl">
+              Filtros
+            </DialogTitle>
+            <button
+              onClick={() => setOpen(false)}
+              className="text-[#11223a] hover:text-[#c7ae5d]"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+          </header>
+
+          {/* Seção de Filtros */}
+          <section className="space-y-6">
+
+            {/* Filtro de Telefone */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">
+                Telefone
+              </h3>
+              <input
+                type="number"
+                id="min-price"
+                min={0}
+                step={10}
+                //value={minPrice}
+                //onChange={(e) => setMinPrice(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
+            </div>
+
+            {/* Filtro de Email */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">
+                Email
+              </h3>
+              <input
+                type="text"
+                id="min-price"
+                min={0}
+                step={10}
+                //value={minPrice}
+                //onChange={(e) => setMinPrice(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
+            </div>
+            {/* Filtro de CPF/CNPJ */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">
+                CPF/CNPJ
+              </h3>
+              <input
+                type="text"
+                id="min-price"
+                min={0}
+                step={10}
+                //value={minPrice}
+                //onChange={(e) => setMinPrice(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
+            </div>
+
+           
+
+            {/* Botões de Ação */}
+            <div className="flex gap-4 mt-6">
+              <button
+                className="flex-1 rounded bg-[#c7ae5d] px-4 py-2 text-white hover:bg-[#11223a]"
+                onClick={handleSave}
+              >
+                Salvar
+              </button>
+              <button
+                className="flex-1 rounded px-4 py-2 border border-red-600 hover:bg-red-600 text-red-600 hover:text-white"
+                onClick={clearFilters}
+              >
+                Limpar
+              </button>
+            </div>
+          </section>
+        </DialogPanel>
+      </div>
+    </Dialog>
+  );
+}
 
 function ListagemClientes() {
   useAuth();
@@ -156,8 +287,18 @@ function ListagemClientes() {
       <div className="md:overflow-x-hidden overflow-x-scroll">
         <article className="grid">
           <header className="listing col-span-7 flex items-center bg-slate-100 p-2 rounded-lg shadow-md">
-            <span className="font-semibold flex items-center justify-center cursor-pointer" onClick={handleSortByName}>
-              Nome {sortOrder === "asc" ? "↓" : sortOrder === "desc" ? "↑" : ""}
+            <span
+              className="font-semibold flex items-center justify-center cursor-pointer"
+              onClick={handleSortByName}
+            >
+              Cliente{" "}
+              {sortOrder === "asc" ? (
+                <ArrowDownIcon className="size-4 ml-1 mt-1" />
+              ) : sortOrder === "desc" ? (
+                <ArrowUpIcon className="size-4 ml-1 mt-1" />
+              ) : (
+                <ArrowsUpDownIcon className="size-4 ml-1 mt-1" />
+              )}
             </span>
             <span className="font-semibold flex items-center justify-center">Telefone</span>
             <span className="font-semibold flex items-center justify-center">Email</span>
@@ -212,6 +353,12 @@ function ListagemClientes() {
           <ChevronRightIcon className="size-5" />
         </button>
       </footer>
+
+      <FilterClient
+        open={filteringOpen}
+        setOpen={setFilteringOpen}
+        onSaveFilters={handleSaveFilters}
+      />
     </>
   );
 }

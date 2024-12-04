@@ -1,5 +1,8 @@
 import {
   ArrowTopRightOnSquareIcon,
+  ArrowDownIcon,
+  ArrowsUpDownIcon,
+  ArrowUpIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   FunnelIcon,
@@ -417,15 +420,19 @@ function ListagemProduto() {
       <div className="md:overflow-x-hidden overflow-x-scroll">
         <article className="grid">
           <header className="listing col-span-7 flex items-center bg-slate-100 p-2 rounded-lg shadow-md">
-            <span className="font-semibold flex items-center justify-center">
-              Foto
-            </span>
+            <span className="font-semibold flex items-center justify-center">Foto</span>
             <span
               className="font-semibold flex items-center justify-start cursor-pointer"
               onClick={handleSortByName}
             >
               Nome{" "}
-              {sortOrder === "asc" ? <ArrowDownIcon className="size-4 ml-1 mt-1" /> : sortOrder === "desc" ? <ArrowUpIcon className="size-4 ml-1 mt-1" /> : <ArrowsUpDownIcon className="size-4 ml-1 mt-1" />}
+              {sortOrder === "asc" ? (
+                <ArrowDownIcon className="size-4 ml-1 mt-1" />
+              ) : sortOrder === "desc" ? (
+                <ArrowUpIcon className="size-4 ml-1 mt-1" />
+              ) : (
+                <ArrowsUpDownIcon className="size-4 ml-1 mt-1" />
+              )}
             </span>
             <span
               className="font-semibold flex items-center justify-center cursor-pointer"
