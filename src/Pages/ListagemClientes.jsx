@@ -74,172 +74,55 @@ function FilterClient({ open, setOpen, onSaveFilters }) {
 
           {/* Seção de Filtros */}
           <section className="space-y-6">
-            {/* Filtro de Ambiente */}
-            <div>
-              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">
-                Ambiente
-              </h3>
-              <div className="flex flex-col gap-2">
-                <button
-                  className={`w-full p-2 border rounded-md ${
-                    selectedEnvironment === "fresh"
-                      ? "bg-blue-100 border-blue-500"
-                      : "border-[#cbd5e1] hover:bg-[#cbd5e1]"
-                  } text-[#11223a]`}
-                  onClick={() =>
-                    setSelectedEnvironment(
-                      selectedEnvironment === "fresh" ? null : "fresh"
-                    )
-                  }
-                >
-                  🌿 Água doce
-                </button>
-                <button
-                  className={`w-full p-2 border rounded-md ${
-                    selectedEnvironment === "salt"
-                      ? "bg-blue-100 border-blue-500"
-                      : "border-[#cbd5e1] hover:bg-[#cbd5e1]"
-                  } text-[#11223a]`}
-                  onClick={() =>
-                    setSelectedEnvironment(
-                      selectedEnvironment === "salt" ? null : "salt"
-                    )
-                  }
-                >
-                  🌊 Água salgada
-                </button>
-              </div>
-            </div>
 
-            {/* Filtro de Alimentação */}
+            {/* Filtro de Telefone */}
             <div>
               <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">
-                Alimentação
+                Telefone
               </h3>
-              <div className="flex flex-col gap-2">
-                <button
-                  className={`w-full p-2 border rounded-md ${
-                    selectedDiet === "herb"
-                      ? "bg-blue-100 border-blue-500"
-                      : "border-[#cbd5e1] hover:bg-[#cbd5e1]"
-                  } text-[#11223a]`}
-                  onClick={() =>
-                    setSelectedDiet(selectedDiet === "herb" ? null : "herb")
-                  }
-                >
-                  🌱 Herbívoro
-                </button>
-                <button
-                  className={`w-full p-2 border rounded-md ${
-                    selectedDiet === "omni"
-                      ? "bg-blue-100 border-blue-500"
-                      : "border-[#cbd5e1] hover:bg-[#cbd5e1]"
-                  } text-[#11223a]`}
-                  onClick={() =>
-                    setSelectedDiet(selectedDiet === "omni" ? null : "omni")
-                  }
-                >
-                  🍽️ Onívoro
-                </button>
-                <button
-                  className={`w-full p-2 border rounded-md ${
-                    selectedDiet === "carn"
-                      ? "bg-blue-100 border-blue-500"
-                      : "border-[#cbd5e1] hover:bg-[#cbd5e1]"
-                  } text-[#11223a]`}
-                  onClick={() =>
-                    setSelectedDiet(selectedDiet === "carn" ? null : "carn")
-                  }
-                >
-                  🍖 Carnívoro
-                </button>
-              </div>
-            </div>
-
-            {/* Filtro de Valores */}
-            <div>
-              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">
-                Valores
-              </h3>
-              <label htmlFor="min-price" className="block mb-1 text-[#11223a]">
-                Preço mínimo: R$
-              </label>
               <input
                 type="number"
                 id="min-price"
                 min={0}
                 step={10}
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
-              />
-              <label
-                htmlFor="max-price"
-                className="block mb-1 mt-4 text-[#11223a]"
-              >
-                Preço máximo: R$
-              </label>
-              <input
-                type="number"
-                id="max-price"
-                min={0}
-                step={10}
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
+                //value={minPrice}
+                //onChange={(e) => setMinPrice(e.target.value)}
                 className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
               />
             </div>
 
-            {/* Filtro de Comportamento Social */}
+            {/* Filtro de Email */}
             <div>
               <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">
-                Comportamento Social
+                Email
               </h3>
-              <div className="flex flex-col gap-2">
-                <button
-                  className={`w-full p-2 border rounded-md ${
-                    selectedBehavior === "peaceful"
-                      ? "bg-blue-100 border-blue-500"
-                      : "border-[#cbd5e1] hover:bg-[#cbd5e1]"
-                  } text-[#11223a]`}
-                  onClick={() =>
-                    setSelectedBehavior(
-                      selectedBehavior === "peaceful" ? null : "peaceful"
-                    )
-                  }
-                >
-                  🕊️ Pacífico
-                </button>
-                <button
-                  className={`w-full p-2 border rounded-md ${
-                    selectedBehavior === "aggressive"
-                      ? "bg-blue-100 border-blue-500"
-                      : "border-[#cbd5e1] hover:bg-[#cbd5e1]"
-                  } text-[#11223a]`}
-                  onClick={() =>
-                    setSelectedBehavior(
-                      selectedBehavior === "aggressive" ? null : "aggressive"
-                    )
-                  }
-                >
-                  🦈 Agressivo
-                </button>
-                <button
-                  className={`w-full p-2 border rounded-md ${
-                    selectedBehavior === "schooling"
-                      ? "bg-blue-100 border-blue-500"
-                      : "border-[#cbd5e1] hover:bg-[#cbd5e1]"
-                  } text-[#11223a]`}
-                  onClick={() =>
-                    setSelectedBehavior(
-                      selectedBehavior === "schooling" ? null : "schooling"
-                    )
-                  }
-                >
-                  🐟 Em cardume
-                </button>
-              </div>
+              <input
+                type="text"
+                id="min-price"
+                min={0}
+                step={10}
+                //value={minPrice}
+                //onChange={(e) => setMinPrice(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
             </div>
+            {/* Filtro de CPF/CNPJ */}
+            <div>
+              <h3 className="font-semibold text-md sm:text-lg text-[#c7ae5d]">
+                CPF/CNPJ
+              </h3>
+              <input
+                type="text"
+                id="min-price"
+                min={0}
+                step={10}
+                //value={minPrice}
+                //onChange={(e) => setMinPrice(e.target.value)}
+                className="w-full rounded-md border p-2 border-[#cbd5e1] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f7f9fb] text-[#11223a]"
+              />
+            </div>
+
+           
 
             {/* Botões de Ação */}
             <div className="flex gap-4 mt-6">
