@@ -22,7 +22,7 @@ const NavBar = () => {
           alt="Logo"
           className="rounded-full border-2 border-slate-600 shadow-sm p-[6px] w-14 h-14"
         />
-        <NavItem Icon={HomeIcon} text="Início" url="/dashboard" />
+        <NavItem Icon={HomeIcon} text="Dashboard" url="/dashboard" />
         <NavItem Icon={FaFishFins} text="Produtos" url="/prods" />
         <NavItem Icon={PresentationChartLineIcon} text="Vendas" url="/vendas" />
         <NavItem Icon={UsersIcon} text="Clientes" url="/client" />

@@ -9,6 +9,9 @@ import {
   PlusCircleIcon,
   PrinterIcon,
   XMarkIcon,
+  ArrowDownIcon,
+  ArrowsUpDownIcon,
+  ArrowUpIcon,
 } from "@heroicons/react/24/outline";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
@@ -422,14 +425,14 @@ function ListagemProduto() {
               onClick={handleSortByName}
             >
               Nome{" "}
-              {sortOrder === "asc" ? "↓" : sortOrder === "desc" ? "↑" : "↕"}
+              {sortOrder === "asc" ? <ArrowDownIcon className="size-4 ml-1 mt-1" /> : sortOrder === "desc" ? <ArrowUpIcon className="size-4 ml-1 mt-1" /> : <ArrowsUpDownIcon className="size-4 ml-1 mt-1" />}
             </span>
             <span
               className="font-semibold flex items-center justify-center cursor-pointer"
               onClick={handleSortByPrice}
             >
               Preço{" "}
-              {priceOrder === "asc" ? "↓" : priceOrder === "desc" ? "↑" : "↕"}
+              {priceOrder === "asc" ? <ArrowDownIcon className="size-4 ml-1 mt-1" /> : priceOrder === "desc" ? <ArrowUpIcon className="size-4 ml-1 mt-1" /> : <ArrowsUpDownIcon className="size-4 ml-1 mt-1" />}
             </span>
             <span className="font-semibold flex items-center justify-center">
               Estoque
