@@ -33,18 +33,6 @@ function parseSale(sale) {
   };
 }
 
-{/* function parseClient(cli) {
-  return {
-    ...cli,
-    id: cli._id,
-    quantity: 5,
-    feeding: String(prod.feeding),
-    tankSize: String(prod.tank_size),
-    sizes: prod.size.match(/(\d*\scm)+/g) || ["Tamanho não informado"],
-  };
-
-} */}
-
 export async function listAllProducts(page = 1, limit = 20) {
   try {
     const data = await fetch(`${API_URL}/prods`);

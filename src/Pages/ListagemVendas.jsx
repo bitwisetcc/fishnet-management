@@ -8,7 +8,6 @@ import {
   DocumentTextIcon,
   FunnelIcon,
   MagnifyingGlassIcon,
-  PrinterIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Tippy from "@tippyjs/react";
@@ -393,7 +392,7 @@ function ListagemVendas() {
   const statusMessages = ["Pendente", "Finalizado", "Cancelado"];
 
   const getReportUrl = (saleId) => {
-    return `${API_URL}/reports/${saleId}`;
+    return `${API_URL}/sales/report/${saleId}`;
   };
 
   if (loading) {
@@ -443,10 +442,10 @@ function ListagemVendas() {
               <span className="hidden md:inline">Filtros</span>
             </button>
 
-            <button className="action">
+            {/* <button className="action">
               <PrinterIcon className="size-5" />
               <span className="hidden md:inline">Imprimir</span>
-            </button>
+            </button> */}
           </div>
         </div>
       </ListingFilter>
@@ -458,6 +457,7 @@ function ListagemVendas() {
               className="font-semibold flex items-center justify-center cursor-pointer"
               onClick={handleSortByName}
             >
+            <span className="bg-slate-400/30 p-1 rounded flex items-center justify-start w-max">
               Cliente{" "}
               {sortOrder === "asc" ? (
                 <ArrowDownIcon className="size-4 ml-1 mt-1" />
@@ -467,6 +467,7 @@ function ListagemVendas() {
                 <ArrowsUpDownIcon className="size-4 ml-1 mt-1" />
               )}
             </span>
+            </span>
             <span className="font-semibold flex items-center justify-center cursor-pointer">
               Frete
             </span>
@@ -474,6 +475,7 @@ function ListagemVendas() {
               className="font-semibold flex items-center justify-center cursor-pointer"
               onClick={handleSortByPrice}
             >
+            <span className="bg-slate-400/30 p-1 rounded flex items-center justify-start w-max">
               Total{" "}
               {priceOrder === "asc" ? (
                 <ArrowDownIcon className="size-4 ml-1 mt-1" />
@@ -482,6 +484,7 @@ function ListagemVendas() {
               ) : (
                 <ArrowsUpDownIcon className="size-4 ml-1 mt-1" />
               )}
+            </span>
             </span>
             <span className="font-semibold flex items-center justify-center cursor-pointer">
               Pagamento
@@ -493,6 +496,7 @@ function ListagemVendas() {
               className="font-semibold flex items-center justify-center cursor-pointer"
               onClick={handleSortByData}
             >
+            <span className="bg-slate-400/30 p-1 rounded flex items-center justify-start w-max">
               Data{" "}
               {dataOrder === "desc" ? (
                 <ArrowDownIcon className="size-4 ml-1 mt-1" />
@@ -501,6 +505,7 @@ function ListagemVendas() {
               ) : (
                 <ArrowsUpDownIcon className="size-4 ml-1 mt-1" />
               )}
+            </span>
             </span>
             <span className="font-semibold flex items-center justify-center cursor-pointer">
               Ações
