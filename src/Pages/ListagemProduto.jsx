@@ -1,7 +1,8 @@
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import {
-  ArrowTopRightOnSquareIcon,
   ArrowDownIcon,
   ArrowsUpDownIcon,
+  ArrowTopRightOnSquareIcon,
   ArrowUpIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -11,19 +12,15 @@ import {
   PencilSquareIcon,
   PlusCircleIcon,
   PrinterIcon,
-  XMarkIcon,
-  ArrowDownIcon,
-  ArrowsUpDownIcon,
-  ArrowUpIcon,
+  XMarkIcon
 } from "@heroicons/react/24/outline";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { TitleContext } from "../App";
-import ListingProducts from "../components/ListingProducts";
-import { getProductByFilter } from "../lib/query";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import loadingImage from "../LoadingImage.gif";
-import RegisterProductDialog from "../components/dialogs/RegisterProductDialog";
+import ListingProducts from "../components/ListingProducts";
 import InsightsDialog from "../components/dialogs/InsightsDialog";
+import RegisterProductDialog from "../components/dialogs/RegisterProductDialog";
+import { getProductByFilter } from "../lib/query";
 
 function FilterProduct({ open, setOpen, onSaveFilters }) {
   const [selectedEnvironment, setSelectedEnvironment] = useState(null);

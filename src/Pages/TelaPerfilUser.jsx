@@ -176,7 +176,7 @@ export default function TelaPerfilUser() {
           <div className="flex flex-col gap-1 mb-3">
             <span className="font-semibold">Estado:</span>
             <select
-              value={profile.state}
+              value={profile.uf}
               name="state"
               id="state"
               className="border border-slate-300 rounded px-2 py-1 bg-slate-100"
